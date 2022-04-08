@@ -8,9 +8,10 @@
             "name": "Python: MyApp",
             "type": "python",
             "request": "launch",
-            "program": "./server/run.py",
+            "program": "./run.py",
             "console": "integratedTerminal",
-            "justMyCode": true
+            "justMyCode": true,
+            "cwd": "${workspaceFolder}/server"
         }
     ]
 }
