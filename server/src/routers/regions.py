@@ -20,7 +20,7 @@ def get_all(uow:UnitOfWork=Depends(get_unit_of_work),
     region_mapper:RegionMapper=Depends(get_region_mapper)):
     # TODO offset and limit
     regions = uow.regions.get_all()
-    region_dtos = [region_mapper.from_Region_to_RegionDTO(r) for r in regions]
+    region_dtos = [region_mapper.from_model_to_dto(r) for r in regions]
     return region_dtos
 
 
@@ -35,7 +35,7 @@ def get_one(
     if region is None:
         raise HTTPException(status_code=404)
 
-    dto = region_mapper.from_Region_to_RegionDTO(region)
+    dto = region_mapper.from_model_to_dto(region)
     return dto
 
 @router.post("/",response_model=RegionDTO)
@@ -45,11 +45,10 @@ def create_one(
         region_mapper:RegionMapper=Depends(get_region_mapper)
         ):
 
-    # TODO map to region instead
-    region = region_mapper.from_CREATEDTO_to_Region(create_dto)
+    region = region_mapper.from_create_to_model(create_dto)
     uow.regions.create_one(region)
     uow.commit_refresh([region])
-    dto = region_mapper.from_Region_to_RegionDTO(region)
+    dto = region_mapper.from_model_to_dto(region)
     return dto
 
 @router.put("/",response_model=RegionDTO)
@@ -63,13 +62,16 @@ def update_one(
     if region is None:
         raise HTTPException(status_code=404)
 
-    region = region_mapper.from_UpdateDTO_to_Region(region_update_dto,region)
+    region = region_mapper.from_update_to_model(region_update_dto,region)
     uow.regions.update_one(region)
     uow.commit_refresh([region])
-    region_dto = region_mapper.from_Region_to_RegionDTO(region)
+    region_dto = region_mapper.from_model_to_dto(region)
     return region_dto
 
-@router.delete("/{region_id}")
+@router.delete("/{region_id}",status_code=204)
 def delete_one(region_id : int ,uow:UnitOfWork=Depends(get_unit_of_work)):
+    model = uow.regions.get_one(region_id)
+    if model is None:
+        raise HTTPException(status_code=404)
     uow.regions.delete_one(region_id)
     uow.commit_refresh()
