@@ -3,18 +3,20 @@ from ..database import Base
 
 from .regions import RegionsService
 from .countries import CountriesServices
-
+from .locations import LocationsService
 class UnitOfWork:
     def __init__(self,
         db:Session,
         regions_service:RegionsService,
-        countries_service:CountriesServices) -> None:
-
+        countries_service:CountriesServices,
+        locations_service:LocationsService
+        ) -> None:
 
         self._db = db
         self.regions = regions_service
         self.countries = countries_service
-        assert self._db == self.regions._db == self.countries._db
+        self.locations = locations_service
+        assert self._db == self.regions._db == self.countries._db == self.locations._db
     
     def commit_refresh(self,items:list[Base]|None=None):
         self._db.commit()

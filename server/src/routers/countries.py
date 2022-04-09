@@ -7,6 +7,7 @@ from ..dependencies import get_unit_of_work, get_country_mapper
 
 router = APIRouter(
     prefix="/countries",
+    tags=["countries"],
     responses={404: {"description": "Not Found"}}
 )
 
