@@ -1,5 +1,5 @@
 from fastapi import FastAPI, Depends
-from .routers import regions,countries,locations
+from .routers import regions,countries,locations,departments
 
 
 app = FastAPI()
@@ -7,6 +7,7 @@ app = FastAPI()
 app.include_router(regions.router)
 app.include_router(countries.router)
 app.include_router(locations.router)
+app.include_router(departments.router)
 
 def a(b):
     return b

@@ -2,7 +2,6 @@ from fastapi import APIRouter, Depends, Query, HTTPException, status
 
 from ..services.unit_of_work import UnitOfWork
 from ..DTOs.locations import LocationCreate, LocationDTO, LocationUpdate
-from ..models import Location
 from ..mappers.location_mapper import LocationMapper
 from ..dependencies import get_unit_of_work
 router = APIRouter(

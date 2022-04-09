@@ -14,4 +14,4 @@ class Location(Base):
     country_id = Column(Integer,ForeignKey("countries.country_id",ondelete="CASCADE"),nullable=False)
 
     country = relationship("Country" , back_populates= "locations")
-#     departments = relationship("Department" , back_populates="location")
+    departments = relationship("Department" , back_populates="location")

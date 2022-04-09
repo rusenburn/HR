@@ -14,7 +14,7 @@ class LocationsService():
     def create_one(self, location: Location):
         if not isinstance(location, Location):
             raise ArgumentError(location, "argument must be a Location type.")
-        return self._db.add(location)
+        self._db.add(location)
 
     def get_all(self, country_id: int = 0, skip: int = 0, limit: int = 100) -> list[Location]:
         q = self._db.query(Location)
