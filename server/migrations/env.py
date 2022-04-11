@@ -12,6 +12,9 @@ from src.models.countries import Country
 from src.models.locations import Location
 from src.models.departments import Department
 from src.models.jobs import Job
+from src.models.employee import Employee
+from src.models.job_history import JobHistory
+# from src.models.departments_manager import DepartmentsManager
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.

@@ -7,6 +7,8 @@ from .countries import CountriesServices
 from .locations import LocationsService
 from .departments import DepartmentsService
 from .jobs import JobsService
+from .employees import EmployeesService
+from .job_histories import JobHistoriesService
 class UnitOfWork:
     def __init__(self,
         db:Session,
@@ -14,7 +16,9 @@ class UnitOfWork:
         countries_service:CountriesServices,
         locations_service:LocationsService,
         departments_service:DepartmentsService,
-        jobs_service:JobsService
+        jobs_service:JobsService,
+        employees_service:EmployeesService,
+        job_histories_service : JobHistoriesService
         ) -> None:
 
         self._db = db
@@ -23,6 +27,8 @@ class UnitOfWork:
         self.locations = locations_service
         self.departments = departments_service
         self.jobs = jobs_service
+        self.employees = employees_service
+        self.job_histories = job_histories_service
         assert self._db == self.regions._db == self.countries._db == self.locations._db == self.departments._db
     
     def commit_refresh(self,items:list[Base]|None=None):
@@ -31,8 +37,3 @@ class UnitOfWork:
             for item in items:
                 if item is not None:
                     self._db.refresh(item)
-
-        
-
-
-        

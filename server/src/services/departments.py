@@ -1,5 +1,4 @@
 from argparse import ArgumentError
-from turtle import update
 from sqlalchemy.orm import Session
 from ..models import Department
 

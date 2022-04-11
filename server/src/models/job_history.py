@@ -1,3 +1,4 @@
+from datetime import datetime
 from sqlalchemy import Boolean,Column,ForeignKey,Integer,String,DateTime
 from ..database import Base
 from sqlalchemy.orm import relationship
@@ -5,16 +6,19 @@ from sqlalchemy.orm import relationship
 class JobHistory(Base):
     __tablename__ = "job_histories"
     
-    employee_id = Column(Integer,primary_key=True,index=True)
-    start_date = Column(DateTime,primary_key=True)
-    end_date = Column(DateTime)
-
-    job_id = Column(Integer,ForeignKey("jobs.job_id"),nullable = False)
-    department_id = Column(Integer,ForeignKey("departments.department_id"),nullable = False)
-
-    job = relationship("Job",back_populates="job_history")
-    department = relationship("Department" , back_populates = "job_histories")
+    employee_id:int = Column(Integer,ForeignKey("employees.employee_id",ondelete="CASCADE"), primary_key=True,index=True)
     employee = relationship("Employee" , back_populates = "job_histories")
+
+    start_date:datetime = Column(DateTime,primary_key=True,nullable = False)
+    salary:int =Column(Integer,nullable = False)
+    end_date :datetime= Column(DateTime)
+
+    department_id :int= Column(Integer,ForeignKey("departments.department_id",ondelete="SET NULL"))
+    department = relationship("Department" , back_populates = "job_histories")
+
+    job_id :int= Column(Integer,ForeignKey("jobs.job_id",ondelete="SET NULL"))
+    job = relationship("Job",back_populates="job_histories")
+    
 
 
 
