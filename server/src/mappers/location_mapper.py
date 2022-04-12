@@ -1,10 +1,10 @@
 from ..DTOs.locations import LocationUpdate, LocationDTO, LocationCreate
 from ..models import Location
-
+from .nested_mapper import NestedMapper
 
 class LocationMapper():
-    def __init__(self) -> None:
-        ...
+    def __init__(self,nested:NestedMapper) -> None:
+        self._nested = nested
 
     def from_update_to_model(self, update_dto: LocationUpdate, location: Location) -> Location:
         location.location_id = update_dto.location_id
@@ -32,5 +32,7 @@ class LocationMapper():
             postal_code=location.postal_code,
             city=location.city,
             state_province=location.state_province,
-            country_id=location.country_id)
+            country_id=location.country_id,
+            country=self._nested.to_country_nested(location.country),
+            departments=list(map(self._nested.to_department_nested,location.departments)))
         return dto

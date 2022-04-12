@@ -3,7 +3,7 @@ from fastapi import APIRouter, Depends, Query, HTTPException, status
 from ..services.unit_of_work import UnitOfWork
 from ..DTOs.locations import LocationCreate, LocationDTO, LocationUpdate
 from ..mappers.location_mapper import LocationMapper
-from ..dependencies import get_unit_of_work
+from ..dependencies import get_location_mapper, get_unit_of_work
 router = APIRouter(
     prefix="/locations",
     tags=["locations"],
@@ -16,7 +16,7 @@ router = APIRouter(
 @router.get("/", response_model=list[LocationDTO])
 def get_all(country_id: int = Query(0), skip: int = Query(0), limit: int = Query(100),
             uow: UnitOfWork = Depends(get_unit_of_work),
-            location_mapper: LocationMapper = Depends()):
+            location_mapper: LocationMapper = Depends(get_location_mapper)):
     locations = uow.locations.get_all(
         country_id=country_id, skip=skip, limit=limit)
     dtos = [location_mapper.from_model_to_dto(l) for l in locations]
@@ -26,7 +26,7 @@ def get_all(country_id: int = Query(0), skip: int = Query(0), limit: int = Query
 @router.get("/location_id")
 def get_one(location_id: int,
             uow: UnitOfWork = Depends(get_unit_of_work),
-            location_mapper: LocationMapper = Depends()
+            location_mapper: LocationMapper = Depends(get_location_mapper)
             ):
     location = uow.locations.get_one(location_id)
     if location is None:
@@ -38,7 +38,7 @@ def get_one(location_id: int,
 @router.post("/", response_model=LocationDTO, status_code=201)
 def create_one(location_create: LocationCreate,
                uow: UnitOfWork = Depends(get_unit_of_work),
-               location_mapper: LocationMapper = Depends()
+               location_mapper: LocationMapper =Depends(get_location_mapper)
                ):
     location = location_mapper.from_create_to_model(location_create)
     uow.locations.create_one(location)
@@ -50,7 +50,7 @@ def create_one(location_create: LocationCreate,
 @router.put("/", response_model=LocationDTO)
 def update_one(location_update: LocationUpdate,
                uow: UnitOfWork = Depends(get_unit_of_work),
-               location_mapper: LocationMapper = Depends()
+               location_mapper: LocationMapper = Depends(get_location_mapper)
                ):
     location = uow.locations.get_one(location_update.location_id)
     if location is None:

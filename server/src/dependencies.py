@@ -8,6 +8,7 @@ from .mappers.country_mapper import CountryMapper
 from .mappers.region_mapper import RegionMapper
 from .mappers.employee_mapper import EmployeeMapper
 from .mappers.job_history_mapper import JobHistoryMapper
+from .mappers.nested_mapper import NestedMapper
 
 from .services import (
     CountriesServices,
@@ -49,18 +50,21 @@ def get_department_service(db: Session = Depends(get_db)) -> DepartmentsService:
     service = DepartmentsService(db=db)
     return service
 
-def get_job_service(db:Session=Depends(get_db))->JobsService:
+
+def get_job_service(db: Session = Depends(get_db)) -> JobsService:
     service = JobsService(db=db)
     return service
 
-def get_employee_service(db:Session=Depends(get_db))->EmployeesService:
+
+def get_employee_service(db: Session = Depends(get_db)) -> EmployeesService:
     service = EmployeesService(db=db)
     return service
 
-def get_job_history_service(db:Session=Depends(get_db))->JobHistoriesService:
+
+def get_job_history_service(db: Session = Depends(get_db)) -> JobHistoriesService:
     service = JobHistoriesService(db=db)
     return service
-    
+
 
 def get_unit_of_work(
     db: Session = Depends(get_db),
@@ -68,9 +72,10 @@ def get_unit_of_work(
     countries_service: CountriesServices = Depends(get_country_service),
     location_service: LocationsService = Depends(get_location_service),
     departments_service: DepartmentsService = Depends(get_department_service),
-    jobs_service:JobsService = Depends(get_job_service),
-    job_history_service:JobHistoriesService = Depends(get_job_history_service),
-    employees_service:EmployeesService = Depends(get_employee_service)
+    jobs_service: JobsService = Depends(get_job_service),
+    job_history_service: JobHistoriesService = Depends(
+        get_job_history_service),
+    employees_service: EmployeesService = Depends(get_employee_service)
 ) -> UnitOfWork:
 
     unit_of_work = UnitOfWork(db=db, regions_service=region_service,
@@ -83,27 +88,33 @@ def get_unit_of_work(
     return unit_of_work
 
 
-def get_region_mapper() -> RegionMapper:
-    return RegionMapper()
+def get_nested_mapper() -> NestedMapper:
+    return NestedMapper()
 
 
-def get_country_mapper() -> CountryMapper:
-    return CountryMapper()
+def get_region_mapper(nested: NestedMapper = Depends(get_nested_mapper)) -> RegionMapper:
+    return RegionMapper(nested=nested)
 
 
-def get_location_mapper() -> LocationMapper:
-    return LocationMapper()
+def get_country_mapper(nested: NestedMapper = Depends(get_nested_mapper)) -> CountryMapper:
+    return CountryMapper(nested=nested)
 
 
-def get_department_mapper() -> DepartmentMapper:
-    return DepartmentMapper()
-
-def get_job_mapper()->JobMapper:
-    return JobMapper()
+def get_location_mapper(nested: NestedMapper = Depends(get_nested_mapper)) -> LocationMapper:
+    return LocationMapper(nested=nested)
 
 
-def get_employee_mapper()->EmployeeMapper:
-    return EmployeeMapper()
+def get_department_mapper(nested: NestedMapper = Depends(get_nested_mapper)) -> DepartmentMapper:
+    return DepartmentMapper(nested=nested)
 
-def get_job_history_mapper()->JobHistoryMapper:
-    return JobHistoryMapper()
+
+def get_job_mapper(nested: NestedMapper = Depends(get_nested_mapper)) -> JobMapper:
+    return JobMapper(nested=nested)
+
+
+def get_employee_mapper(nested: NestedMapper = Depends(get_nested_mapper)) -> EmployeeMapper:
+    return EmployeeMapper(nested=nested)
+
+
+def get_job_history_mapper(nested: NestedMapper = Depends(get_nested_mapper)) -> JobHistoryMapper:
+    return JobHistoryMapper(nested=nested)

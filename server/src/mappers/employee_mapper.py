@@ -1,10 +1,10 @@
 from ..DTOs.employees import EmployeeCreate, EmployeeDTO, EmployeeUpdate
 from ..models import Employee
-
+from .nested_mapper import NestedMapper
 
 class EmployeeMapper:
-    def __init__(self) -> None:
-        ...
+    def __init__(self,nested:NestedMapper) -> None:
+        self._nested = nested
 
     def from_model_to_dto(self, employee: Employee) -> EmployeeDTO:
         dto = EmployeeDTO(
@@ -17,7 +17,13 @@ class EmployeeMapper:
             salary=employee.salary,
             job_id=employee.job_id,
             manager_id=employee.manager_id,
-            department_id=employee.department_id)
+            department_id=employee.department_id,
+            manager=self._nested.to_employee_nested(employee.manager),
+            employees=list(map(self._nested.to_employee_nested,employee.employees)),
+            department=self._nested.to_department_nested(employee.department),
+            job=self._nested.to_job_nested(employee.job),
+            job_histories=[self._nested.to_job_history_nested(j) for j in employee.job_histories]
+            )
         return dto
 
     def from_create_to_model(self, create_dto: EmployeeCreate) -> Employee:

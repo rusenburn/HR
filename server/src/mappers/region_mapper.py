@@ -1,9 +1,10 @@
 from ..DTOs.regions import RegionCreateDTO,RegionUpdateDTO,RegionDTO
 from ..models.regions import Region
+from .nested_mapper import NestedMapper
 
 class RegionMapper:
-    def __init__(self) -> None:
-        ...
+    def __init__(self,nested:NestedMapper) -> None:
+        self._nested = nested
     
     def from_create_to_model(self,dto:RegionCreateDTO)->Region:
         region  = Region()
@@ -15,10 +16,8 @@ class RegionMapper:
         region.region_name = dto.region_name
         return region
     def from_model_to_dto(self,region:Region)->RegionDTO:
-        dto = RegionDTO(region_id=region.region_id,region_name=region.region_name)
+        dto = RegionDTO(
+            region_id=region.region_id,
+            region_name=region.region_name,
+            countries=list(map(self._nested.to_country_nested,region.countries)))
         return dto
-
-
-
-
-    

@@ -9,5 +9,5 @@ class JobUpdate(BaseModel):
     @validator('max_salary')
     def max_salary_not_smaller_than_min_salary(cls,v:int,values:dict,**kwargs):
         if 'min_salary' in values and v < values['min_salary']:
-            raise ValidationError('max_salary must be bigger than min_salary')
+            raise ValueError('max_salary must be bigger than min_salary')
         return v

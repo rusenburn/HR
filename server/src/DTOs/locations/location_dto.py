@@ -1,5 +1,7 @@
 from pydantic import BaseModel
 
+from ..nested import DepartmentNested,CountryNested
+
 class LocationDTO(BaseModel):
     location_id:int
     street_address:str
@@ -7,3 +9,5 @@ class LocationDTO(BaseModel):
     city:str
     state_province:str
     country_id : int
+    country:CountryNested
+    departments:list[DepartmentNested]

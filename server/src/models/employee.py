@@ -25,9 +25,7 @@ class Employee(Base):
     department_id :int= Column(Integer, ForeignKey("departments.department_id",ondelete="SET NULL"),index=True)
     department = relationship("Department" , back_populates = "employees")
 
-    
     job_histories = relationship("JobHistory",back_populates="employee")
-    # job_histories : list
 
 
 

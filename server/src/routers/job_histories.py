@@ -1,8 +1,9 @@
+from datetime import datetime
 from fastapi import APIRouter, Depends, HTTPException, Query
 
 from ..services.unit_of_work import UnitOfWork
 from ..mappers.job_history_mapper import JobHistoryMapper
-from ..DTOs.job_histories import JobHistoryCreate, JobHistoryDTO,JobHistoryEnd
+from ..DTOs.job_histories import JobHistoryCreate, JobHistoryDTO,JobHistoryUpdate
 from ..models import JobHistory
 from ..dependencies import get_job_history_mapper, get_unit_of_work
 
@@ -59,7 +60,6 @@ def create_one(
     if department is None:
         raise HTTPException(status_code =400,detail={"description":"cannot create a history if department does not exist"})
 
-    # TODO START A TRANSACTION INSTEAD OF CHECKING IF ALL THESE EXIST
     # checks the last history of the employee
     hist = uow.job_histories.get_all(employee_id=create_dto.employee_id,limit=1)
     if len(hist): 
@@ -83,27 +83,22 @@ def create_one(
     dto = job_history_mapper.from_model_to_dto(job_history)
     return dto
 
-@router.post("/end",status_code=204)
-def end(end_dto :JobHistoryEnd,
+@router.put("/",response_model=JobHistoryDTO)
+def update_one(update_dto:JobHistoryUpdate,
         job_history_mapper: JobHistoryMapper = Depends(get_job_history_mapper),
         uow: UnitOfWork = Depends(get_unit_of_work)):
-    """ Sets an end date for the last Job History and removes some of Employee values
-    like salary and department_id and job_id then creates a new Job history that has no values 
-    """
-    hists = uow.job_histories.get_all(employee_id=end_dto.employee_id,limit=1)
-    if len(hists)==0:
-        raise HTTPException(status_code=404)
-    history = hists[0]
-    employee = uow.employees.get_one(end_dto.employee_id)
-    history,new_history = job_history_mapper.from_end_to_model(end_dto,history)
-    employee = job_history_mapper.from_job_history_to_employee(new_history,employee)
-    uow.job_histories.create_one(new_history)
-    uow.job_histories.update_one(history)
-    uow.employees.update_one(employee)
-    uow.commit_refresh([])
+        history = uow.job_histories.get_one(update_dto.employee_id,update_dto.start_date)
+        if history is None:
+            raise HTTPException(status_code=404)
+        history = job_history_mapper.from_update_to_model(update_dto,history)
+        uow.job_histories.update_one(history)
+        uow.commit_refresh([history])
+        dto = job_history_mapper.from_model_to_dto(history)
+        return dto
 
-
-
-
-
-
+@router.delete("/{employee_id}/{start_date}",status_code=204)
+def delete_one(employee_id:int,start_date:datetime,
+        uow: UnitOfWork = Depends(get_unit_of_work)):
+        uow.job_histories.delete_one(employee_id,start_date)
+        # TODO if it is the last job_history then we should update our employee
+        uow.commit_refresh([])
