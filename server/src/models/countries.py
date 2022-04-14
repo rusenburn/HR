@@ -10,6 +10,6 @@ class Country(Base):
     
     region_id = Column(Integer,ForeignKey("regions.region_id",ondelete="CASCADE"),nullable=False)
 
-    region = relationship("Region",back_populates="countries",foreign_keys=region_id)
-    locations = relationship("Location" , back_populates="country")
+    region = relationship("Region",back_populates="countries",foreign_keys=region_id,lazy="raise")
+    locations = relationship("Location" , back_populates="country",lazy="raise")
     

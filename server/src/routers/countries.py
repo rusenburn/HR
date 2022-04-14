@@ -1,5 +1,7 @@
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException
 
+
+from ..DTOs.nested import CountryNested
 from ..DTOs.countries import CountryDTO, CountryCreateDTO, CountryUpdateDTO
 from ..mappers.country_mapper import CountryMapper
 from ..services.unit_of_work import UnitOfWork
@@ -23,11 +25,11 @@ def get_one(country_id: int, uow: UnitOfWork = Depends(get_unit_of_work),
     return dto
 
 
-@router.get("/", response_model=list[CountryDTO])
+@router.get("/", response_model=list[CountryNested])
 def get_all(uow: UnitOfWork = Depends(get_unit_of_work),
             country_mapper: CountryMapper = Depends(get_country_mapper)):
     countries = uow.countries.get_all()
-    dtos = [country_mapper.from_model_to_dto(c) for c in countries]
+    dtos = [country_mapper.from_model_to_nested(c) for c in countries]
     return dtos
 
 

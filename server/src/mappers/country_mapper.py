@@ -1,5 +1,6 @@
 from .nested_mapper import NestedMapper
 from ..DTOs.countries import CountryDTO,CountryCreateDTO,CountryUpdateDTO
+from ..DTOs.nested import CountryNested
 from ..models import Country
 
 
@@ -28,3 +29,6 @@ class CountryMapper:
         country.country_name = update_dto.country_name
         country.region_id = update_dto.region_id
         return country
+    
+    def from_model_to_nested(self,country:Country)->CountryNested:
+        return self._nested.to_country_nested(country)

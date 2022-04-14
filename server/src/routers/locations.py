@@ -1,7 +1,9 @@
 from fastapi import APIRouter, Depends, Query, HTTPException, status
 
-from ..services.unit_of_work import UnitOfWork
+
 from ..DTOs.locations import LocationCreate, LocationDTO, LocationUpdate
+from ..DTOs.nested import LocationNested
+from ..services.unit_of_work import UnitOfWork
 from ..mappers.location_mapper import LocationMapper
 from ..dependencies import get_location_mapper, get_unit_of_work
 router = APIRouter(
@@ -13,13 +15,13 @@ router = APIRouter(
 )
 
 
-@router.get("/", response_model=list[LocationDTO])
+@router.get("/", response_model=list[LocationNested])
 def get_all(country_id: int = Query(0), skip: int = Query(0), limit: int = Query(100),
             uow: UnitOfWork = Depends(get_unit_of_work),
             location_mapper: LocationMapper = Depends(get_location_mapper)):
     locations = uow.locations.get_all(
         country_id=country_id, skip=skip, limit=limit)
-    dtos = [location_mapper.from_model_to_dto(l) for l in locations]
+    dtos = [location_mapper.from_model_to_nested(l) for l in locations]
     return dtos
 
 

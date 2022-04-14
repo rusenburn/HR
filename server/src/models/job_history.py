@@ -14,10 +14,10 @@ class JobHistory(Base):
     end_date :datetime= Column(DateTime)
 
     department_id :int= Column(Integer,ForeignKey("departments.department_id",ondelete="SET NULL"))
-    department = relationship("Department" , back_populates = "job_histories")
-
     job_id :int= Column(Integer,ForeignKey("jobs.job_id",ondelete="SET NULL"))
-    job = relationship("Job",back_populates="job_histories")
+
+    department = relationship("Department" , back_populates = "job_histories",lazy="raise")
+    job = relationship("Job",back_populates="job_histories",lazy="raise")
     
 
 

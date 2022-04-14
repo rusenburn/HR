@@ -8,4 +8,4 @@ class Region(Base):
     region_id = Column(Integer,primary_key=True,index=True)
     region_name = Column(String(64),nullable =False)
 
-    countries = relationship("Country",back_populates="region")
+    countries = relationship("Country",back_populates="region",lazy="raise")

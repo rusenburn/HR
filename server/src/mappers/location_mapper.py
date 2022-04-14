@@ -1,4 +1,5 @@
 from ..DTOs.locations import LocationUpdate, LocationDTO, LocationCreate
+from ..DTOs.nested import LocationNested
 from ..models import Location
 from .nested_mapper import NestedMapper
 
@@ -36,3 +37,6 @@ class LocationMapper():
             country=self._nested.to_country_nested(location.country),
             departments=list(map(self._nested.to_department_nested,location.departments)))
         return dto
+    
+    def from_model_to_nested(self,location:Location)->LocationNested:
+        return self._nested.to_location_nested(location=location)

@@ -1,5 +1,6 @@
-from ..DTOs.job_histories import JobHistoryCreate,JobHistoryDTO,JobHistoryUpdate
 from ..models import JobHistory,Employee
+from ..DTOs.nested import JobHistoryNested
+from ..DTOs.job_histories import JobHistoryCreate,JobHistoryDTO,JobHistoryUpdate
 from .nested_mapper import NestedMapper
 
 class JobHistoryMapper():
@@ -29,16 +30,6 @@ class JobHistoryMapper():
             )
         return dto
     
-    # def from_end_to_model(self,end_dto:JobHistoryEnd,job_history:JobHistory)->tuple[JobHistory,JobHistory]:
-    #     job_history.end_date = end_dto.end_date
-    #     new_job_history = JobHistory()
-    #     new_job_history.employee_id = end_dto.employee_id
-    #     new_job_history.salary=0
-    #     new_job_history.department_id=None
-    #     new_job_history.job_id=None
-    #     new_job_history.start_date=end_dto.end_date
-    #     return job_history,new_job_history
-
     def from_job_history_to_employee(self,job_history:JobHistory,employee:Employee)->Employee:
         employee.salary=job_history.salary
         employee.department_id=job_history.department_id
@@ -47,10 +38,8 @@ class JobHistoryMapper():
 
     
     def from_update_to_model(self,update_dto:JobHistoryUpdate,job_history:JobHistory)->JobHistory:
-        # job_history.employee_id = update_dto.employee_id
-        # job_history.start_date = update_dto.start_date
         job_history.end_date = update_dto.end_date
         return job_history
-        
 
-    
+    def from_model_to_nested(self,job_history:JobHistory)->JobHistoryNested:
+        return self._nested.to_job_history_nested(job_history)    

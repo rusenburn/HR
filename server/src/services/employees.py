@@ -1,6 +1,7 @@
 from argparse import ArgumentError
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, joinedload
 from ..models import Employee
+
 
 class EmployeesService():
     def __init__(self, db: Session) -> None:
@@ -8,6 +9,12 @@ class EmployeesService():
 
     def get_one(self, employee_id: int) -> Employee:
         return self._db.query(Employee)\
+            .options(
+                joinedload(Employee.department),
+                joinedload(Employee.job_histories),
+                joinedload(Employee.manager),
+                joinedload(Employee.job),
+                joinedload(Employee.employees),)\
             .filter(Employee.employee_id == employee_id)\
             .first()
 

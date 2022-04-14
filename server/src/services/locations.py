@@ -1,5 +1,5 @@
 from argparse import ArgumentError
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, joinedload
 
 from ..models import Location
 
@@ -9,7 +9,10 @@ class LocationsService():
         self._db = db
 
     def get_one(self, location_id: int):
-        return self._db.query(Location).filter(Location.location_id == location_id).first()
+        return self._db.query(Location)\
+            .options(joinedload(Location.country), joinedload(Location.departments))\
+            .filter(Location.location_id == location_id)\
+            .first()
 
     def create_one(self, location: Location):
         if not isinstance(location, Location):

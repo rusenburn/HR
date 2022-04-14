@@ -1,9 +1,12 @@
 from fastapi import APIRouter, Body ,Depends,HTTPException
 
+
 from ..mappers.region_mapper import RegionMapper
+from ..mappers.nested_mapper import NestedMapper
+from ..DTOs.nested import RegionNested
+from ..DTOs.regions import RegionDTO
 from ..DTOs.regions.region_create_dto import RegionCreateDTO
 from ..DTOs.regions.region_update_dto import RegionUpdateDTO
-from ..DTOs.regions import RegionDTO
 from ..services.unit_of_work import UnitOfWork
 from ..dependencies import get_region_mapper, get_unit_of_work
 
@@ -15,12 +18,12 @@ router = APIRouter(
     }
 )
 
-@router.get("/",response_model=list[RegionDTO])
+@router.get("/",response_model=list[RegionNested])
 def get_all(uow:UnitOfWork=Depends(get_unit_of_work),
     region_mapper:RegionMapper=Depends(get_region_mapper)):
     # TODO offset and limit
     regions = uow.regions.get_all()
-    region_dtos = [region_mapper.from_model_to_dto(r) for r in regions]
+    region_dtos = [region_mapper.from_model_to_nested(r) for r in regions]
     return region_dtos
 
 

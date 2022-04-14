@@ -1,4 +1,5 @@
 from ..models import Department
+from ..DTOs.nested import DepartmentNested
 from ..DTOs.departments import DepartmentCreate,DepartmentUpdate,DepartmentDTO
 from .nested_mapper import NestedMapper
 
@@ -26,5 +27,8 @@ class DepartmentMapper():
             employees=list(map(self._nested.to_employee_nested,department.employees)),
             job_histories=list(map(self._nested.to_job_history_nested,department.job_histories)))
         return dto
+    
+    def from_model_to_nested(self,department:Department)->DepartmentNested:
+        return self._nested.to_department_nested(department)
 
     

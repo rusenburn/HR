@@ -1,4 +1,4 @@
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, joinedload
 from ..models import Country
 
 
@@ -10,7 +10,9 @@ class CountriesServices:
         self._db.add(country)
 
     def get_one(self, country_id: int) -> Country:
-        return self._db.query(Country).filter(Country.country_id == country_id).first()
+        return self._db.query(Country)\
+            .options(joinedload(Country.region),joinedload(Country.locations))\
+            .filter(Country.country_id == country_id).first()
 
     def get_all(self, region_id: int = 0, skip: int = 0, limit: int = 100) -> list[Country]:
         q = self._db.query(Country)

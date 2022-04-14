@@ -14,18 +14,16 @@ class Employee(Base):
     phone_number:str = Column(String(52),nullable = False)
     hire_date :datetime= Column(DateTime)
     salary :int= Column(Integer)
-
-    job_id :int= Column(Integer, ForeignKey("jobs.job_id",ondelete="SET NULL"),index=True)
-    job = relationship("Job" , back_populates = "employees")
-
-    manager_id :int= Column(Integer, ForeignKey("employees.employee_id",ondelete="SET NULL"),index=True)
-    manager = relationship("Employee" , back_populates = "employees",remote_side=[employee_id])
-    employees  = relationship("Employee", back_populates="manager")
     
+    job_id :int= Column(Integer, ForeignKey("jobs.job_id",ondelete="SET NULL"),index=True)
+    manager_id :int= Column(Integer, ForeignKey("employees.employee_id",ondelete="SET NULL"),index=True)
     department_id :int= Column(Integer, ForeignKey("departments.department_id",ondelete="SET NULL"),index=True)
-    department = relationship("Department" , back_populates = "employees")
 
-    job_histories = relationship("JobHistory",back_populates="employee")
+    manager = relationship("Employee" , back_populates = "employees",remote_side=[employee_id],lazy="raise")
+    employees  = relationship("Employee", back_populates="manager",lazy="raise")
+    department = relationship("Department" , back_populates = "employees",lazy="raise")
+    job = relationship("Job" , back_populates = "employees",lazy="raise")
+    job_histories = relationship("JobHistory",back_populates="employee",lazy="raise")
 
 
 

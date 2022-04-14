@@ -1,5 +1,5 @@
 from argparse import ArgumentError
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, joinedload
 from ..models import Job
 
 
@@ -8,7 +8,10 @@ class JobsService():
         self._db = db
 
     def get_one(self, job_id: int) -> Job:
-        return self._db.query(Job).filter(Job.job_id == job_id).first()
+        return self._db.query(Job)\
+            .options(joinedload(Job.job_histories), joinedload(Job.employees))\
+            .filter(Job.job_id == job_id)\
+            .first()
 
     def title_exist(self, job_title: str) -> bool:
         return self._db.query(Job)\

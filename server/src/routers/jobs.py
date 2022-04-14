@@ -1,9 +1,11 @@
 from fastapi import APIRouter, Depends, Query, HTTPException
-from ..DTOs.jobs import JobDTO, JobCreate, JobUpdate
+
 from ..models import Job
-from ..services import UnitOfWork
+from ..DTOs.jobs import JobDTO, JobCreate, JobUpdate
+from ..DTOs.nested import JobNested
 from ..mappers.job_mapper import JobMapper
 from ..dependencies import get_job_mapper, get_unit_of_work
+from ..services import UnitOfWork
 
 router = APIRouter(
     prefix="/jobs",
@@ -12,7 +14,7 @@ router = APIRouter(
 )
 
 
-@router.get("/", response_model=list[JobDTO])
+@router.get("/", response_model=list[JobNested])
 def get_all(
         skip: int = Query(0, ge=0),
         limit: int = Query(100, ge=0),
@@ -20,7 +22,7 @@ def get_all(
         job_mapper: JobMapper = Depends(get_job_mapper)):
 
     jobs = uow.jobs.get_all(skip=skip, limit=limit)
-    dtos = [job_mapper.from_model_to_dto(j) for j in jobs]
+    dtos = [job_mapper.from_model_to_nested(j) for j in jobs]
     return dtos
 
 

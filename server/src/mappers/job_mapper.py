@@ -1,5 +1,6 @@
-from ..DTOs.jobs import JobCreate,JobDTO,JobUpdate
 from ..models import Job
+from ..DTOs.nested import JobNested
+from ..DTOs.jobs import JobCreate,JobDTO,JobUpdate
 from .nested_mapper import NestedMapper
 class JobMapper():
     def __init__(self,nested:NestedMapper) -> None:
@@ -30,4 +31,6 @@ class JobMapper():
         job.max_salary=update_dto.max_salary
         return job
     
+    def from_model_to_nested(self,job:Job)->JobNested:
+        return self._nested.to_job_nested(job)
         

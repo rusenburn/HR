@@ -12,5 +12,5 @@ class Job(Base):
     min_salary: int = Column(Integer, nullable=False)
     max_salary: int = Column(Integer, nullable=False)
 
-    employees = relationship("Employee", back_populates = "job")
-    job_histories = relationship("JobHistory" , back_populates="job")
+    employees = relationship("Employee", back_populates = "job",lazy="raise")
+    job_histories = relationship("JobHistory" , back_populates="job",lazy="raise")

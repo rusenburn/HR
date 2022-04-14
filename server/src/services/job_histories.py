@@ -1,6 +1,7 @@
 from argparse import ArgumentTypeError
 from datetime import datetime
-from sqlalchemy.orm import Session
+from ntpath import join
+from sqlalchemy.orm import Session, joinedload
 from ..models import JobHistory
 
 
@@ -10,13 +11,19 @@ class JobHistoriesService():
 
     def get_one(self, employee_id: int, start_date: datetime) -> JobHistory:
         job_history = self._db.query(JobHistory)\
+            .options(joinedload(JobHistory.employee),
+                     joinedload(JobHistory.job),
+                     joinedload(JobHistory.department))\
             .filter(JobHistory.employee_id == employee_id,
                     JobHistory.start_date == start_date)\
             .first()
         return job_history
 
-    def get_all(self, employee_id: int, skip: int = 0, limit: int = 100, department_id: int = 0, job_id: int = 0)->list[JobHistory]:
-        q = self._db.query(JobHistory)
+    def get_all(self, employee_id: int, skip: int = 0, limit: int = 100, department_id: int = 0, job_id: int = 0) -> list[JobHistory]:
+        q = self._db.query(JobHistory)\
+            .options(joinedload(JobHistory.employee)
+                    ,joinedload(JobHistory.department))\
+            .join(JobHistory.job)
         if employee_id:
             q = q.filter(JobHistory.employee_id == employee_id)
         if department_id:

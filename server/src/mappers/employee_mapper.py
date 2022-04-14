@@ -1,5 +1,6 @@
-from ..DTOs.employees import EmployeeCreate, EmployeeDTO, EmployeeUpdate
 from ..models import Employee
+from ..DTOs.nested import EmployeeNested
+from ..DTOs.employees import EmployeeCreate, EmployeeDTO, EmployeeUpdate
 from .nested_mapper import NestedMapper
 
 class EmployeeMapper:
@@ -32,11 +33,6 @@ class EmployeeMapper:
         employee.last_name = create_dto.last_name
         employee.email = create_dto.email
         employee.phone_number = create_dto.phone_number
-        # employee.hire_date = create_dto.hire_date
-        # employee.salary = create_dto.salary
-        # employee.job_id = create_dto.job_id
-        # employee.manager_id = create_dto.manager_id
-        # employee.department_id = create_dto.department_id
         return employee
 
     def from_update_to_model(self, update_dto: EmployeeUpdate, employee: Employee) -> Employee:
@@ -45,7 +41,7 @@ class EmployeeMapper:
         employee.email = update_dto.email
         employee.phone_number = update_dto.phone_number
         employee.manager_id = update_dto.manager_id
-        # employee.salary = update_dto.salary
-        # employee.job_id = update_dto.job_id
-        # employee.department_id = update_dto.department_id
         return employee
+    
+    def from_model_to_nested(self,employee:Employee)->EmployeeNested:
+        return self._nested.to_employee_nested(employee)

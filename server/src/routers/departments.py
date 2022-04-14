@@ -1,5 +1,7 @@
 from fastapi import APIRouter, Depends, Query, HTTPException
 
+from ..DTOs.nested import DepartmentNested
+
 from ..services.unit_of_work import UnitOfWork
 from ..dependencies import get_department_mapper, get_unit_of_work
 from ..mappers.department_mapper import DepartmentMapper
@@ -27,7 +29,7 @@ def get_one(department_id: int,
     return dto
 
 
-@router.get("/", response_model=list[DepartmentDTO])
+@router.get("/", response_model=list[DepartmentNested])
 def get_all(limit: int = Query(100),
             skip: int = Query(0),
             location_id: int = Query(0),
@@ -37,7 +39,7 @@ def get_all(limit: int = Query(100),
             ):
     departments = uow.departments.get_all(
         location_id=location_id, skip=skip, limit=limit)
-    dtos = [department_mapper.from_model_to_dto(d) for d in departments]
+    dtos = [department_mapper.from_model_to_nested(d) for d in departments]
     return dtos
 
 
