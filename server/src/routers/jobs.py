@@ -35,7 +35,7 @@ def get_one(job_id: int,
     dto = job_mapper.from_model_to_dto(job)
     return dto
 
-@router.post("/", response_model=JobDTO, status_code=201)
+@router.post("/", response_model=JobNested, status_code=201)
 def create_one(job_create: JobCreate,
                uow: UnitOfWork = Depends(get_unit_of_work),
                job_mapper: JobMapper = Depends(get_job_mapper)
@@ -47,10 +47,10 @@ def create_one(job_create: JobCreate,
     job = job_mapper.from_create_to_model(job_create)
     uow.jobs.create_one(job)
     uow.commit_refresh(items=[job])
-    dto = job_mapper.from_model_to_dto(job)
+    dto = job_mapper.from_model_to_nested(job)
     return dto
 
-@router.put("/", response_model=JobDTO)
+@router.put("/", response_model=JobNested)
 def update_one(job_update: JobUpdate,
                uow: UnitOfWork = Depends(get_unit_of_work),
                job_mapper: JobMapper = Depends(get_job_mapper)
@@ -63,7 +63,7 @@ def update_one(job_update: JobUpdate,
     job = job_mapper.from_update_to_model(job_update, job)
     uow.jobs.update_one(job)
     uow.commit_refresh(items=[job])
-    dto = job_mapper.from_model_to_dto(job)
+    dto = job_mapper.from_model_to_nested(job)
     return dto
 
 @router.delete("/job_id", status_code=204)

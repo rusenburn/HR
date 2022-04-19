@@ -33,7 +33,7 @@ def get_all(uow: UnitOfWork = Depends(get_unit_of_work),
     return dtos
 
 
-@router.post("/", response_model=CountryDTO)
+@router.post("/", response_model=CountryNested)
 def create_one(create_dto: CountryCreateDTO,
                uow: UnitOfWork = Depends(get_unit_of_work),
                country_mapper: CountryMapper = Depends(get_country_mapper)
@@ -47,12 +47,12 @@ def create_one(create_dto: CountryCreateDTO,
     country = country_mapper.from_create_to_model(create_dto)
     uow.countries.create_one(country)
     uow.commit_refresh([country])
-    dto = country_mapper.from_model_to_dto(country)
+    dto = country_mapper.from_model_to_nested(country)
     return dto
 
 
 @router.put("/")
-def update_one(update_dto: CountryUpdateDTO,
+def update_one(update_dto: CountryNested,
                uow: UnitOfWork = Depends(get_unit_of_work),
                country_mapper: CountryMapper = Depends(get_country_mapper)):
     model = uow.countries.get_one(update_dto.country_id)
@@ -69,7 +69,7 @@ def update_one(update_dto: CountryUpdateDTO,
     model = country_mapper.from_update_to_model(update_dto, model)
     uow.countries.update_one(model)
     uow.commit_refresh([model])
-    dto = country_mapper.from_model_to_dto(model)
+    dto = country_mapper.from_model_to_nested(model)
     return dto
 
 

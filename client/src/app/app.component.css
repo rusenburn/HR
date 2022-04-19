@@ -1,0 +1,25 @@
+mat-drawer-container{
+    height: 100%;
+}
+mat-drawer{
+    height: 100%;
+    width: 200px;
+}
+mat-drawer-content{
+    padding: 1rem;
+    padding-top: 2rem;
+}
+
+.toolbar-link{
+    display: none;
+}
+
+@media (min-width:599px) {
+    .toolbar-link{
+        display: initial;
+    }
+
+    .toolbar-burger{
+        display: none;
+    }
+}

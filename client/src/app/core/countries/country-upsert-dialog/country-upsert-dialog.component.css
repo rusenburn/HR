@@ -1,0 +1,20 @@
+mat-card{
+    width: 90%;
+}
+
+form{
+    width:100%;
+}
+mat-form-field{
+    width: 100%;
+}
+
+.button-container{
+    display: flex;
+    width: 100%;
+    justify-content: space-evenly;
+}
+
+mat-card-title{
+    text-align: center;
+}

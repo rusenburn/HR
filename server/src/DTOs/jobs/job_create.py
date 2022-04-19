@@ -1,9 +1,13 @@
-from pydantic import BaseModel, ValidationError ,validator,Field
+from pydantic import BaseModel ,validator,Field
 
 class JobCreate(BaseModel):
-    job_title:str = Field(...,max_length=52)
-    min_salary : int = Field(...,ge=0)
-    max_salary : int 
+    job_title:str = Field(...,max_length=52,alias="jobTitle")
+    min_salary : int = Field(...,ge=0,alias="minSalary")
+    max_salary : int =Field(...,alias="maxSalary")
+
+    
+    class Config:
+        allow_population_by_field_name=True
 
     @validator('max_salary')
     def max_salary_not_smaller_than_min_salary(cls,v:int,values:dict,**kwargs):

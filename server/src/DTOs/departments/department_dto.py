@@ -1,12 +1,16 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 
 from ..nested import EmployeeNested,JobHistoryNested
 
 class DepartmentDTO(BaseModel):
-    department_id: int
-    department_name: str
-    location_id: int
+    department_id: int = Field(...,alias="departmentId")
+    department_name: str = Field(...,alias="departmentName")
+    location_id: int = Field(...,alias="locationId")
     employees:list[EmployeeNested]
-    job_histories:list[JobHistoryNested]
+    job_histories:list[JobHistoryNested] = Field(...,alias="jobHistories")
+
+    
+    class Config:
+        allow_population_by_field_name=True
 

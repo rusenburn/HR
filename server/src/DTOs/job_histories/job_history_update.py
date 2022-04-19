@@ -3,9 +3,13 @@ from pydantic import BaseModel, Field, validator
 
 
 class JobHistoryUpdate(BaseModel):
-    employee_id: int = Field(..., gt=0)
-    start_date: datetime
-    end_date: datetime | None = None
+    employee_id: int = Field(..., gt=0,alias="employeeId")
+    start_date: datetime=Field(...,alias="startDate")
+    end_date: datetime | None = Field(...,alias="endDate")
+
+    
+    class Config:
+        allow_population_by_field_name=True
 
     @validator('end_date')
     def max_salary_not_smaller_than_min_salary(cls, v: int, values: dict, **kwargs):

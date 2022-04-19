@@ -43,7 +43,7 @@ def get_all(limit: int = Query(100),
     return dtos
 
 
-@router.post("/", response_model=DepartmentDTO, status_code=201)
+@router.post("/", response_model=DepartmentNested, status_code=201)
 def create_one(department_create: DepartmentCreate,
                department_mapper: DepartmentMapper = Depends(
                    get_department_mapper),
@@ -52,11 +52,11 @@ def create_one(department_create: DepartmentCreate,
     department = department_mapper.from_create_to_model(department_create)
     uow.departments.create_one(department)
     uow.commit_refresh([department])
-    dto = department_mapper.from_model_to_dto(department)
+    dto = department_mapper.from_model_to_nested(department)
     return dto
 
 
-@router.put("/",response_model=DepartmentDTO)
+@router.put("/",response_model=DepartmentNested)
 def update_one(department_update: DepartmentUpdate,
                department_mapper: DepartmentMapper = Depends(
                    get_department_mapper),
@@ -69,7 +69,7 @@ def update_one(department_update: DepartmentUpdate,
     uow.departments.update_one(department)
     uow.commit_refresh([department])
     
-    dto = department_mapper.from_model_to_dto(department)
+    dto = department_mapper.from_model_to_nested(department)
     return dto
 
 

@@ -1,6 +1,5 @@
 from fastapi import APIRouter, Depends, Query, HTTPException, status
 
-
 from ..DTOs.locations import LocationCreate, LocationDTO, LocationUpdate
 from ..DTOs.nested import LocationNested
 from ..services.unit_of_work import UnitOfWork
@@ -37,7 +36,7 @@ def get_one(location_id: int,
     return dto
 
 
-@router.post("/", response_model=LocationDTO, status_code=201)
+@router.post("/", response_model=LocationNested, status_code=201)
 def create_one(location_create: LocationCreate,
                uow: UnitOfWork = Depends(get_unit_of_work),
                location_mapper: LocationMapper =Depends(get_location_mapper)
@@ -45,11 +44,11 @@ def create_one(location_create: LocationCreate,
     location = location_mapper.from_create_to_model(location_create)
     uow.locations.create_one(location)
     uow.commit_refresh([location])
-    dto = location_mapper.from_model_to_dto(location)
+    dto = location_mapper.from_model_to_nested(location)
     return dto
 
 
-@router.put("/", response_model=LocationDTO)
+@router.put("/", response_model=LocationNested)
 def update_one(location_update: LocationUpdate,
                uow: UnitOfWork = Depends(get_unit_of_work),
                location_mapper: LocationMapper = Depends(get_location_mapper)
@@ -61,7 +60,7 @@ def update_one(location_update: LocationUpdate,
     uow.locations.update_one(location)
     uow.commit_refresh([location])
 
-    dto = location_mapper.from_model_to_dto(location)
+    dto = location_mapper.from_model_to_nested(location)
     return dto
 
 

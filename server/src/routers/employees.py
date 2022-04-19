@@ -45,7 +45,7 @@ def get_one(employee_id: int,
     return dto
 
 
-@router.post("/", response_model=EmployeeDTO, status_code=201)
+@router.post("/", response_model=EmployeeNested, status_code=201)
 def create_one(create_dto: EmployeeCreate,
                uow: UnitOfWork = Depends(get_unit_of_work),
                employee_mapper: EmployeeMapper = Depends(get_employee_mapper)
@@ -53,11 +53,11 @@ def create_one(create_dto: EmployeeCreate,
     employee = employee_mapper.from_create_to_model(create_dto)
     uow.employees.create_one(employee)
     uow.commit_refresh([employee])
-    dto = employee_mapper.from_model_to_dto(employee)
+    dto = employee_mapper.from_model_to_nested(employee)
     return dto
 
 
-@router.put("/", response_model=EmployeeDTO)
+@router.put("/", response_model=EmployeeNested)
 def update_one(update_dto: EmployeeUpdate,
                uow: UnitOfWork = Depends(get_unit_of_work),
                employee_mapper: EmployeeMapper = Depends(get_employee_mapper)):
@@ -68,7 +68,7 @@ def update_one(update_dto: EmployeeUpdate,
     employee = employee_mapper.from_update_to_model(update_dto, employee)
     uow.employees.update_one(employee)
     uow.commit_refresh([employee])
-    dto = employee_mapper.from_model_to_dto(employee)
+    dto = employee_mapper.from_model_to_nested(employee)
     return dto
 
 

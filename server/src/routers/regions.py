@@ -41,7 +41,7 @@ def get_one(
     dto = region_mapper.from_model_to_dto(region)
     return dto
 
-@router.post("/",response_model=RegionDTO)
+@router.post("/",response_model=RegionNested)
 def create_one(
         create_dto:RegionCreateDTO=Body(...),
         uow:UnitOfWork=Depends(get_unit_of_work),
@@ -51,10 +51,10 @@ def create_one(
     region = region_mapper.from_create_to_model(create_dto)
     uow.regions.create_one(region)
     uow.commit_refresh([region])
-    dto = region_mapper.from_model_to_dto(region)
+    dto = region_mapper.from_model_to_nested(region)
     return dto
 
-@router.put("/",response_model=RegionDTO)
+@router.put("/",response_model=RegionNested)
 def update_one(
         region_update_dto:RegionUpdateDTO=Body(...),
         uow:UnitOfWork=Depends(get_unit_of_work),
@@ -68,7 +68,7 @@ def update_one(
     region = region_mapper.from_update_to_model(region_update_dto,region)
     uow.regions.update_one(region)
     uow.commit_refresh([region])
-    region_dto = region_mapper.from_model_to_dto(region)
+    region_dto = region_mapper.from_model_to_nested(region)
     return region_dto
 
 @router.delete("/{region_id}",status_code=204)

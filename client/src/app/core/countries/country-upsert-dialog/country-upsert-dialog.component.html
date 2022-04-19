@@ -1,0 +1,33 @@
+<mat-card>
+    <mat-card-subtitle *ngIf="country?.countryId">
+        {{country.countryName}}
+    </mat-card-subtitle>
+    <mat-card-subtitle *ngIf="country === null || country?.countryId===0">
+        Add new Country
+    </mat-card-subtitle>
+    <mat-card-content>
+        <form [formGroup]="countryForm" (ngSubmit)="submitForm()">
+            <mat-form-field>
+                <mat-label>Country Name</mat-label>
+                <input matInput type="text" formControlName="countryName" autofocus autocomplete="off">
+            </mat-form-field>
+
+            <mat-form-field>
+                <mat-label>Region</mat-label>
+                <mat-select formControlName="regionId">
+                    <mat-option>
+                        ------
+                    </mat-option>
+                    <mat-option *ngFor="let region of regions" [value]="region.regionId">
+                        {{region.regionName}}
+                    </mat-option>
+                </mat-select>
+                <input matInput type="text" formControlName="regionId">
+            </mat-form-field>
+            <div class="button-container">
+                <button type="submit" mat-raised-button color="primary" [disabled]="countryForm.invalid">Submit</button>
+                <button type="button" mat-raised-button (click)="close()">Cancel</button>
+            </div>
+        </form>
+    </mat-card-content>
+</mat-card>
