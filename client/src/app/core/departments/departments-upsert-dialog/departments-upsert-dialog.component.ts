@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Store } from '@ngrx/store';
@@ -12,7 +12,7 @@ import {createOne,updateOne} from "../store/departments.actions";
   templateUrl: './departments-upsert-dialog.component.html',
   styleUrls: ['./departments-upsert-dialog.component.css']
 })
-export class DepartmentsUpsertDialogComponent implements OnInit {
+export class DepartmentsUpsertDialogComponent  {
   public department: DepartmentUpdateModel;
   public location: LocationUpdateModel;
   public countries: CountryModel[];
@@ -35,9 +35,6 @@ export class DepartmentsUpsertDialogComponent implements OnInit {
       postalCode: [this.location?.postalCode || null, [Validators.maxLength(52)]],
       streetAddress: [this.location?.streetAddress || "", [Validators.required, Validators.maxLength(52)]]
     });
-  }
-
-  ngOnInit(): void {
   }
 
   public submitForm():void{

@@ -42,7 +42,7 @@ def get_last(
     return dto
 
 
-@router.post("/",status_code=201)
+@router.post("/",status_code=201,response_model=JobHistoryDTO)
 def create_one(
     create_dto: JobHistoryCreate,
     job_history_mapper: JobHistoryMapper = Depends(get_job_history_mapper),

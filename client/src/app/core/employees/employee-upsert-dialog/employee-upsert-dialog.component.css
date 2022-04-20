@@ -1,0 +1,17 @@
+mat-card{
+    width: 90%;
+}
+form{
+    width: 100%;
+}
+
+mat-form-field{
+    width: 45%;
+    padding: 2%;
+}
+
+.button-container{
+    display: flex;
+    width: 100%;
+    justify-content: space-evenly;
+}

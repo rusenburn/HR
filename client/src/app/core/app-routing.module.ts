@@ -5,6 +5,8 @@ import { RegionsModule } from './regions/regions.module';
 import { NotFoundComponent } from '../shared/not-found.component';
 import { HomeComponent } from './home/home.component';
 import { DepartmentsModule } from './departments/departments.module';
+import { JobsModule } from './jobs/jobs.module';
+import { EmployeesModule } from './employees/employees.module';
 
 const routes: Routes = [
 
@@ -12,7 +14,9 @@ const routes: Routes = [
   { path: "", redirectTo: "/home", pathMatch: "full" },
   { path: "regions", loadChildren: () => RegionsModule },
   { path: "countries", loadChildren: () => CountriesModule },
-  { path: "departments", loadChildren: () => DepartmentsModule,},
+  { path: "departments", loadChildren: () => DepartmentsModule, },
+  { path: "jobs", loadChildren: () => JobsModule, },
+  { path: "employees", loadChildren: () => EmployeesModule, },
   { path: "**", component: NotFoundComponent },
 ];
 

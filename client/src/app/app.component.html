@@ -1,5 +1,6 @@
 <div class="page-app">
   <mat-toolbar color="primary">
+    <div class="toolbar-links-container">
       <button mat-button class="toolbar-burger" (click)="sidenav.toggle()">
         <mat-icon>menu</mat-icon>
       </button>
@@ -7,6 +8,9 @@
       <a mat-button routerLink="/regions" class="toolbar-link">Regions</a>
       <a mat-button routerLink="/countries" class="toolbar-link">Countries</a>
       <a mat-button routerLink="/departments" class="toolbar-link">Departments</a>
+      <a mat-button routerLink="/jobs" class="toolbar-link">Jobs</a>
+      <a mat-button routerLink="/employees" class="toolbar-link">Employees</a>
+    </div>
   </mat-toolbar>
 </div>
 <mat-drawer-container>
@@ -23,6 +27,12 @@
       </a>
       <a mat-list-item routerLink="/departments" (click)="sidenav.close()">
         Departments
+      </a>
+      <a mat-list-item routerLink="/jobs" (click)="sidenav.close()">
+        Jobs
+      </a>
+      <a mat-list-item routerLink="/employees" (click)="sidenav.close()">
+        Employees
       </a>
     </mat-nav-list>
   </mat-drawer>

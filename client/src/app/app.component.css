@@ -1,25 +1,35 @@
-mat-drawer-container{
+mat-drawer-container {
     height: 100%;
 }
-mat-drawer{
+
+mat-drawer {
     height: 100%;
     width: 200px;
 }
-mat-drawer-content{
+
+mat-drawer-content {
     padding: 1rem;
     padding-top: 2rem;
 }
 
-.toolbar-link{
+.toolbar-links-container {
+    display: flex;
+    margin: auto;
+    max-width: 960px;
+    width: 100%;
+    justify-content: center;
+}
+
+.toolbar-link {
     display: none;
 }
 
 @media (min-width:599px) {
-    .toolbar-link{
+    .toolbar-link {
         display: initial;
     }
 
-    .toolbar-burger{
+    .toolbar-burger {
         display: none;
     }
 }
