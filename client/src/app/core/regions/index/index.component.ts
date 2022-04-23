@@ -10,6 +10,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { RegionUpdateModel } from 'src/app/models/regions/region-update.model';
 import { MatDialog } from '@angular/material/dialog';
 import { RegionUpsertDialogComponent } from '../region-upsert-dialog/region-upsert-dialog.component';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-index',
@@ -26,7 +27,8 @@ export class IndexComponent implements OnInit {
     private _store: Store,
     // private _route: ActivatedRoute,
     private _fb: FormBuilder,
-    private _dialog: MatDialog
+    private _dialog: MatDialog,
+    private _router:Router
   ) {
     // this.regions$ = this._regions.getAll()
     this.regions$ = this._store.select(selectAllRegions);
@@ -45,5 +47,8 @@ export class IndexComponent implements OnInit {
       width: '600px',
       data: region
     });
+  }
+  detail(regionId:number):void{
+    this._router.navigate(["/regions",regionId])
   }
 }

@@ -7,6 +7,7 @@ import { IndexComponent } from './index/index.component';
 import { EffectsModule } from '@ngrx/effects';
 import { RegionsApiEffects } from '../../core/regions/store/regions.effects';
 import { RegionUpsertDialogComponent } from '../../core/regions/region-upsert-dialog/region-upsert-dialog.component';
+import { RegionDetailComponent } from './region-detail/region-detail.component';
 
 
 export const metaReducers: MetaReducer<RegionsState.State>[] = RegionsState.metaReducers;
@@ -15,6 +16,7 @@ export const metaReducers: MetaReducer<RegionsState.State>[] = RegionsState.meta
   declarations: [
     IndexComponent,
     RegionUpsertDialogComponent,
+    RegionDetailComponent,
   ],
   imports: [
     SharedModule,

@@ -54,5 +54,17 @@ export class CountriesApiEffects {
                 )
             })
         )
+    });
+
+    readOne$ = createEffect(()=>{
+        return this.actions$.pipe(
+            ofType(CountriesActions.readOne),
+            exhaustMap(action=>{
+                return this.countriesService.getOne(action.countryId).pipe(
+                    map((country)=>CountriesActions.readOneSuccess({country})),
+                    catchError((error)=>of(CountriesActions.readOneFailure({error})))
+                )
+            })
+        )
     })
 }

@@ -1,10 +1,12 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { IndexComponent } from './index/index.component';
+import { RegionDetailComponent } from './region-detail/region-detail.component';
 
 const routes:Routes=[
   {path:"index",component:IndexComponent},
-  {path:"",redirectTo:"index",pathMatch:"full"}
+  {path:":regionId",component:RegionDetailComponent},
+  {path:"",redirectTo:"index",pathMatch:"full"},
 ]
 
 @NgModule({

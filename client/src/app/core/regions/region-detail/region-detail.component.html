@@ -1,0 +1,37 @@
+<div class="page-region-detail">
+    <div *ngIf="region;then regionCard else noRegion">
+    </div>
+</div>
+<ng-template #regionCard>
+    <mat-card>
+        <mat-card-subtitle>
+            {{region?.regionId}}
+        </mat-card-subtitle>
+        <mat-card-title>
+            {{region?.regionName}}
+        </mat-card-title>
+        <mat-card-content>
+            <mat-divider></mat-divider>
+            <div class="subtitle">
+                <h3>Countries of {{region?.regionName}}</h3>
+            </div>
+            <app-countries-table [countries]="region?.countries||[]" (editCountry)="null"></app-countries-table>
+        </mat-card-content>
+        <mat-card-actions></mat-card-actions>
+        <mat-card-footer *ngIf="loading$|async">
+            <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+        </mat-card-footer>
+    </mat-card>
+</ng-template>
+
+<ng-template #noRegion>
+    <mat-card>
+        <mat-card-title>
+            No Region or Loading
+        </mat-card-title>
+            <mat-divider></mat-divider>
+        <mat-card-footer *ngIf="loading$|async">
+            <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+        </mat-card-footer>
+    </mat-card>
+</ng-template>

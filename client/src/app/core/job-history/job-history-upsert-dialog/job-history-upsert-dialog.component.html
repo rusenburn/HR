@@ -1,0 +1,82 @@
+<mat-card *ngIf="create">
+    <mat-card-subtitle>
+        Create
+    </mat-card-subtitle>
+    <mat-card-content *ngIf="create;then createForm else updateForm">
+    </mat-card-content>
+</mat-card>
+
+
+
+<ng-template #createForm>
+    <form [formGroup]="jobHistoryForm" (ngSubmit)="submitForm()">
+        <mat-form-field>
+            <mat-label>Employee</mat-label>
+            <mat-select matInput formControlName="employeeId" autocomplete="off" placeholder="last name">
+                <mat-option>
+                    ----
+                </mat-option>
+                <mat-option *ngFor="let employee of employees$|async" [value]="employee.employeeId">
+                    {{employee.firstName}} {{employee.lastName}}
+                </mat-option>
+            </mat-select>
+            <mat-error></mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill">
+            <mat-label>Start Date</mat-label>
+            <input matInput [matDatepicker]="picker" formControlName="startDate">
+            <mat-hint>MM/DD/YYYY</mat-hint>
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+        </mat-form-field>
+
+        <mat-form-field>
+            <mat-label>Salary</mat-label>
+            <input matInput formControlName="salary" type="number" />
+            <mat-error></mat-error>
+        </mat-form-field>
+
+        <mat-form-field>
+            <mat-label>Department</mat-label>
+            <mat-select matInput formControlName="departmentId">
+                <mat-option [value]="0">---</mat-option>
+                <mat-option *ngFor="let department of departments$|async;" [value]="department.departmentId">
+                    {{department.departmentName}}</mat-option>
+            </mat-select>
+            <mat-error></mat-error>
+        </mat-form-field>
+
+        <mat-form-field>
+            <mat-label>Job</mat-label>
+            <mat-select matInput formControlName="jobId">
+                <mat-option [value]="0">---</mat-option>
+                <mat-option *ngFor="let job of jobs$|async;" [value]="job.jobId">{{job.jobTitle}}</mat-option>
+            </mat-select>
+            <mat-error></mat-error>
+        </mat-form-field>
+        <div class="button-container">
+            <button mat-raised-button color="primary">Submit</button>
+            <button mat-raised-button type="button" (click)="close()">Cancel</button>
+        </div>
+    </form>
+</ng-template>
+
+<ng-template #updateForm>
+    <form [formGroup]="jobHistoryForm" (ngSubmit)="submitForm()">
+        <mat-form-field appearance="fill">
+            <mat-label>End Date</mat-label>
+            <input matInput [matDatepicker]="picker" formControlName="endDate">
+            <mat-hint>MM/DD/YYYY</mat-hint>
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+        </mat-form-field>
+
+        <div class="button-container">
+            <button mat-raised-button color="primary">Submit</button>
+            <button mat-raised-button type="button" (click)="close()">Cancel</button>
+        </div>
+    </form>
+
+
+</ng-template>

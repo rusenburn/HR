@@ -6,10 +6,13 @@ import { MatListModule } from "@angular/material/list"
 import { MatIconModule } from "@angular/material/icon";
 import { MatDialogModule } from "@angular/material/dialog";
 import { MatCardModule } from "@angular/material/card";
-import {MatFormFieldModule} from "@angular/material/form-field";
-import {MatInputModule} from "@angular/material/input";
-import {MatTableModule} from "@angular/material/table";
-import {MatSelectModule} from "@angular/material/select";
+import { MatFormFieldModule } from "@angular/material/form-field";
+import { MatInputModule } from "@angular/material/input";
+import { MatTableModule } from "@angular/material/table";
+import { MatSelectModule } from "@angular/material/select";
+import { MatDatepickerModule } from "@angular/material/datepicker";
+import { MatNativeDateModule } from "@angular/material/core";
+import {MatProgressBarModule} from "@angular/material/progress-bar";
 
 const material = [
   MatSidenavModule,
@@ -22,11 +25,17 @@ const material = [
   MatFormFieldModule,
   MatInputModule,
   MatTableModule,
-  MatSelectModule
+  MatSelectModule,
+  MatDatepickerModule,
+  MatNativeDateModule,
+  MatProgressBarModule
 ]
 
 @NgModule({
   declarations: [],
+  imports: [
+    material
+  ],
   exports: [
     material
   ]

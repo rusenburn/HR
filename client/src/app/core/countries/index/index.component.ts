@@ -18,7 +18,7 @@ import { selectAllRegions } from '../../regions/store/regions.selectors';
 export class IndexComponent implements OnInit {
   countries$:Observable<CountryModel[]>;
   loading$:Observable<boolean>;
-  displayedColumns:string[];
+  displayedColumns: string[] = ["countryId", "countryName", "regionId", "actions"];
   regions$:Observable<RegionModel[]>;
   regions:RegionModel[]=[];
   constructor(
@@ -29,7 +29,7 @@ export class IndexComponent implements OnInit {
     this.loading$ = this._store.select(CountriesSelectors.selectLoading);
     this.regions$ = this._store.select(selectAllRegions);
     this.regions$.subscribe((data)=>this.regions=data);
-    this.displayedColumns=["countryId","countryName","regionId","actions"];
+    
    }
   ngOnInit(): void {
     this._store.dispatch(CountriesActions.readAll());

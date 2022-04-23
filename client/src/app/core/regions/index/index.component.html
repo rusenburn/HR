@@ -7,7 +7,8 @@
             Add new region
         </button>
     </div>
-    <table mat-table [dataSource]="(regions$|async)||[]" *ngIf="(regions$|async)?.length;else emptyRegions">
+    <app-regions-table [regions]="(regions$|async)||[]" (editRegion)="openDialog($event)"></app-regions-table>
+    <!-- <table mat-table [dataSource]="(regions$|async)||[]" *ngIf="(regions$|async)?.length;else emptyRegions">
         <ng-container matColumnDef="regionName">
             <th mat-header-cell *matHeaderCellDef>Region</th>
             <td mat-cell *matCellDef="let region">{{region.regionName}}</td>
@@ -21,6 +22,11 @@
         <ng-container matColumnDef="actions">
             <th mat-header-cell *matHeaderCellDef>Actions</th>
             <td mat-cell *matCellDef="let region">
+                <button mat-icon-button color="primary" (click)="detail(region.regionId)">
+                    <mat-icon>
+                        description
+                    </mat-icon>
+                </button>
                 <button mat-icon-button color="accent" (click)="openDialog(region)">
                     <mat-icon>
                         edit
@@ -31,8 +37,8 @@
 
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
         <tr mat-row *matRowDef="let row;columns:displayedColumns;"></tr>
-    </table>
+    </table> -->
 
-<ng-template #emptyRegions>
-    <p>There are no regions , Please Add one.</p>
-</ng-template>
+    <ng-template #emptyRegions>
+        <p>There are no regions , Please Add one.</p>
+    </ng-template>

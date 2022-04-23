@@ -7,12 +7,14 @@ import { CountriesApiEffects } from './store/countries.effects';
 import * as CountryState from "./store/countries.state";
 import { IndexComponent } from './index/index.component';
 import { CountryUpsertDialogComponent } from './country-upsert-dialog/country-upsert-dialog.component';
+import { CountryDetailComponent } from './country-detail/country-detail.component';
 
 
 @NgModule({
   declarations: [
     IndexComponent,
-    CountryUpsertDialogComponent
+    CountryUpsertDialogComponent,
+    CountryDetailComponent
   ],
   imports: [
     SharedModule,

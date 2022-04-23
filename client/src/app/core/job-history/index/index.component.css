@@ -1,0 +1,13 @@
+.page-job-history-index{
+    width: 90%;
+    max-width: 960px;
+    margin: auto;
+}
+table{
+    margin: auto;
+    width: 100%;
+    max-width: 960px;
+}
+th,td{
+    padding-left: 5px;
+}

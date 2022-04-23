@@ -9,6 +9,9 @@ export const createOne = createAction("[COUNTRIES] CreateOne", props<{ country: 
 export const updateOne = createAction("[COUNTRIES] UpdateOne", props<{ country: CountryUpdateModel }>());
 export const deleteOne = createAction("[COUNTRIES] DeleteOne", props<{ id: number }>());
 
+// ACTIVATE ROUTE 
+export const readOne = createAction("[COUNTRIES PARAM] ReadOne", props<{ countryId: number }>());
+
 
 // API ACTIONS
 export const readAllSuccess = createAction("[COUNTRIES API] ReadAllSuccess",props<{countries:CountryModel[]}>());
@@ -22,3 +25,6 @@ export const updateOneFailure = createAction("[COUNTRIES API] UpdateOneFailure",
 
 export const deleteOneSuccess = createAction("[COUNTRIES API] DeleteOneSuccess",props<{countryId:number}>())
 export const deleteOneFailure = createAction("[COUNTRIES API] DeleteOneFailure",props<{error:Error}>())
+
+export const readOneSuccess = createAction("[COUNTRIES API] ReadOneSuccess", props<{ country: CountryDetailModel }>());
+export const readOneFailure = createAction("[COUNTRIES API] ReadOneFailure", props<{ error: Error }>());

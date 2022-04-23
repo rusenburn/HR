@@ -8,7 +8,7 @@ from ..models import JobHistory
 from ..dependencies import get_job_history_mapper, get_unit_of_work
 
 router = APIRouter(
-    prefix="/job_histories",
+    prefix="/job-history",
     tags=["job histories"],
     responses={404: {
         "decription": "Specific Job History cannot be found."
@@ -78,8 +78,8 @@ def create_one(
     if employee.hire_date is None:
         employee.hire_date = create_dto.start_date
     uow.employees.update_one(employee)
-    uow.commit_refresh([job_history])
-
+    uow.commit_refresh([])
+    job_history = uow.job_histories.get_one(job_history.employee_id,job_history.start_date)
     dto = job_history_mapper.from_model_to_dto(job_history)
     return dto
 

@@ -10,6 +10,7 @@
       <a mat-button routerLink="/departments" class="toolbar-link">Departments</a>
       <a mat-button routerLink="/jobs" class="toolbar-link">Jobs</a>
       <a mat-button routerLink="/employees" class="toolbar-link">Employees</a>
+      <a mat-button routerLink="/job-history" class="toolbar-link">Job History</a>
     </div>
   </mat-toolbar>
 </div>
@@ -33,6 +34,9 @@
       </a>
       <a mat-list-item routerLink="/employees" (click)="sidenav.close()">
         Employees
+      </a>
+      <a mat-list-item routerLink="/job-history" (click)="sidenav.close()">
+        Job History
       </a>
     </mat-nav-list>
   </mat-drawer>

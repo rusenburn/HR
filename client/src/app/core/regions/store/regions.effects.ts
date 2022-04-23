@@ -1,12 +1,13 @@
-import { Injectable } from "@angular/core";
+import { Inject, Injectable } from "@angular/core";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
-import { catchError, concatMap, exhaustAll, exhaustMap, map, mergeMap, of } from "rxjs";
+import { ActivatedRoute } from "@angular/router";
+import { catchError, concatMap, exhaustAll, exhaustMap, map, mergeMap, of, switchMap } from "rxjs";
 import { RegionsService } from "src/app/services/regions.service";
 import * as RegionActions from "./regions.actions";
 
 @Injectable()
 export class RegionsApiEffects {
-    constructor(private regionService: RegionsService, private actions$: Actions) { }
+    constructor(private regionService: RegionsService, private actions$: Actions, private route: ActivatedRoute) { }
 
     readAll$ = createEffect(() => {
         return this.actions$.pipe(
@@ -51,6 +52,35 @@ export class RegionsApiEffects {
                 return this.regionService.updateOne(action.region).pipe(
                     map((region) => RegionActions.updateOneSuccess({ region })),
                     catchError((error) => of(RegionActions.updateOneFailure({ error })))
+                )
+            })
+        )
+    });
+
+
+    paramMapChange$ = createEffect(() => {
+        return this.route.paramMap.pipe(
+            exhaustMap(param => {
+                const regionId = +(param.get('regionId') || '0');
+                console.log(`${regionId} region Id from effects`);
+                if (regionId === 0) {
+                    return of(RegionActions.readOneNever());
+                }
+                return this.regionService.getOne(regionId).pipe(
+                    map(region => RegionActions.readOneSuccess({ region })),
+                    catchError(error => of(RegionActions.readOneFailure({ error })))
+                )
+            })
+        )
+    });
+
+    readOne$ = createEffect(() => {
+        return this.actions$.pipe(
+            ofType(RegionActions.readOne),
+            exhaustMap((action) => {
+                return this.regionService.getOne(action.regionId).pipe(
+                    map(region => RegionActions.readOneSuccess({ region })),
+                    catchError(error => of(RegionActions.readOneFailure({ error })))
                 )
             })
         )

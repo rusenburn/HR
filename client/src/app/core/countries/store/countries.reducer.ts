@@ -1,5 +1,6 @@
 
 import { createReducer, on } from "@ngrx/store";
+import { CountryDetailModel } from "src/app/models/countries/country-detail.model";
 import { CountryModel } from "src/app/models/countries/country.model";
 import * as CountriesActions from "./countries.action";
 
@@ -14,12 +15,14 @@ export interface CountriesState {
     countries: CountryModel[];
     loading: boolean;
     error: Error | null;
+    countryDetail: CountryDetailModel | null;
 }
 
 const initialState: CountriesState = {
     countries: [],
     loading: false,
-    error: null
+    error: null,
+    countryDetail: null
 }
 
 export const reducer = createReducer(initialState,
@@ -27,6 +30,7 @@ export const reducer = createReducer(initialState,
         CountriesActions.createOne,
         CountriesActions.deleteOne,
         CountriesActions.updateOne,
+        CountriesActions.readOne,
         (state) => {
             return { ...state, loading: true };
         }),
@@ -34,6 +38,7 @@ export const reducer = createReducer(initialState,
         CountriesActions.deleteOneFailure,
         CountriesActions.createOneFailure,
         CountriesActions.updateOneFailure,
+        CountriesActions.readOneFailure,
         (state, action) => {
             return { ...state, loading: false, error: action.error };
         }),
@@ -53,5 +58,14 @@ export const reducer = createReducer(initialState,
         countries.splice(index, 1);
         return { ...state, loading: false, countries }
     }),
+    on(CountriesActions.readOneSuccess, (state, action) => {
+        const index = state.countries.findIndex(c=>c.countryId===action.country.countryId);
+        let countries = state.countries;
+        if(index !== -1){
+            countries = [...state.countries];
+            countries.splice(index,1,action.country);
+        }
+        return { ...state, loading: false, countryDetail: action.country ,countries}
+    })
 );
 
