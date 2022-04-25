@@ -26,7 +26,7 @@ def get_all(
     return dtos
 
 
-@router.get("/job_id", response_model=JobDTO)
+@router.get("/{job_id}", response_model=JobDTO)
 def get_one(job_id: int,
             uow: UnitOfWork = Depends(get_unit_of_work),
             job_mapper: JobMapper = Depends(get_job_mapper)
@@ -66,7 +66,7 @@ def update_one(job_update: JobUpdate,
     dto = job_mapper.from_model_to_nested(job)
     return dto
 
-@router.delete("/job_id", status_code=204)
+@router.delete("/{job_id}", status_code=204)
 def delete_one(job_id: int,
                uow: UnitOfWork = Depends(get_unit_of_work),
                ):

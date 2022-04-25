@@ -82,5 +82,17 @@ export class DepartmentsEffects {
                 )
             })
         )
-    })
+    });
+
+    readOne$ = createEffect(() => {
+        return this.actions$.pipe(
+            ofType(DepartmentActions.readOne),
+            exhaustMap(action => {
+                return this.departmentsService.getOne(action.departmentId).pipe(
+                    map((department) => DepartmentActions.readOneSuccess({ department })),
+                    catchError(error => of(DepartmentActions.readOneFailure({ error })))
+                )
+            })
+        )
+    });
 }

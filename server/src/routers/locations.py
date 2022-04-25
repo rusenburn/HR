@@ -24,7 +24,7 @@ def get_all(country_id: int = Query(0), skip: int = Query(0), limit: int = Query
     return dtos
 
 
-@router.get("/location_id")
+@router.get("/{location_id}")
 def get_one(location_id: int,
             uow: UnitOfWork = Depends(get_unit_of_work),
             location_mapper: LocationMapper = Depends(get_location_mapper)

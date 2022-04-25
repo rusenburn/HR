@@ -7,11 +7,13 @@ import { EffectsModule } from '@ngrx/effects';
 import { JobsEffects as JobsAPIEffects } from './store/jobs.effects';
 import { IndexComponent } from './index/index.component';
 import { JobsUpsertDialogComponent } from './jobs-upsert-dialog/jobs-upsert-dialog.component';
+import { JobDetailComponent } from './job-detail/job-detail.component';
 
 @NgModule({
   declarations: [
     IndexComponent,
-    JobsUpsertDialogComponent
+    JobsUpsertDialogComponent,
+    JobDetailComponent
   ],
   imports: [
     SharedModule,

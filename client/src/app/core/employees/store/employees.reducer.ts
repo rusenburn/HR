@@ -1,4 +1,5 @@
 import { createReducer, on } from "@ngrx/store";
+import { EmployeeDetailModel } from "src/app/models/employees/employee-detail.model";
 import { EmployeeModel } from "src/app/models/employees/employee.model";
 import * as EmployeesActions from "./employees.actions";
 
@@ -13,13 +14,15 @@ const cloneArrayWithUpdatedItem = function (employees: EmployeeModel[], employee
 export interface EmployeesState {
     employees: EmployeeModel[],
     loading: boolean,
-    error: Error | null
+    error: Error | null,
+    employeeDetail: EmployeeDetailModel | null,
 }
 
 const initialState: EmployeesState = {
     employees: [],
     loading: false,
-    error: null
+    error: null,
+    employeeDetail: null,
 };
 
 export const reducer = createReducer(initialState,
@@ -27,6 +30,7 @@ export const reducer = createReducer(initialState,
         EmployeesActions.createOne,
         EmployeesActions.deleteOne,
         EmployeesActions.updateOne,
+        EmployeesActions.readOne,
         (state) => {
             return { ...state, loading: true };
         }),
@@ -34,6 +38,7 @@ export const reducer = createReducer(initialState,
         EmployeesActions.deleteOneFailure,
         EmployeesActions.createOneFailure,
         EmployeesActions.updateOneFailure,
+        EmployeesActions.readOneFailure,
         (state, action) => {
             return { ...state, loading: false, error: action.error };
         }),
@@ -53,4 +58,7 @@ export const reducer = createReducer(initialState,
         employees.splice(index, 1);
         return { ...state, loading: false, employees }
     }),
+    on(EmployeesActions.readOneSuccess, (state, action) => {
+        return { ...state, loading: false, employeeDetail: action.employeeDetail };
+    })
 );

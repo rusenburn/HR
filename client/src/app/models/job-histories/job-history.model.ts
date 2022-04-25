@@ -1,8 +1,8 @@
 export interface JobHistoryModel{
     employeeId:number;
-    startDate:Date;
+    startDate:string;
     salary:number;
-    endDate:Date|null;
+    endDate:string|null;
     jobId:number|null;
     departmentId:number|null;
 }

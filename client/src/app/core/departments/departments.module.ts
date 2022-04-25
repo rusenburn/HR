@@ -7,11 +7,13 @@ import { StoreModule } from '@ngrx/store';
 import { reducers, metaReducers } from './store/departments.state';
 import { EffectsModule } from '@ngrx/effects';
 import { DepartmentsEffects } from "./store/departments.effects";
+import { DepartmentDetailComponent } from './department-detail/department-detail.component';
 
 @NgModule({
   declarations: [
     IndexComponent,
-    DepartmentsUpsertDialogComponent
+    DepartmentsUpsertDialogComponent,
+    DepartmentDetailComponent
   ],
   imports: [
     SharedModule,

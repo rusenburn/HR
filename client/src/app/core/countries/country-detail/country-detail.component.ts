@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { Observable, Subscription } from 'rxjs';
+import { Observable, Subject, Subscription, takeUntil } from 'rxjs';
 import { CountryDetailModel } from 'src/app/models/countries/country-detail.model';
 import { readOne } from '../store/countries.action';
 import { selectCountryDetail, selectLoading } from '../store/countries.selectors';
@@ -13,33 +13,32 @@ import { selectCountryDetail, selectLoading } from '../store/countries.selectors
 })
 export class CountryDetailComponent implements OnInit, OnDestroy {
   country: CountryDetailModel | null = null;
-  subs: Subscription[] = [];
+  destroy$ = new Subject<void>();
   country$: Observable<CountryDetailModel | null>;
   loading$: Observable<boolean>;
   constructor(
     private _route: ActivatedRoute,
     private _store: Store
   ) {
-    let sub = this._store.select(selectCountryDetail).subscribe((country) => {
-      this.country = country;
-    })
-    this.subs.push(sub);
+    this._store.select(selectCountryDetail).pipe(
+      takeUntil(this.destroy$)).subscribe((country) => {
+        this.country = country;
+      })
     this.country$ = this._store.select(selectCountryDetail);
     this.loading$ = this._store.select(selectLoading);
   }
 
 
   ngOnInit(): void {
-    let a = this._route.paramMap.subscribe(this.subscribeFn);
-    this.subs.push(a)
+    this._route.paramMap
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(this.subscribeFn);
+
   }
 
   ngOnDestroy(): void {
-    for (let sub of this.subs) {
-      if (!sub.closed) {
-        sub.unsubscribe();
-      }
-    }
+    this.destroy$.next();
+    this.destroy$.unsubscribe();
   }
 
   private subscribeFn = (param: ParamMap) => {

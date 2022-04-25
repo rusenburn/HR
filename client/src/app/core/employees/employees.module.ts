@@ -7,12 +7,14 @@ import { EmployeesAPIEffects } from './store/employees.effect';
 import { reducers as employeesReducers, metaReducers } from "./store/employees.state";
 import { IndexComponent } from './index/index.component';
 import { EmployeeUpsertDialogComponent } from './employee-upsert-dialog/employee-upsert-dialog.component';
+import { EmployeeDetailComponent } from './employee-detail/employee-detail.component';
 
 
 @NgModule({
   declarations: [
     IndexComponent,
-    EmployeeUpsertDialogComponent
+    EmployeeUpsertDialogComponent,
+    EmployeeDetailComponent
   ],
   imports: [
     SharedModule,

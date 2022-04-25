@@ -1,6 +1,6 @@
 export interface JobHistoryCreateModel{
     employeeId:number;
-    startDate:Date;
+    startDate:string;
     salary:number;
     jobId:number;
     departmentId:number;

@@ -5,7 +5,9 @@
     <div>
         <button mat-raised-button color="primary" (click)="openDialog(null)">Add New Department</button>
     </div>
-    <table mat-table [dataSource]="(departments$|async) || []"
+    <ng-template *ngIf="(departments$|async);then table else emptyDepartments">
+    </ng-template>
+    <!-- <table mat-table [dataSource]="(departments$|async) || []"
         *ngIf="(departments$|async)?.length else emptyDepartments">
 
         <ng-container matColumnDef="departmentName">
@@ -39,9 +41,14 @@
         </ng-container>
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
         <tr mat-row *matRowDef="let row;columns:displayedColumns;"></tr>
-    </table>
+    </table> -->
 </div>
 
 <ng-template #emptyDepartments>
     <p>There are no departments, please add one.</p>
+</ng-template>
+
+<ng-template #table>
+    <app-departments-table [departments]="(departments$|async)||[]" (editDepartment)="openDialog($event)">
+    </app-departments-table>
 </ng-template>

@@ -31,7 +31,7 @@ def get_all(manager_id: int|None = Query(0), job_id: int|None = Query(0), depart
     return dtos
 
 
-@router.get("/employee_id", response_model=EmployeeDTO)
+@router.get("/{employee_id}", response_model=EmployeeDTO)
 def get_one(employee_id: int,
             uow: UnitOfWork = Depends(get_unit_of_work),
             employee_mapper: EmployeeMapper = Depends(get_employee_mapper)
@@ -72,7 +72,7 @@ def update_one(update_dto: EmployeeUpdate,
     return dto
 
 
-@router.delete("/employee_id", status_code=204)
+@router.delete("/{employee_id}", status_code=204)
 def delete_one(employee_id: int,
                uow: UnitOfWork = Depends(get_unit_of_work),
                ):

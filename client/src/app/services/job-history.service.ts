@@ -31,7 +31,7 @@ export class JobHistoryService {
     return this._client.put<JobHistoryDetailModel>(`${this._baseURL}/`, jobHistory);
   }
 
-  public deleteOne(employeeId: number, startDate: Date): Observable<void> {
+  public deleteOne(employeeId: number, startDate: string): Observable<void> {
     return this._client.delete<void>(`${this._baseURL}/${employeeId}/${startDate}`);
   }
 }

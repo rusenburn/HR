@@ -1,0 +1,62 @@
+<table mat-table [dataSource]="employees">
+
+    <ng-container matColumnDef="employeeId">
+        <th mat-header-cell *matHeaderCellDef>Id</th>
+        <td mat-cell *matCellDef="let employee;">{{employee.employeeId}}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="firstName">
+        <th mat-header-cell *matHeaderCellDef>First name</th>
+        <td mat-cell *matCellDef="let employee;">{{employee.firstName}}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="lastName">
+        <th mat-header-cell *matHeaderCellDef>Last name</th>
+        <td mat-cell *matCellDef="let employee;">{{employee.lastName}}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="email">
+        <th mat-header-cell *matHeaderCellDef>email</th>
+        <td mat-cell *matCellDef="let employee;">{{employee.email}}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="hireDate">
+        <th mat-header-cell *matHeaderCellDef>Hire Date</th>
+        <td mat-cell *matCellDef="let employee;">{{employee.hireDate|| "N/A"}}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="salary">
+        <th mat-header-cell *matHeaderCellDef>salary</th>
+        <td mat-cell *matCellDef="let employee;">{{employee.salary || "N/A"}}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="jobId">
+        <th mat-header-cell *matHeaderCellDef>jobId</th>
+        <td mat-cell *matCellDef="let employee;">{{employee.jobId || "N/A"}}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="managerId">
+        <td mat-header-cell *matHeaderCellDef>managerId</td>
+        <td mat-cell *matCellDef="let employee;">{{employee.managerId || "N/A"}}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="departmentId">
+        <th mat-header-cell *matHeaderCellDef>departmentId</th>
+        <td mat-cell *matCellDef="let employee;">{{employee.departmentId || "N/A"}}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef>Actions</th>
+        <td mat-cell *matCellDef="let employee;">
+            <button mat-icon-button color="primary" (click)="detail(employee.employeeId)">
+                <mat-icon>description</mat-icon>
+            </button>
+            <button mat-icon-button color="accent" (click)="edit(employee)">
+                <mat-icon>edit</mat-icon>
+            </button>
+        </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row;columns:displayedColumns;"></tr>
+</table>

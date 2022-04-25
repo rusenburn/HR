@@ -53,5 +53,17 @@ export class JobsEffects {
                 )
             })
         )
-    })
+    });
+
+    readOne$ = createEffect(() => {
+        return this.actions$.pipe(
+            ofType(JobsActions.readOneJob),
+            exhaustMap(action => {
+                return this.jobsService.getOne(action.jobId).pipe(
+                    map((jobDetail) => JobsActions.readOneSuccess({ jobDetail })),
+                    catchError(error => of(JobsActions.readOneFailure({ error })))
+                )
+            })
+        )
+    });
 }

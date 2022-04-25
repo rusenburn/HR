@@ -1,0 +1,35 @@
+<div class="page-job-detail">
+    <div *ngIf="job;then jobCard else noJob"></div>
+</div>
+
+<ng-template #jobCard>
+    <mat-card>
+        <mat-card-subtitle>{{job?.jobId}}</mat-card-subtitle>
+        <mat-card-title>{{job?.jobTitle}}</mat-card-title>
+        <mat-card-content>
+            <ul>
+                <li>Minimum Salary : {{job?.minSalary}}</li>
+                <li>Maximum Salary : {{job?.maxSalary}}</li>
+            </ul>
+
+            <mat-tab-group>
+                <mat-tab label="current employees">
+                    <app-employees-table [employees]="job?.employees || []">
+                    </app-employees-table>
+                </mat-tab>
+                <mat-tab label="Job History">
+                    <app-job-history-table [jobHistoryCollection]="job?.jobHistories||[]">
+                    </app-job-history-table>
+                </mat-tab>
+            </mat-tab-group>
+        </mat-card-content>
+        <mat-card-actions></mat-card-actions>
+        <mat-card-footer *ngIf="loading$|async">
+            <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+        </mat-card-footer>
+    </mat-card>
+</ng-template>
+
+<ng-template #noJob>
+    Page is Loading or Error.
+</ng-template>

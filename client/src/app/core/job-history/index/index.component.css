@@ -3,10 +3,9 @@
     max-width: 960px;
     margin: auto;
 }
-table{
+.page-title{
+    text-align: center;
     margin: auto;
-    width: 100%;
-    max-width: 960px;
 }
 th,td{
     padding-left: 5px;

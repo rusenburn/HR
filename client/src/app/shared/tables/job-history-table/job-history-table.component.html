@@ -1,0 +1,44 @@
+<table mat-table [dataSource]="jobHistoryCollection">
+
+    <ng-container matColumnDef="employeeId">
+        <th mat-header-cell *matHeaderCellDef>Employee Id</th>
+        <td mat-cell *matCellDef="let jobHistory">{{jobHistory.employeeId}}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="startDate">
+        <th mat-header-cell *matHeaderCellDef>Start Date</th>
+        <td mat-cell *matCellDef="let jobHistory">{{parseDate(jobHistory.startDate.toString())}}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="endDate">
+        <th mat-header-cell *matHeaderCellDef>End Date</th>
+        <td mat-cell *matCellDef="let jobHistory">{{parseDate(jobHistory.endDate?.toString())|| "N/A"}}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="salary">
+        <th mat-header-cell *matHeaderCellDef>Salary</th>
+        <td mat-cell *matCellDef="let jobHistory">{{jobHistory.salary}}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="departmentId">
+        <th mat-header-cell *matHeaderCellDef>Department Id</th>
+        <td mat-cell *matCellDef="let jobHistory">{{jobHistory.departmentId}}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="jobId">
+        <th mat-header-cell *matHeaderCellDef>Job Id</th>
+        <td mat-cell *matCellDef="let jobHistory">{{jobHistory.jobId}}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef>Actions</th>
+        <td mat-cell *matCellDef="let jobHistory;">
+            <button mat-icon-button color="accent" (click)="edit(jobHistory)">
+                <mat-icon>edit</mat-icon>
+            </button>
+        </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row;columns:displayedColumns;"></tr>
+</table>

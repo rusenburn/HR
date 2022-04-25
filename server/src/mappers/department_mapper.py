@@ -25,7 +25,9 @@ class DepartmentMapper():
             department_name=department.department_name,
             location_id=department.location_id,
             employees=list(map(self._nested.to_employee_nested,department.employees)),
-            job_histories=list(map(self._nested.to_job_history_nested,department.job_histories)))
+            job_histories=list(map(self._nested.to_job_history_nested,department.job_histories)),
+            location=self._nested.to_location_nested(department.location))
+            
         return dto
     
     def from_model_to_nested(self,department:Department)->DepartmentNested:

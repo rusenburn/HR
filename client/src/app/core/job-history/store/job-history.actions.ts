@@ -6,7 +6,7 @@ import { JobHistoryUpdateModel } from "src/app/models/job-histories/job-history-
 export const readAll = createAction("[JobHistory] ReadAll");
 export const createOne = createAction("[JobHistory] CreateOne", props<{ jobHistory: JobHistoryCreateModel }>());
 export const updateOne = createAction("[JobHistory] UpdateOne", props<{ jobHistory: JobHistoryUpdateModel }>());
-export const deleteOne = createAction("[JobHistory] DeleteOne", props<{ employeeId: number,startDate:Date }>());
+export const deleteOne = createAction("[JobHistory] DeleteOne", props<{ employeeId: number,startDate:string }>());
 
 
 // API ACTIONS
@@ -19,5 +19,5 @@ export const createOneFailure = createAction("[JobHistory API] CreateOneSuccess"
 export const updateOneSuccess = createAction("[JobHistory API] UpdateOneSuccess", props<{ jobHistory: JobHistoryDetailModel }>())
 export const updateOneFailure = createAction("[JobHistory API] UpdateOneFailure", props<{ error: Error }>())
 
-export const deleteOneSuccess = createAction("[JobHistory API] DeleteOneSuccess", props<{ employeeId: number,startDate:Date }>())
-export const deleteOneFailure = createAction("[JobHistory API] DeleteOneFailure", props<{ error: Error }>())
+export const deleteOneSuccess = createAction("[JobHistory API] DeleteOneSuccess", props<{ employeeId: number,startDate:string }>());
+export const deleteOneFailure = createAction("[JobHistory API] DeleteOneFailure", props<{ error: Error }>());

@@ -13,6 +13,8 @@ class JobHistoryUpdate(BaseModel):
 
     @validator('end_date')
     def max_salary_not_smaller_than_min_salary(cls, v: int, values: dict, **kwargs):
-        if v and 'start_date' in values and v < values['start_date']:
-            raise ValueError('max_salary must be bigger than min_salary')
+        if v and 'start_date' in values :
+            start_date = values['start_date']
+            if v < start_date:
+                raise ValueError('max_salary must be bigger than min_salary')
         return v

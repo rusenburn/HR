@@ -1,5 +1,6 @@
 import { createAction, props } from "@ngrx/store";
 import { EmployeeCreateModel } from "src/app/models/employees/employee-create.model";
+import { EmployeeDetailModel } from "src/app/models/employees/employee-detail.model";
 import { EmployeeUpdateModel } from "src/app/models/employees/employee-update.model";
 import { EmployeeModel } from "src/app/models/employees/employee.model";
 
@@ -9,15 +10,21 @@ export const updateOne = createAction("[Employees] UpdateOne", props<{ employee:
 export const deleteOne = createAction("[Employees] DeleteOne", props<{ id: number }>());
 
 
+// Route
+export const readOne = createAction("[EMPLOYEES ROUTE] ReadOne", props<{ employeeId: number }>());
+
 // API ACTIONS
-export const readAllSuccess = createAction("[Employees API] ReadAllSuccess",props<{employees:EmployeeModel[]}>());
-export const readAllFailure = createAction("[Employees API] ReadAllFailure",props<{error:Error}>());
+export const readAllSuccess = createAction("[Employees API] ReadAllSuccess", props<{ employees: EmployeeModel[] }>());
+export const readAllFailure = createAction("[Employees API] ReadAllFailure", props<{ error: Error }>());
 
-export const createOneSuccess = createAction("[Employees API] CreateOneSuccess",props<{employee:EmployeeModel}>())
-export const createOneFailure = createAction("[Employees API] CreateOneSuccess",props<{error:Error}>())
+export const createOneSuccess = createAction("[Employees API] CreateOneSuccess", props<{ employee: EmployeeModel }>());
+export const createOneFailure = createAction("[Employees API] CreateOneSuccess", props<{ error: Error }>());
 
-export const updateOneSuccess = createAction("[Employees API] UpdateOneSuccess",props<{employee:EmployeeModel}>())
-export const updateOneFailure = createAction("[Employees API] UpdateOneFailure",props<{error:Error}>())
+export const updateOneSuccess = createAction("[Employees API] UpdateOneSuccess", props<{ employee: EmployeeModel }>());
+export const updateOneFailure = createAction("[Employees API] UpdateOneFailure", props<{ error: Error }>());
 
-export const deleteOneSuccess = createAction("[Employees API] DeleteOneSuccess",props<{employeeId:number}>())
-export const deleteOneFailure = createAction("[Employees API] DeleteOneFailure",props<{error:Error}>())
+export const deleteOneSuccess = createAction("[Employees API] DeleteOneSuccess", props<{ employeeId: number }>());
+export const deleteOneFailure = createAction("[Employees API] DeleteOneFailure", props<{ error: Error }>());
+
+export const readOneSuccess = createAction("[Employees API] ReadOneSuccess", props<{ employeeDetail: EmployeeDetailModel }>());
+export const readOneFailure = createAction("[Employees API] ReadOneFailure", props<{ error: Error }>());

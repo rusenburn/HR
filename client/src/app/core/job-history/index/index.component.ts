@@ -18,7 +18,6 @@ import { readAll as readAllJobs } from '../../jobs/store/jobs.actions';
 export class IndexComponent implements OnInit {
   jobHistoryCollection$: Observable<JobHistoryDetailModel[]>;
   loading$: Observable<boolean>;
-  displayedColumns: string[] = [];
   dialogOpenedOnce: boolean = false;
 
   constructor(
@@ -27,7 +26,6 @@ export class IndexComponent implements OnInit {
   ) {
     this.jobHistoryCollection$ = this._store.select(selectAllJobHistory);
     this.loading$ = this._store.select(selectLoading);
-    this.displayedColumns = ["employee", "startDate", "endDate", "department", "job", "salary", "actions"]
   }
 
   ngOnInit(): void {
@@ -50,13 +48,4 @@ export class IndexComponent implements OnInit {
       width:"600px"
     });
   }
-
-  public parseDate(date: Date | null): string {
-    // temporary solution
-    if (date) {
-      return new Date(Date.parse(date.toString())).toDateString();
-    }
-    return "N/A";
-  }
-
 }

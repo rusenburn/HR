@@ -1,4 +1,5 @@
 import { createReducer, on } from "@ngrx/store";
+import { JobDetailModel } from "src/app/models/jobs/job-detail.model";
 import { JobModel } from "src/app/models/jobs/job.model";
 import * as JobsActions from "./jobs.actions";
 
@@ -13,12 +14,14 @@ export interface JobsState {
     jobs: JobModel[];
     loading: boolean;
     error: Error | null;
+    jobDetail: JobDetailModel | null;
 }
 
 const initialState: JobsState = {
     jobs: [],
     loading: false,
-    error: null
+    error: null,
+    jobDetail: null
 }
 
 export const reducer = createReducer(
@@ -27,6 +30,7 @@ export const reducer = createReducer(
         JobsActions.createOne,
         JobsActions.updateOne,
         JobsActions.deleteOne,
+        JobsActions.readOneJob,
         (state) => {
             return { ...state, loading: true }
         }
@@ -36,6 +40,7 @@ export const reducer = createReducer(
         JobsActions.createOneFailure,
         JobsActions.updateOneFailure,
         JobsActions.deleteOneFailure,
+        JobsActions.readOneFailure,
         (state, action) => {
             return { ...state, loading: false, error: action.error };
         }
@@ -65,6 +70,10 @@ export const reducer = createReducer(
             jobs.splice(index, 1);
             return { ...state, loading: false, jobs };
         }
-    )
+    ),
+    on(JobsActions.readOneSuccess,
+        (state, action) => {
+            return { ...state, loading: false, jobDetail: action.jobDetail };
+        })
 
 )

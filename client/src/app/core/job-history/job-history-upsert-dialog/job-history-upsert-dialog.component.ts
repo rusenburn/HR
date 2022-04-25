@@ -71,7 +71,7 @@ export class JobHistoryUpsertDialogComponent {
   private createFormToModel(): JobHistoryCreateModel {
     const model: JobHistoryCreateModel = {
       employeeId: this.jobHistoryForm.value.employeeId,
-      startDate: (this.jobHistoryForm.value.startDate) as Date,
+      startDate: (this.jobHistoryForm.value.startDate as Date).toISOString() ,
       salary: this.jobHistoryForm.value.salary || 0,
       jobId: this.jobHistoryForm.value.jobId || 0,
       departmentId: this.jobHistoryForm.value.departmentId || 0
@@ -86,7 +86,7 @@ export class JobHistoryUpsertDialogComponent {
     const model: JobHistoryUpdateModel = {
       employeeId: this.jobHistoryModel.employeeId,
       startDate: this.jobHistoryModel.startDate,
-      endDate: this.jobHistoryForm.value.endDate || null
+      endDate: (this.jobHistoryForm.value.endDate as Date).toISOString() || null
     }
     return model;
   }

@@ -13,6 +13,7 @@ import { MatSelectModule } from "@angular/material/select";
 import { MatDatepickerModule } from "@angular/material/datepicker";
 import { MatNativeDateModule } from "@angular/material/core";
 import {MatProgressBarModule} from "@angular/material/progress-bar";
+import {MatTabsModule} from "@angular/material/tabs"
 
 const material = [
   MatSidenavModule,
@@ -28,7 +29,8 @@ const material = [
   MatSelectModule,
   MatDatepickerModule,
   MatNativeDateModule,
-  MatProgressBarModule
+  MatProgressBarModule,
+  MatTabsModule
 ]
 
 @NgModule({

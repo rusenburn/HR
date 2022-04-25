@@ -7,7 +7,7 @@ class JobDTO(BaseModel):
     job_title:str = Field(...,alias="jobTitle")
     min_salary : int = Field(...,alias="minSalary")
     max_salary : int = Field(...,alias="maxSalary")
-    employees:list[EmployeeNested] 
+    employees:list[EmployeeNested]
     job_histories:list[JobHistoryNested] = Field(...,alias="jobHistories")
 
     

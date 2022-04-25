@@ -11,7 +11,7 @@ export const deleteOne = createAction("[REGIONS] DeleteOne", props<{ id: number 
 
 
 export const readOne = createAction("[REGIONS PARAM] ReadOne", props<{ regionId: number }>());
-export const readOneNever = createAction("[REGIONS PARAM] ReadOneNever]");
+// export const readOneNever = createAction("[REGIONS PARAM] ReadOneNever]");
 
 // API ACTIONS
 export const readAllSuccess = createAction("[REGIONS API] ReadAllSuccess", props<{ regions: RegionModel[] }>());

@@ -54,5 +54,18 @@ export class EmployeesAPIEffects {
                 )
             })
         )
-    })
+    });
+
+    readOne$ = createEffect(() => {
+        return this.actions$.pipe(
+            ofType(EmployeesActions.readOne),
+            exhaustMap(action => {
+                return this.employeesService.getOne(action.employeeId).pipe(
+                    map((employeeDetail) => EmployeesActions.readOneSuccess({ employeeDetail })),
+                    catchError(error => of(EmployeesActions.readOneFailure({ error })))
+                )
+            })
+        )
+    });
+
 }

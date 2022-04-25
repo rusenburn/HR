@@ -3,14 +3,15 @@ import { DepartmentsState } from "./departments.reducers";
 import { DepartmentsSharedState } from "./departments.state";
 
 
-const _selectAllDepartments = (state:DepartmentsState)=>state.departments;
-const _selectLoading = (state:DepartmentsState)=>state.loading;
+const _selectAllDepartments = (state: DepartmentsState) => state.departments;
+const _selectLoading = (state: DepartmentsState) => state.loading;
+const _selectDepartmentDetail = (state: DepartmentsState) => state.departmentDetail;
 
 export const selectSharedDepartmentsState = createFeatureSelector<DepartmentsSharedState>("[DEPARTMENTS]");
 
 export const selectDepartmentsState = createSelector(
     selectSharedDepartmentsState,
-    (sharedState)=>sharedState.departments
+    (sharedState) => sharedState.departments
 );
 
 export const selectAllDepartmets = createSelector(
@@ -22,3 +23,7 @@ export const selectLoading = createSelector(
     selectDepartmentsState,
     _selectLoading
 );
+export const selectDepartmentDetail = createSelector(
+    selectDepartmentsState,
+    _selectDepartmentDetail
+)

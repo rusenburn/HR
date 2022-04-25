@@ -1,5 +1,6 @@
 import { Actions } from "@ngrx/effects";
 import { createReducer, on } from "@ngrx/store";
+import { DepartmentDetailModel } from "src/app/models/departments/department-detail.model";
 import { DepartmentLocationedModel } from "src/app/models/departments/department-locationed";
 import { DepartmentModel } from "src/app/models/departments/department.model";
 import { LocationModel } from "src/app/models/locations/location.model";
@@ -16,12 +17,14 @@ export interface DepartmentsState {
     departments: DepartmentLocationedModel[];
     loading: boolean;
     error: Error | null;
+    departmentDetail: DepartmentDetailModel | null;
 }
 
 const initialState: DepartmentsState = {
     departments: [],
     loading: false,
-    error: null
+    error: null,
+    departmentDetail: null
 }
 
 export const reducer = createReducer(
@@ -46,7 +49,7 @@ export const reducer = createReducer(
             action.locations.forEach((l) => dict.set(l.locationId, l));
             const departments: DepartmentLocationedModel[] = [];
             // const departments = action.departments.map<DepartmentLocationedModel>(d=>{return {...d,location:dict[d.locationId]}})
-            action.departments.forEach(d => departments.push({ ...d, location: dict.get(d.locationId)as LocationModel }));
+            action.departments.forEach(d => departments.push({ ...d, location: dict.get(d.locationId) as LocationModel }));
             return { ...state, loading: false, departments }
         }),
     on(DepartmentsActions.createOneSuccess,
@@ -66,5 +69,9 @@ export const reducer = createReducer(
             const index = departments.findIndex(d => d.departmentId === action.departmentId);
             departments.splice(index, 1);
             return { ...state, loading: false, departments }
+        }),
+    on(DepartmentsActions.readOneSuccess,
+        (state, action) => {
+            return { ...state, loading: false, departmentDetail: action.department }
         })
 )

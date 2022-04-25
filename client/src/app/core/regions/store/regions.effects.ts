@@ -56,24 +56,7 @@ export class RegionsApiEffects {
             })
         )
     });
-
-
-    paramMapChange$ = createEffect(() => {
-        return this.route.paramMap.pipe(
-            exhaustMap(param => {
-                const regionId = +(param.get('regionId') || '0');
-                console.log(`${regionId} region Id from effects`);
-                if (regionId === 0) {
-                    return of(RegionActions.readOneNever());
-                }
-                return this.regionService.getOne(regionId).pipe(
-                    map(region => RegionActions.readOneSuccess({ region })),
-                    catchError(error => of(RegionActions.readOneFailure({ error })))
-                )
-            })
-        )
-    });
-
+    
     readOne$ = createEffect(() => {
         return this.actions$.pipe(
             ofType(RegionActions.readOne),
