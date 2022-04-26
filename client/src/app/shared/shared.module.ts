@@ -11,6 +11,12 @@ import { EmployeesTableComponent } from './tables/employees-table/employees-tabl
 import { JobsTableComponent } from './tables/jobs-table/jobs-table.component';
 import { JobHistoryDetailTableComponent } from './tables/job-history-detail-table/job-history-detail-table.component';
 import { JobHistoryTableComponent } from './tables/job-history-table/job-history-table.component';
+import { RegionsStore } from '../stores/region/regions.store';
+import { CountriesStore } from '../stores/countries/countries.store';
+import { DepartmentsStore } from '../stores/departments/departments.store';
+import { EmployeeStore } from '../stores/employees/employees.store';
+import { JobsStore } from '../stores/jobs/jobs.store';
+import { JobHisotryStore } from '../stores/job-history/job-history.store';
 
 const components = [
   RegionsTableComponent,
@@ -26,7 +32,13 @@ const modules = [
   ReactiveFormsModule,
   FormsModule,
   HttpClientModule,
-  MaterialsModule
+  MaterialsModule,
+  RegionsStore,
+  CountriesStore,
+  DepartmentsStore,
+  EmployeeStore,
+  JobsStore,
+  JobHisotryStore
 ];
 @NgModule({
   declarations: [

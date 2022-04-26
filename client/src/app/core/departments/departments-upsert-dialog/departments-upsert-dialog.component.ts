@@ -5,8 +5,7 @@ import { Store } from '@ngrx/store';
 import { CountryModel } from 'src/app/models/countries/country.model';
 import { DepartmentUpdateModel } from 'src/app/models/departments/department-update.model';
 import { LocationUpdateModel } from 'src/app/models/locations/location-update.model';
-import { LocationModel } from 'src/app/models/locations/location.model';
-import {createOne,updateOne} from "../store/departments.actions";
+import {createOne,updateOne} from "src/app/stores/departments/departments.actions";
 @Component({
   selector: 'app-departments-upsert-dialog',
   templateUrl: './departments-upsert-dialog.component.html',

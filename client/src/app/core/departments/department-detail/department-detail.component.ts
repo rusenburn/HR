@@ -1,10 +1,10 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { Observable, Subject, Subscription, takeUntil } from 'rxjs';
+import { Observable, Subject, takeUntil } from 'rxjs';
 import { DepartmentDetailModel } from 'src/app/models/departments/department-detail.model';
-import { readOne } from '../store/departments.actions';
-import { selectDepartmentDetail, selectLoading } from '../store/departments.selectors';
+import { readOne } from 'src/app/stores/departments/departments.actions';
+import { selectDepartmentDetail, selectLoading } from 'src/app/stores/departments/departments.selectors';
 
 @Component({
   selector: 'app-department-detail',

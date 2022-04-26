@@ -1,23 +1,27 @@
-import { Component, Inject } from '@angular/core';
+import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Store } from '@ngrx/store';
 import { JobUpdateModel } from 'src/app/models/jobs/job-update.model';
-import { createOne, updateOne } from "../store/jobs.actions";
+import { createOne, createOneSuccess, updateOne, updateOneSuccess } from "src/app/stores/jobs/jobs.actions";
 import { CustomValidators } from 'src/app/shared/validators/customValidators.validator';
+import { Actions, ofType } from '@ngrx/effects';
+import { Subject, takeUntil } from 'rxjs';
 @Component({
   selector: 'app-jobs-upsert-dialog',
   templateUrl: './jobs-upsert-dialog.component.html',
   styleUrls: ['./jobs-upsert-dialog.component.css']
 })
-export class JobsUpsertDialogComponent {
+export class JobsUpsertDialogComponent implements OnInit, OnDestroy {
   job: JobUpdateModel;
   jobForm: FormGroup;
+  private destroy$ = new Subject<void>();
   constructor(
     private _store: Store,
     private _fb: FormBuilder,
     private diaglogRef: MatDialogRef<JobsUpsertDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: any
+    private actions$: Actions,
+    @Inject(MAT_DIALOG_DATA) public data: any,
   ) {
     this.job = data.job;
     this.jobForm = this._fb.group({
@@ -26,6 +30,16 @@ export class JobsUpsertDialogComponent {
       maxSalary: [this.job?.maxSalary, [Validators.required, Validators.min(0)]]
     })
     this.jobForm.addValidators([CustomValidators.notSmaller("maxSalary", "minSalary")]);
+  }
+
+  ngOnInit(): void {
+    this.actions$
+      .pipe(takeUntil(this.destroy$), ofType(createOneSuccess,updateOneSuccess))
+      .subscribe(() => this.diaglogRef.close())
+  }
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   public submitForm(): void {

@@ -26,8 +26,9 @@ export const updateOneFailure = createAction("[REGIONS API] UpdateOneFailure", p
 export const deleteOneSuccess = createAction("[REGIONS API] DeleteOneSuccess", props<{ regionId: number }>());
 export const deleteOneFailure = createAction("[REGIONS API] DeleteOneFailure", props<{ error: Error }>());
 
-
 export const readOneSuccess = createAction("[REGIONS API] ReadOneSuccess", props<{ region: RegionDetailModel }>());
 export const readOneFailure = createAction("[REGIONS API] ReadOneFailure", props<{ error: Error }>());
+
+export const closeDialogSuccess = createAction("[REGION API] CloseDialog");
 
 

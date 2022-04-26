@@ -2,10 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { RegionModel } from 'src/app/models/regions/region.model';
-import { RegionsService } from 'src/app/services/regions.service';
-import { selectAllRegions, selectLoading } from '../store/regions.selectors';
-import * as RegionActions from '../store/regions.actions';
-// import { ActivatedRoute } from '@angular/router';
+import { selectAllRegions, selectLoading } from 'src/app/stores/region/regions.selectors';
+import * as RegionActions from 'src/app/stores/region/regions.actions';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { RegionUpdateModel } from 'src/app/models/regions/region-update.model';
 import { MatDialog } from '@angular/material/dialog';
@@ -21,16 +19,13 @@ export class IndexComponent implements OnInit {
   regions$: Observable<RegionModel[]>;
   loading$: Observable<boolean>;
   regionForm: FormGroup;
-  displayedColumns:string[]=["regionName","regionId","actions"]
+  displayedColumns: string[] = ["regionName", "regionId", "actions"]
   constructor(
-    private _regions: RegionsService,
     private _store: Store,
-    // private _route: ActivatedRoute,
     private _fb: FormBuilder,
     private _dialog: MatDialog,
-    private _router:Router
+    private _router: Router
   ) {
-    // this.regions$ = this._regions.getAll()
     this.regions$ = this._store.select(selectAllRegions);
     this.loading$ = this._store.select(selectLoading);
     this.regionForm = this._fb.group({
@@ -41,14 +36,14 @@ export class IndexComponent implements OnInit {
   ngOnInit(): void {
     this._store.dispatch(RegionActions.readAll());
   }
-  
+
   openDialog(region: RegionUpdateModel | null): void {
     const di = this._dialog.open(RegionUpsertDialogComponent, {
       width: '600px',
       data: region
     });
   }
-  detail(regionId:number):void{
-    this._router.navigate(["/regions",regionId])
+  detail(regionId: number): void {
+    this._router.navigate(["/regions", regionId])
   }
 }

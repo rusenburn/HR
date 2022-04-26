@@ -4,28 +4,24 @@ import { catchError, concatMap, exhaustMap, map, mergeMap, of } from "rxjs";
 import { DepartmentsService } from "src/app/services/departments.service";
 import { LocationsService } from "src/app/services/locations.service";
 import * as DepartmentActions from "./departments.actions";
-import * as LocationsActions from "../../locations/store/locations.actions";
 import { DepartmentUpdateModel } from "src/app/models/departments/department-update.model";
+import { MatDialog, MatDialogActions } from "@angular/material/dialog";
 
 @Injectable()
-export class DepartmentsEffects {
+export class DepartmentsAPIEffects {
     constructor(
         private departmentsService: DepartmentsService,
         private locationsService: LocationsService,
-        private actions$: Actions) { }
+        private actions$: Actions,
+        private dialog: MatDialog) { }
 
     readAll$ = createEffect(() => {
         return this.actions$.pipe(
             ofType(DepartmentActions.readAll),
             exhaustMap(() => {
                 return this.locationsService.getAll()
-                // .pipe(
-                //     map(locations => LocationsActions.readAllSuccess({ locations })),
-                // catchError(error => of(DepartmentActions.readAllFailure({ error })))
-                // )
             }),
             exhaustMap((locations) => {
-                // const locations = action.locations;
                 return this.departmentsService.getAll().pipe(
                     map(departments => DepartmentActions.readAllSuccess({ departments, locations }))
                 )
@@ -43,7 +39,12 @@ export class DepartmentsEffects {
                         concatMap((location) => {
                             const d = { ...action.department, locationId: location.locationId };
                             return this.departmentsService.createOne(d).pipe(
-                                map(department => DepartmentActions.createOneSuccess({ department, location })),
+                                map(department => {
+                                    if (this.dialog.openDialogs.length) {
+                                        this.dialog.closeAll();
+                                    }
+                                    return DepartmentActions.createOneSuccess({ department, location })
+                                }),
                                 catchError(error => of(DepartmentActions.createOneFailure({ error })))
                             );
                         }),
@@ -62,7 +63,12 @@ export class DepartmentsEffects {
                     concatMap((location) => {
                         const d: DepartmentUpdateModel = { ...action.department, locationId: location.locationId };
                         return this.departmentsService.updateOne(d).pipe(
-                            map(department => DepartmentActions.updateOneSuccess({ department, location })),
+                            map(department => {
+                                if (this.dialog.openDialogs.length) {
+                                    this.dialog.closeAll();
+                                }
+                                return DepartmentActions.updateOneSuccess({ department, location })
+                            }),
                             catchError(error => of(DepartmentActions.updateOneFailure({ error })))
                         )
                     }),

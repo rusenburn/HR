@@ -14,7 +14,7 @@ export const selectDepartmentsState = createSelector(
     (sharedState) => sharedState.departments
 );
 
-export const selectAllDepartmets = createSelector(
+export const selectAllDepartments = createSelector(
     selectDepartmentsState,
     _selectAllDepartments
 );

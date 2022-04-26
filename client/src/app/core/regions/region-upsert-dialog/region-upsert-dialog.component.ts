@@ -1,10 +1,10 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Store } from '@ngrx/store';
 import { RegionUpdateModel } from 'src/app/models/regions/region-update.model';
-import * as RegionActions from '../store/regions.actions';
+import * as RegionActions from 'src/app/stores/region/regions.actions';
 
 
 @Component({
@@ -12,7 +12,7 @@ import * as RegionActions from '../store/regions.actions';
   templateUrl: './region-upsert-dialog.component.html',
   styleUrls: ['./region-upsert-dialog.component.css']
 })
-export class RegionUpsertDialogComponent implements OnInit {
+export class RegionUpsertDialogComponent  {
   public region: RegionUpdateModel;
   public regionForm:FormGroup;
   constructor(
@@ -26,9 +26,6 @@ export class RegionUpsertDialogComponent implements OnInit {
       regionName: [this.region?.regionName, [Validators.required, Validators.maxLength(52)]]
     })
   }
-  ngOnInit(): void {
-  }
-
 
   public submitForm() {
     let model = this.formToModel();

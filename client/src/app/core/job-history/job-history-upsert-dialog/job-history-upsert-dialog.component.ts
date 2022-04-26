@@ -8,10 +8,10 @@ import { EmployeeModel } from 'src/app/models/employees/employee.model';
 import { JobHistoryCreateModel } from 'src/app/models/job-histories/job-history-create.model';
 import { JobHistoryUpdateModel } from 'src/app/models/job-histories/job-history-update';
 import { JobModel } from 'src/app/models/jobs/job.model';
-import { selectAllDepartmets } from '../../departments/store/departments.selectors';
-import { selectAllEmployees } from '../../employees/store/employees.selectors';
-import { selectAllJobs } from '../../jobs/store/jobs.selectors';
-import { createOne, updateOne } from '../store/job-history.actions';
+import { selectAllDepartments } from 'src/app/stores/departments/departments.selectors';
+import { selectAllEmployees } from 'src/app/stores/employees/employees.selectors';
+import { selectAllJobs } from 'src/app/stores/jobs/jobs.selectors';
+import { createOne, updateOne } from 'src/app/stores/job-history/job-history.actions';
 @Component({
   selector: 'app-job-history-upsert-dialog',
   templateUrl: './job-history-upsert-dialog.component.html',
@@ -34,7 +34,7 @@ export class JobHistoryUpsertDialogComponent {
     data: any) {
     this.employees$ = this._store.select(selectAllEmployees);
     this.jobs$ = this._store.select(selectAllJobs);
-    this.departments$ = this._store.select(selectAllDepartmets);
+    this.departments$ = this._store.select(selectAllDepartments);
     this.create = data.create === true;
     this.jobHistoryModel = data.jobHistory;
     if (this.create) {

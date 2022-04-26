@@ -1,4 +1,5 @@
 import { Injectable } from "@angular/core";
+import { MatDialog } from "@angular/material/dialog";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
 import { catchError, concatMap, exhaustMap, map, mergeMap, of } from "rxjs";
 import { CountriesService } from "src/app/services/countries.service";
@@ -6,7 +7,7 @@ import * as CountriesActions from "./countries.action";
 
 @Injectable()
 export class CountriesApiEffects {
-    constructor(private countriesService: CountriesService, private actions$: Actions) { }
+    constructor(private countriesService: CountriesService, private actions$: Actions, private dialog: MatDialog) { }
     readAll$ = createEffect(() => {
         return this.actions$.pipe(
             ofType(CountriesActions.readAll),
@@ -25,7 +26,12 @@ export class CountriesApiEffects {
             ofType(CountriesActions.createOne),
             concatMap((action) => {
                 return this.countriesService.createOne(action.country).pipe(
-                    map(country => CountriesActions.createOneSuccess({ country })),
+                    map(country => {
+                        if (this.dialog.openDialogs.length) {
+                            this.dialog.closeAll();
+                        }
+                        return CountriesActions.createOneSuccess({ country })
+                    }),
                     catchError(error => of(CountriesActions.createOneFailure({ error })))
                 )
             })
@@ -37,7 +43,12 @@ export class CountriesApiEffects {
             ofType(CountriesActions.updateOne),
             concatMap(action => {
                 return this.countriesService.updateOne(action.country).pipe(
-                    map(country => CountriesActions.updateOneSuccess({ country })),
+                    map(country => {
+                        if (this.dialog.openDialogs.length) {
+                            this.dialog.closeAll();
+                        }
+                        return CountriesActions.updateOneSuccess({ country })
+                    }),
                     catchError(error => of(CountriesActions.updateOneFailure({ error })))
                 )
             })
@@ -56,13 +67,13 @@ export class CountriesApiEffects {
         )
     });
 
-    readOne$ = createEffect(()=>{
+    readOne$ = createEffect(() => {
         return this.actions$.pipe(
             ofType(CountriesActions.readOne),
-            exhaustMap(action=>{
+            exhaustMap(action => {
                 return this.countriesService.getOne(action.countryId).pipe(
-                    map((country)=>CountriesActions.readOneSuccess({country})),
-                    catchError((error)=>of(CountriesActions.readOneFailure({error})))
+                    map((country) => CountriesActions.readOneSuccess({ country })),
+                    catchError((error) => of(CountriesActions.readOneFailure({ error })))
                 )
             })
         )

@@ -1,13 +1,16 @@
-import { Inject, Injectable } from "@angular/core";
+import { Injectable } from "@angular/core";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
-import { ActivatedRoute } from "@angular/router";
-import { catchError, concatMap, exhaustAll, exhaustMap, map, mergeMap, of, switchMap } from "rxjs";
+import { catchError, concatMap, exhaustMap, map, mergeMap, of } from "rxjs";
 import { RegionsService } from "src/app/services/regions.service";
 import * as RegionActions from "./regions.actions";
+import { MatDialog, MatDialogRef, } from "@angular/material/dialog";
+import { RegionUpsertDialogComponent } from "src/app/core/regions/region-upsert-dialog/region-upsert-dialog.component";
+
+
 
 @Injectable()
 export class RegionsApiEffects {
-    constructor(private regionService: RegionsService, private actions$: Actions, private route: ActivatedRoute) { }
+    constructor(private regionService: RegionsService, private actions$: Actions, private dialog: MatDialog) { }
 
     readAll$ = createEffect(() => {
         return this.actions$.pipe(
@@ -26,7 +29,12 @@ export class RegionsApiEffects {
             ofType(RegionActions.createOne),
             concatMap((action) => {
                 return this.regionService.createOne(action.region).pipe(
-                    map(region => RegionActions.createOneSuccess({ region })),
+                    map(region => {
+                        if (this.dialog.openDialogs.length) {
+                            this.dialog.closeAll();
+                        }
+                        return RegionActions.createOneSuccess({ region })
+                    }),
                     catchError(error => of(RegionActions.createOneFailure({ error })))
                 )
             })
@@ -50,13 +58,18 @@ export class RegionsApiEffects {
             ofType(RegionActions.updateOne),
             concatMap((action) => {
                 return this.regionService.updateOne(action.region).pipe(
-                    map((region) => RegionActions.updateOneSuccess({ region })),
+                    map((region) => {
+                        if (this.dialog.openDialogs.length) {
+                            this.dialog.closeAll();
+                        }
+                        return RegionActions.updateOneSuccess({ region })
+                    }),
                     catchError((error) => of(RegionActions.updateOneFailure({ error })))
                 )
             })
         )
     });
-    
+
     readOne$ = createEffect(() => {
         return this.actions$.pipe(
             ofType(RegionActions.readOne),
@@ -67,7 +80,5 @@ export class RegionsApiEffects {
                 )
             })
         )
-    })
-
-
+    });
 }

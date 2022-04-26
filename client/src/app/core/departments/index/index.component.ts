@@ -2,14 +2,12 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Store } from '@ngrx/store';
 import { Observable, Subscription } from 'rxjs';
-import { DepartmentModel } from 'src/app/models/departments/department.model';
-import { selectAllDepartmets, selectLoading } from '../store/departments.selectors';
-import { readAll as readAllDepartments } from '../store/departments.actions';
+import { selectAllDepartments, selectLoading } from 'src/app/stores/departments/departments.selectors';
+import { readAll as readAllDepartments } from 'src/app/stores/departments/departments.actions';
 import { DepartmentsUpsertDialogComponent } from '../departments-upsert-dialog/departments-upsert-dialog.component';
-import { DepartmentUpdateModel } from 'src/app/models/departments/department-update.model';
 import { CountryModel } from 'src/app/models/countries/country.model';
-import { selectAllCountries } from '../../countries/store/countries.selectors';
-import { readAll as readAllCountries } from '../../countries/store/countries.action';
+import { selectAllCountries } from 'src/app/stores/countries/countries.selectors';
+import { readAll as readAll } from 'src/app/stores/countries/countries.action';
 import { DepartmentLocationedModel } from 'src/app/models/departments/department-locationed';
 @Component({
   selector: 'app-index',
@@ -27,7 +25,7 @@ export class IndexComponent implements OnInit, OnDestroy {
     private _store: Store,
     private _dialog: MatDialog,
   ) {
-    this.departments$ = this._store.select(selectAllDepartmets);
+    this.departments$ = this._store.select(selectAllDepartments);
     this.loading$ = this._store.select(selectLoading);
     this.countries$ = this._store.select(selectAllCountries);
     let sub = this.countries$.subscribe((countries) => {
@@ -44,7 +42,7 @@ export class IndexComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this._store.dispatch(readAllDepartments());
-    this._store.dispatch(readAllCountries());
+    this._store.dispatch(readAll());
   }
 
   openDialog(department: DepartmentLocationedModel | null): void {

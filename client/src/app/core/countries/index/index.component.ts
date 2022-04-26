@@ -3,13 +3,13 @@ import { MatDialog } from '@angular/material/dialog';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { CountryModel } from 'src/app/models/countries/country.model';
-import * as CountriesSelectors from "../store/countries.selectors";
-import * as CountriesActions from "../store/countries.action";
+import * as CountriesSelectors from "src/app/stores/countries/countries.selectors";
+import * as CountriesActions from "src/app/stores/countries/countries.action";
 import { CountryUpdateModel } from 'src/app/models/countries/country-update.model';
 import { CountryUpsertDialogComponent } from '../country-upsert-dialog/country-upsert-dialog.component';
 import { RegionModel } from 'src/app/models/regions/region.model';
-import {readAll as readAllRegions} from "../../regions/store/regions.actions";
-import { selectAllRegions } from '../../regions/store/regions.selectors';
+import {readAll as readAllRegions} from "src/app/stores/region/regions.actions";
+import { selectAllRegions } from 'src/app/stores/region/regions.selectors';
 @Component({
   selector: 'app-index',
   templateUrl: './index.component.html',

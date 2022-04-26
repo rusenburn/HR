@@ -1,4 +1,5 @@
 import { Injectable } from "@angular/core";
+import { MatDialog } from "@angular/material/dialog";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
 import { catchError, concatMap, exhaustMap, map, mergeMap, of } from "rxjs";
 import { EmployeesService } from "src/app/services/employees.service";
@@ -6,7 +7,10 @@ import * as EmployeesActions from "./employees.actions";
 
 @Injectable()
 export class EmployeesAPIEffects {
-    constructor(private employeesService: EmployeesService, private actions$: Actions) { }
+    constructor(
+        private employeesService: EmployeesService,
+        private actions$: Actions,
+        private dialog: MatDialog) { }
 
     readAll$ = createEffect(() =>
         this.actions$.pipe(
@@ -25,7 +29,12 @@ export class EmployeesAPIEffects {
             ofType(EmployeesActions.createOne),
             concatMap((action) => {
                 return this.employeesService.createOne(action.employee).pipe(
-                    map(employee => EmployeesActions.createOneSuccess({ employee })),
+                    map(employee => {
+                        if (this.dialog.openDialogs.length) {
+                            this.dialog.closeAll();
+                        }
+                        return EmployeesActions.createOneSuccess({ employee })
+                    }),
                     catchError(error => of(EmployeesActions.createOneFailure({ error })))
                 )
             })
@@ -37,7 +46,12 @@ export class EmployeesAPIEffects {
             ofType(EmployeesActions.updateOne),
             concatMap((action) => {
                 return this.employeesService.updateOne(action.employee).pipe(
-                    map(employee => EmployeesActions.updateOneSuccess({ employee })),
+                    map(employee => {
+                        if (this.dialog.openDialogs.length) {
+                            this.dialog.closeAll();
+                        }
+                        return EmployeesActions.updateOneSuccess({ employee })
+                    }),
                     catchError(error => of(EmployeesActions.updateOneFailure({ error })))
                 )
             })

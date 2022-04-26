@@ -13,6 +13,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { HomeComponent } from './core/home/home.component';
 import { CoreModule } from './core/core.module';
+import { MatDialogModule } from '@angular/material/dialog';
 
 @NgModule({
   declarations: [
@@ -27,6 +28,7 @@ import { CoreModule } from './core/core.module';
     EffectsModule.forRoot([]),
     BrowserAnimationsModule,
     CoreModule,
+    MatDialogModule
   ],
   providers: [
     { provide: AppConfig, useValue: new AppConfig() },

@@ -3,7 +3,7 @@
         <h1>Jobs</h1>
     </div>
     <button mat-raised-button color="primary" (click)="openDialog(null)">Add New Job</button>
-    <app-jobs-table [jobs]="(jobs$|async)||[]"></app-jobs-table>
+    <app-jobs-table [jobs]="(jobs$|async)||[]" (editJob)="openDialog($event)"></app-jobs-table>
     <!-- <table mat-table [dataSource]="(jobs$|async)||[]" *ngIf="(jobs$|async)?.length;else whenEmpty">
 
         <ng-container matColumnDef="jobId">

@@ -3,13 +3,13 @@ import { MatDialog } from '@angular/material/dialog';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { JobHistoryDetailModel } from 'src/app/models/job-histories/job-history-detail.model';
-import { selectAllJobHistory, selectLoading } from '../store/job-history.selectors';
-import { readAll as readAllJobHistory } from '../store/job-history.actions';
+import { selectAllJobHistory, selectLoading } from 'src/app/stores/job-history/job-history.selectors';
+import { readAll as readAllJobHistory } from 'src/app/stores/job-history/job-history.actions';
 import { JobHistoryUpsertDialogComponent } from '../job-history-upsert-dialog/job-history-upsert-dialog.component';
-import { readAll as readAllEmployees } from '../../employees/store/employees.actions';
+import { readAll as readAllEmployees } from 'src/app/stores/employees/employees.actions';
 import { JobHistoryUpdateModel } from 'src/app/models/job-histories/job-history-update';
-import { readAll as readAllDepartments } from '../../departments/store/departments.actions';
-import { readAll as readAllJobs } from '../../jobs/store/jobs.actions';
+import { readAll as readAllDepartments } from 'src/app/stores/departments/departments.actions';
+import { readAll as readAllJobs } from 'src/app/stores/jobs/jobs.actions';
 @Component({
   selector: 'app-index',
   templateUrl: './index.component.html',
@@ -45,7 +45,7 @@ export class IndexComponent implements OnInit {
         create: jobHistory === null
       },
       disableClose: true,
-      width:"600px"
+      width: "600px"
     });
   }
 }

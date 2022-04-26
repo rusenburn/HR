@@ -47,6 +47,7 @@ export const reducer = createReducer(
     ),
     on(JobsActions.readAllSuccess,
         (state, action) => {
+            console.log(action.jobs);
             return { ...state, loading: false, jobs: action.jobs };
         }
     ),

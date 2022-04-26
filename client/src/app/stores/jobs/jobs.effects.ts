@@ -3,6 +3,7 @@ import { Actions, createEffect, ofType } from "@ngrx/effects";
 import { catchError, concatMap, exhaustMap, map, mergeMap, of } from "rxjs";
 import { JobsService } from "src/app/services/jobs.service";
 import * as JobsActions from "./jobs.actions";
+
 @Injectable()
 export class JobsEffects {
     constructor(private jobsService: JobsService, private actions$: Actions) { }

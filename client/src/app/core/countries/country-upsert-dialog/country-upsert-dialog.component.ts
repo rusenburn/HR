@@ -1,11 +1,11 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Store } from '@ngrx/store';
 import { CountryUpdateModel } from 'src/app/models/countries/country-update.model';
 import { RegionModel } from 'src/app/models/regions/region.model';
-import { createOne as createCountryAction } from '../store/countries.action';
-import { updateOne as updateCountryAction } from '../store/countries.action';
+import { createOne as createCountryAction } from 'src/app/stores/countries/countries.action';
+import { updateOne as updateCountryAction } from 'src/app/stores/countries/countries.action';
 
 
 @Component({
@@ -13,7 +13,7 @@ import { updateOne as updateCountryAction } from '../store/countries.action';
   templateUrl: './country-upsert-dialog.component.html',
   styleUrls: ['./country-upsert-dialog.component.css']
 })
-export class CountryUpsertDialogComponent implements OnInit {
+export class CountryUpsertDialogComponent  {
   public country: CountryUpdateModel;
   public countryForm: FormGroup;
   public regions:RegionModel[];
@@ -29,9 +29,6 @@ export class CountryUpsertDialogComponent implements OnInit {
       countryName: [this.country?.countryName, [Validators.required, Validators.maxLength(52)]],
       regionId: [this.country?.regionId || 0, [Validators.required, Validators.min(1)]]
     })
-  }
-
-  ngOnInit(): void {
   }
 
   public submitForm() {
