@@ -1,8 +1,6 @@
-import { Actions } from "@ngrx/effects";
 import { createReducer, on } from "@ngrx/store";
 import { DepartmentDetailModel } from "src/app/models/departments/department-detail.model";
 import { DepartmentLocationedModel } from "src/app/models/departments/department-locationed";
-import { DepartmentModel } from "src/app/models/departments/department.model";
 import { LocationModel } from "src/app/models/locations/location.model";
 import * as DepartmentsActions from "./departments.actions";
 
@@ -18,14 +16,24 @@ export interface DepartmentsState {
     loading: boolean;
     error: Error | null;
     departmentDetail: DepartmentDetailModel | null;
+    pageIndex: number;
+    pageSize: number;
+    sortActive: string;
+    ascending: boolean;
+    byCountry: number | null;
 }
 
 const initialState: DepartmentsState = {
     departments: [],
     loading: false,
     error: null,
-    departmentDetail: null
-}
+    departmentDetail: null,
+    pageIndex: 0,
+    pageSize: 10,
+    sortActive: "departmentId",
+    ascending: true,
+    byCountry: null
+};
 
 export const reducer = createReducer(
     initialState,
@@ -36,6 +44,18 @@ export const reducer = createReducer(
         (state) => {
             return { ...state, loading: true };
         }),
+    on(DepartmentsActions.updatePagination, (state, action) => {
+        return { ...state, pageIndex: action.pageIndex, pageSize: action.pageSize };
+    }),
+    on(DepartmentsActions.updateSorting, (state, action) => {
+        return { ...state, ascending: action.asc, sortActive: action.active };
+    }),
+    on(DepartmentsActions.setCountryFilter, (state, action) => {
+        return { ...state, byCountry: action.countryId };
+    }),
+    on(DepartmentsActions.clearCountryFilter, (state) => {
+        return { ...state, byCountry: null };
+    }),
     on(DepartmentsActions.createOneFailure,
         DepartmentsActions.readAllFailure,
         DepartmentsActions.deleteOneFailure,

@@ -1,10 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { RegionModel } from 'src/app/models/regions/region.model';
 import { selectAllRegions, selectLoading } from 'src/app/stores/region/regions.selectors';
-import * as RegionActions from 'src/app/stores/region/regions.actions';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { RegionUpdateModel } from 'src/app/models/regions/region-update.model';
 import { MatDialog } from '@angular/material/dialog';
 import { RegionUpsertDialogComponent } from '../region-upsert-dialog/region-upsert-dialog.component';
@@ -15,7 +13,7 @@ import { Router } from '@angular/router';
   templateUrl: './index.component.html',
   styleUrls: ['./index.component.css']
 })
-export class IndexComponent implements OnInit {
+export class IndexComponent {
   regions$: Observable<RegionModel[]>;
   loading$: Observable<boolean>;
 
@@ -29,14 +27,11 @@ export class IndexComponent implements OnInit {
     this.loading$ = this._store.select(selectLoading);
   }
 
-  ngOnInit(): void {
-    this._store.dispatch(RegionActions.readAll({ skip: 0, limit: 2147483647 }));
-  }
-
   openDialog(region: RegionUpdateModel | null): void {
     const di = this._dialog.open(RegionUpsertDialogComponent, {
       width: '600px',
-      data: region
+      data: region,
+      disableClose: true,
     });
   }
   detail(regionId: number): void {

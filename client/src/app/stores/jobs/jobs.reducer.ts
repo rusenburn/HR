@@ -15,14 +15,22 @@ export interface JobsState {
     loading: boolean;
     error: Error | null;
     jobDetail: JobDetailModel | null;
+    pageIndex: number;
+    pageSize: number;
+    ascending: boolean;
+    sortActive: string;
 }
 
 const initialState: JobsState = {
     jobs: [],
     loading: false,
     error: null,
-    jobDetail: null
-}
+    jobDetail: null,
+    pageIndex: 0,
+    pageSize: 20,
+    ascending: true,
+    sortActive: "jobId"
+};
 
 export const reducer = createReducer(
     initialState,
@@ -35,6 +43,12 @@ export const reducer = createReducer(
             return { ...state, loading: true }
         }
     ),
+    on(JobsActions.updatePagination, (state, action) => {
+        return { ...state, pageIndex: action.pageIndex, pageSize: action.pageSize };
+    }),
+    on(JobsActions.updateSorting, (state, action) => {
+        return { ...state, ascending: action.asc, sortActive: action.sortActive };
+    }),
     on(
         JobsActions.readAllFailure,
         JobsActions.createOneFailure,

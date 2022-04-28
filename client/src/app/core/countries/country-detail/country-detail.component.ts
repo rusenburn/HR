@@ -2,9 +2,10 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import { Store } from '@ngrx/store';
 
-import {  Observable, Subject, takeUntil } from 'rxjs';
+import { Observable, Subject, takeUntil } from 'rxjs';
 import { CountryDetailModel } from 'src/app/models/countries/country-detail.model';
 import { DepartmentLocationedModel } from 'src/app/models/departments/department-locationed';
+import { defaultDepartmentQuery } from 'src/app/models/departments/department-query.model';
 import { readOne } from 'src/app/stores/countries/countries.action';
 import { selectCountryDepartments, selectCountryDetail, selectLoading } from 'src/app/stores/countries/countries.selectors';
 import { readAll as readAllDepartments } from 'src/app/stores/departments/departments.actions';
@@ -17,9 +18,9 @@ import { readAll as readAllDepartments } from 'src/app/stores/departments/depart
 export class CountryDetailComponent implements OnInit, OnDestroy {
   country: CountryDetailModel | null = null;
   destroy$ = new Subject<void>();
-   country$: Observable<CountryDetailModel | null>;
+  country$: Observable<CountryDetailModel | null>;
   loading$: Observable<boolean>;
-  departments$:Observable<DepartmentLocationedModel[]>;
+  departments$: Observable<DepartmentLocationedModel[]>;
   constructor(
     private _route: ActivatedRoute,
     private _store: Store
@@ -38,7 +39,7 @@ export class CountryDetailComponent implements OnInit, OnDestroy {
     this._route.paramMap
       .pipe(takeUntil(this.destroy$))
       .subscribe(this.subscribeFn);
-    this._store.dispatch(readAllDepartments())
+    this._store.dispatch(readAllDepartments({ ...defaultDepartmentQuery }));
   }
 
   ngOnDestroy(): void {

@@ -1,19 +1,19 @@
 <div class="page-region-detail">
-    <div *ngIf="region;then regionCard else noRegion">
+    <div *ngIf="region$|async;then regionCard else noRegion">
     </div>
 </div>
 <ng-template #regionCard>
-    <mat-card>
+    <mat-card *ngIf="(region$|async)as region">
         <mat-card-subtitle>
-            {{region?.regionId}}
+            {{region.regionId}}
         </mat-card-subtitle>
         <mat-card-title>
-            {{region?.regionName}}
+            {{region.regionName}}
         </mat-card-title>
         <mat-card-content>
             <mat-divider></mat-divider>
             <div class="subtitle">
-                <h3>Countries of {{region?.regionName}}</h3>
+                <h3>Countries of {{region.regionName}}</h3>
             </div>
             <app-countries-table (editCountry)="null"></app-countries-table>
         </mat-card-content>
@@ -24,6 +24,9 @@
     </mat-card>
 </ng-template>
 
+<ng-container>
+
+</ng-container>
 <ng-template #noRegion>
     <mat-card>
         <mat-card-title>

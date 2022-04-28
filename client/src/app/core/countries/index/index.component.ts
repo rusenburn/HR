@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Store } from '@ngrx/store';
-import { map, mergeMap, Observable, of, Subject, switchMap, takeUntil } from 'rxjs';
+import { Observable, Subject, takeUntil } from 'rxjs';
 import { CountryModel } from 'src/app/models/countries/country.model';
 import * as CountriesSelectors from "src/app/stores/countries/countries.selectors";
 import * as CountriesActions from "src/app/stores/countries/countries.action";
@@ -10,7 +10,6 @@ import { CountryUpsertDialogComponent } from '../country-upsert-dialog/country-u
 import { RegionModel } from 'src/app/models/regions/region.model';
 import { readAll as readAllRegions } from "src/app/stores/region/regions.actions";
 import { selectAllRegions } from 'src/app/stores/region/regions.selectors';
-import { ActivatedRoute } from '@angular/router';
 import { defaultRegionQuery } from 'src/app/models/regions/region-query.model';
 import { defaultCountryQuery } from 'src/app/models/countries/country-query.model';
 @Component({
@@ -37,14 +36,14 @@ export class IndexComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroy$))
       .subscribe((data) => this.regions = data);
   }
+
+  ngOnInit(): void {
+    this._store.dispatch(readAllRegions({ ...defaultRegionQuery }));
+  }
+
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
-  }
-  ngOnInit(): void {
-    this._store.dispatch(CountriesActions.readAll(defaultCountryQuery));
-
-    this._store.dispatch(readAllRegions(defaultRegionQuery));
   }
 
   openDialog(country: CountryUpdateModel | null): void {
@@ -53,7 +52,8 @@ export class IndexComponent implements OnInit, OnDestroy {
       data: {
         country: country,
         regions: this.regions
-      }
+      },
+      disableClose:true
     })
   }
 

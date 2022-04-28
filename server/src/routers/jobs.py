@@ -4,7 +4,7 @@ from ..models import Job
 from ..DTOs.jobs import JobDTO, JobCreate, JobUpdate
 from ..DTOs.nested import JobNested
 from ..mappers.job_mapper import JobMapper
-from ..dependencies import get_job_mapper, get_unit_of_work
+from ..dependencies import get_job_mapper, get_unit_of_work,get_base_query
 from ..services import UnitOfWork
 
 router = APIRouter(
@@ -16,12 +16,13 @@ router = APIRouter(
 
 @router.get("/", response_model=list[JobNested])
 def get_all(
-        skip: int = Query(0, ge=0),
-        limit: int = Query(100, ge=0),
+        # skip: int = Query(0, ge=0),
+        # limit: int = Query(100, ge=0),
         uow: UnitOfWork = Depends(get_unit_of_work),
-        job_mapper: JobMapper = Depends(get_job_mapper)):
+        job_mapper: JobMapper = Depends(get_job_mapper),
+        query=Depends(get_base_query)):
 
-    jobs = uow.jobs.get_all(skip=skip, limit=limit)
+    jobs = uow.jobs.get_all(**query)
     dtos = [job_mapper.from_model_to_nested(j) for j in jobs]
     return dtos
 

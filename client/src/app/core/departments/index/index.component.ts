@@ -10,6 +10,7 @@ import { selectAllCountries } from 'src/app/stores/countries/countries.selectors
 import { readAll as readAllCountries } from 'src/app/stores/countries/countries.action';
 import { DepartmentLocationedModel } from 'src/app/models/departments/department-locationed';
 import { defaultCountryQuery } from 'src/app/models/countries/country-query.model';
+import { defaultDepartmentQuery } from 'src/app/models/departments/department-query.model';
 @Component({
   selector: 'app-index',
   templateUrl: './index.component.html',
@@ -42,7 +43,7 @@ export class IndexComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this._store.dispatch(readAllDepartments());
+    this._store.dispatch(readAllDepartments({ ...defaultDepartmentQuery }));
     this._store.dispatch(readAllCountries({ ...defaultCountryQuery }));
   }
 

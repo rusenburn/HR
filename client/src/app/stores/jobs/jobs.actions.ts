@@ -1,13 +1,17 @@
 import { createAction, props } from "@ngrx/store";
 import { JobCreateModel } from "src/app/models/jobs/job-create.model";
 import { JobDetailModel } from "src/app/models/jobs/job-detail.model";
+import { JobQueryModel } from "src/app/models/jobs/job-query.model";
 import { JobUpdateModel } from "src/app/models/jobs/job-update.model";
 import { JobModel } from "src/app/models/jobs/job.model";
 
-export const readAll = createAction("[JOBS] ReadAll");
+export const readAll = createAction("[JOBS] ReadAll", props<JobQueryModel>());
 export const createOne = createAction("[JOBS] CreateOne", props<{ job: JobCreateModel }>());
 export const updateOne = createAction("[JOBS] UpdateOne", props<{ job: JobUpdateModel }>());
 export const deleteOne = createAction("[JOBS] DeleteOne", props<{ id: number }>());
+
+export const updatePagination = createAction("[JOBS] UpdatePagination", props<{ pageIndex: number, pageSize: number }>());
+export const updateSorting = createAction("[JOBS] UpdateSorting", props<{ sortActive: string, asc: boolean }>());
 
 // Route ACTIONS
 export const readOneJob = createAction("[JOBS PARAM] ReadOne", props<{ jobId: number }>());

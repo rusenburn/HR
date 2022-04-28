@@ -12,7 +12,7 @@ import { selectLoading, selectRegionDetail } from '../../../stores/region/region
   styleUrls: ['./region-detail.component.css']
 })
 export class RegionDetailComponent implements OnInit {
-  region: RegionDetailModel | null = null;
+  // region: RegionDetailModel | null = null;
   region$: Observable<RegionDetailModel | null>;
   loading$: Observable<boolean>;
   destroy$ = new Subject<void>();
@@ -21,11 +21,11 @@ export class RegionDetailComponent implements OnInit {
     private _store: Store
   ) {
 
-    this._store.select(selectRegionDetail)
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((region) => {
-        this.region = region;
-      });
+    // this._store.select(selectRegionDetail)
+    //   .pipe(takeUntil(this.destroy$))
+    //   .subscribe((region) => {
+    //     this.region = region;
+    //   });
     this.loading$ = this._store.select(selectLoading);
     this.region$ = this._store.select(selectRegionDetail);
 
@@ -35,7 +35,6 @@ export class RegionDetailComponent implements OnInit {
     this._route.paramMap
       .pipe(takeUntil(this.destroy$))
       .subscribe(this.subscribeFn);
-
   }
 
   ngOnDestory(): void {

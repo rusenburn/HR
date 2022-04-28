@@ -1,11 +1,12 @@
 import { Component, EventEmitter, Input, Output, ViewChild, } from '@angular/core';
-import { MatPaginator, PageEvent } from '@angular/material/paginator';
+import { PageEvent } from '@angular/material/paginator';
 import { Sort } from '@angular/material/sort';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { Observable, } from 'rxjs';
+import { defaultRegionQuery } from 'src/app/models/regions/region-query.model';
 import { RegionModel } from 'src/app/models/regions/region.model';
-import { paginationChanged, sortChanged } from 'src/app/stores/region/regions.actions';
+import { paginationChanged, readAll, sortChanged } from 'src/app/stores/region/regions.actions';
 import {
   selectRegionPageIndex,
   selectRegionPageSize,
@@ -32,6 +33,7 @@ export class RegionsTableComponent {
     private _router: Router,
     private _store: Store
   ) {
+    this._store.dispatch(readAll({ ...defaultRegionQuery }));
     this.pageIndex$ = this._store.select(selectRegionPageIndex);
     this.pageSize$ = this._store.select(selectRegionPageSize);
     this.regions$ = this._store.select(selectRegionsSortedSlice);
@@ -47,7 +49,6 @@ export class RegionsTableComponent {
   }
 
   public onPageEvent(event: PageEvent) {
-    // console.log(event);
     this._store.dispatch(paginationChanged({ ...event }));
   }
 

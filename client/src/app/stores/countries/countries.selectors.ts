@@ -41,26 +41,17 @@ const _sort = (countries: CountryModel[], sortActive: string, ascending: boolean
 };
 
 const _sliced = (countries: CountryModel[], pageIndex: number, pageSize: number) => {
-    console.log("before slice");
-    console.log(countries);
     const start = pageIndex * pageSize;
     const end = start + pageSize;
-    const slice = countries.slice(start, end);
-    console.log("after slice");
-    console.log([...slice]);
-    return [...slice];
+    const sl = countries.slice(start, end);
+    return [...sl];
 };
 const _filterByRegion = (countries: CountryModel[], byRegion: number | null) => {
-    console.log(`byRegion ${byRegion}.`);
-    console.log(countries);
     if (!byRegion) {
-        console.log("filter result.1")
-        console.log(countries);
+
         return countries;
     }
     const result = countries.filter(c => c.regionId === byRegion);
-    console.log("filter result.2")
-    console.log(result);
     return result;
 }
 
@@ -142,7 +133,7 @@ export const selectSortedRegionCountries = createSelector(
     selectSortActive,
     selectAscending,
     _sort
-    
+
 )
 export const selectSortedRegionCountriesSlice = createSelector(
     selectSortedRegionCountries,

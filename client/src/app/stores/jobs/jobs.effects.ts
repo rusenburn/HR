@@ -1,6 +1,7 @@
 import { Injectable } from "@angular/core";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
 import { catchError, concatMap, exhaustMap, map, mergeMap, of } from "rxjs";
+import { defaultJobQuery } from "src/app/models/jobs/job-query.model";
 import { JobsService } from "src/app/services/jobs.service";
 import * as JobsActions from "./jobs.actions";
 
@@ -11,8 +12,8 @@ export class JobsEffects {
     readAll$ = createEffect(() => {
         return this.actions$.pipe(
             ofType(JobsActions.readAll),
-            exhaustMap(() => {
-                return this.jobsService.getAll().pipe(
+            exhaustMap((action) => {
+                return this.jobsService.getAll({ ...action }).pipe(
                     map(jobs => JobsActions.readAllSuccess({ jobs })),
                     catchError(error => of(JobsActions.readAllFailure({ error })))
                 )
