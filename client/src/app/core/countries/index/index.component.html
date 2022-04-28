@@ -7,7 +7,7 @@
             Add new country
         </button>
     </div>
-    <app-countries-table [countries]="(countries$|async)||[]" (editCountry)="openDialog($event)">
+    <app-countries-table (editCountry)="openDialog($event)">
     </app-countries-table>
 </div>
 

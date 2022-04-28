@@ -1,11 +1,13 @@
 import { Injectable } from '@angular/core';
 import { AppConfig } from '../app.config';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { RegionModel } from '../models/regions/region.model';
 import { RegionDetailModel } from '../models/regions/region-detail.model';
 import { RegionUpdateModel } from '../models/regions/region-update.model';
 import { RegionCreateModel } from '../models/regions/region-create.model';
+import { RegionQueryModel } from '../models/regions/region-query.model';
+import { EmptyModel } from '../models/empty.model';
 @Injectable({
   providedIn: 'root'
 })
@@ -15,8 +17,9 @@ export class RegionsService {
     this._baseURL = `${appConfig.apiEndpoint}/regions`
   }
 
-  public getAll(): Observable<RegionModel[]> {
-    return this._client.get<RegionModel[]>(`${this._baseURL}/`);
+  public getAll(query:RegionQueryModel): Observable<RegionModel[]> {
+    const params = new HttpParams({fromObject:{...query}});
+    return this._client.get<RegionModel[]>(`${this._baseURL}/`,{params:params});
   }
 
   public getOne(regionId: number): Observable<RegionDetailModel> {

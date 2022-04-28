@@ -7,8 +7,9 @@ import { readAll as readAllDepartments } from 'src/app/stores/departments/depart
 import { DepartmentsUpsertDialogComponent } from '../departments-upsert-dialog/departments-upsert-dialog.component';
 import { CountryModel } from 'src/app/models/countries/country.model';
 import { selectAllCountries } from 'src/app/stores/countries/countries.selectors';
-import { readAll as readAll } from 'src/app/stores/countries/countries.action';
+import { readAll as readAllCountries } from 'src/app/stores/countries/countries.action';
 import { DepartmentLocationedModel } from 'src/app/models/departments/department-locationed';
+import { defaultCountryQuery } from 'src/app/models/countries/country-query.model';
 @Component({
   selector: 'app-index',
   templateUrl: './index.component.html',
@@ -42,7 +43,7 @@ export class IndexComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this._store.dispatch(readAllDepartments());
-    this._store.dispatch(readAll());
+    this._store.dispatch(readAllCountries({ ...defaultCountryQuery }));
   }
 
   openDialog(department: DepartmentLocationedModel | null): void {

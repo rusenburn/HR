@@ -5,7 +5,7 @@ from ..DTOs.nested import CountryNested
 from ..DTOs.countries import CountryDTO, CountryCreateDTO, CountryUpdateDTO
 from ..mappers.country_mapper import CountryMapper
 from ..services.unit_of_work import UnitOfWork
-from ..dependencies import get_unit_of_work, get_country_mapper
+from ..dependencies import get_unit_of_work, get_country_mapper,get_base_query
 
 router = APIRouter(
     prefix="/countries",
@@ -27,8 +27,9 @@ def get_one(country_id: int, uow: UnitOfWork = Depends(get_unit_of_work),
 
 @router.get("/", response_model=list[CountryNested])
 def get_all(uow: UnitOfWork = Depends(get_unit_of_work),
-            country_mapper: CountryMapper = Depends(get_country_mapper)):
-    countries = uow.countries.get_all()
+            country_mapper: CountryMapper = Depends(get_country_mapper),
+            query=Depends(get_base_query)):
+    countries = uow.countries.get_all(**query)
     dtos = [country_mapper.from_model_to_nested(c) for c in countries]
     return dtos
 

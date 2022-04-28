@@ -12,8 +12,10 @@ import { MatTableModule } from "@angular/material/table";
 import { MatSelectModule } from "@angular/material/select";
 import { MatDatepickerModule } from "@angular/material/datepicker";
 import { MatNativeDateModule } from "@angular/material/core";
-import {MatProgressBarModule} from "@angular/material/progress-bar";
-import {MatTabsModule} from "@angular/material/tabs"
+import { MatProgressBarModule } from "@angular/material/progress-bar";
+import { MatTabsModule } from "@angular/material/tabs";
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatSortModule } from '@angular/material/sort';
 
 const material = [
   MatSidenavModule,
@@ -30,7 +32,9 @@ const material = [
   MatDatepickerModule,
   MatNativeDateModule,
   MatProgressBarModule,
-  MatTabsModule
+  MatTabsModule,
+  MatPaginatorModule,
+  MatSortModule
 ]
 
 @NgModule({

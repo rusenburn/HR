@@ -5,6 +5,7 @@ import { RegionsService } from "src/app/services/regions.service";
 import * as RegionActions from "./regions.actions";
 import { MatDialog, MatDialogRef, } from "@angular/material/dialog";
 import { RegionUpsertDialogComponent } from "src/app/core/regions/region-upsert-dialog/region-upsert-dialog.component";
+import { RegionQueryModel } from "src/app/models/regions/region-query.model";
 
 
 
@@ -15,8 +16,12 @@ export class RegionsApiEffects {
     readAll$ = createEffect(() => {
         return this.actions$.pipe(
             ofType(RegionActions.readAll),
-            exhaustMap(() => {
-                return this.regionService.getAll().pipe(
+            exhaustMap((action) => {
+                const query: RegionQueryModel = {
+                    limit: action.limit,
+                    skip: action.skip
+                };
+                return this.regionService.getAll(query).pipe(
                     map(regions => RegionActions.readAllSuccess({ regions })),
                     catchError(error => of(RegionActions.readAllFailure({ error })))
                 )
@@ -81,4 +86,11 @@ export class RegionsApiEffects {
             })
         )
     });
+
+    // paginationChanged$ = createEffect(() => {
+    //     return this.actions$.pipe(
+    //         ofType(RegionActions.paginationChanged),
+    //         exhaustMap(x => of(RegionActions.readAll(x)))
+    //     )
+    // });
 }

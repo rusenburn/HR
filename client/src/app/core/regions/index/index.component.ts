@@ -18,23 +18,19 @@ import { Router } from '@angular/router';
 export class IndexComponent implements OnInit {
   regions$: Observable<RegionModel[]>;
   loading$: Observable<boolean>;
-  regionForm: FormGroup;
+
   displayedColumns: string[] = ["regionName", "regionId", "actions"]
   constructor(
     private _store: Store,
-    private _fb: FormBuilder,
     private _dialog: MatDialog,
     private _router: Router
   ) {
     this.regions$ = this._store.select(selectAllRegions);
     this.loading$ = this._store.select(selectLoading);
-    this.regionForm = this._fb.group({
-      regionName: ['', [Validators.required, Validators.maxLength(52)]]
-    })
   }
 
   ngOnInit(): void {
-    this._store.dispatch(RegionActions.readAll());
+    this._store.dispatch(RegionActions.readAll({ skip: 0, limit: 2147483647 }));
   }
 
   openDialog(region: RegionUpdateModel | null): void {

@@ -8,7 +8,7 @@ from ..DTOs.regions import RegionDTO
 from ..DTOs.regions.region_create_dto import RegionCreateDTO
 from ..DTOs.regions.region_update_dto import RegionUpdateDTO
 from ..services.unit_of_work import UnitOfWork
-from ..dependencies import get_region_mapper, get_unit_of_work
+from ..dependencies import get_base_query, get_region_mapper, get_unit_of_work
 
 router = APIRouter(
     prefix="/regions",
@@ -20,9 +20,10 @@ router = APIRouter(
 
 @router.get("/",response_model=list[RegionNested])
 def get_all(uow:UnitOfWork=Depends(get_unit_of_work),
-    region_mapper:RegionMapper=Depends(get_region_mapper)):
+    region_mapper:RegionMapper=Depends(get_region_mapper),
+    query=Depends(get_base_query)):
     # TODO offset and limit
-    regions = uow.regions.get_all()
+    regions = uow.regions.get_all(**query)
     region_dtos = [region_mapper.from_model_to_nested(r) for r in regions]
     return region_dtos
 

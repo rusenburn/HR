@@ -1,7 +1,4 @@
-import { state } from "@angular/animations"
-import { createReducer, createSelector, on } from "@ngrx/store"
-import { Action } from "rxjs/internal/scheduler/Action"
-import { RegionCreateModel } from "src/app/models/regions/region-create.model"
+import { createReducer, on } from "@ngrx/store"
 import { RegionDetailModel } from "src/app/models/regions/region-detail.model"
 import { RegionModel } from "src/app/models/regions/region.model"
 import * as RegionsActions from "./regions.actions"
@@ -16,17 +13,25 @@ let updateItemInArray = function (array: RegionModel[], region: RegionModel): Re
 
 
 export interface RegionsState {
-    regions: RegionModel[]
-    loading: boolean
+    regions: RegionModel[],
+    loading: boolean,
     error: Error | null,
-    regionDetail: RegionDetailModel | null
+    regionDetail: RegionDetailModel | null,
+    pageSize: number,
+    pageIndex: number,
+    ascending: boolean,
+    sortActive: string
 }
 
 const initialState: RegionsState = {
     regions: [],
     loading: false,
     error: null,
-    regionDetail: null
+    regionDetail: null,
+    pageSize: 20,
+    pageIndex: 0,
+    ascending: true,
+    sortActive: "regionId"
 }
 
 export const reducer = createReducer(initialState,
@@ -47,6 +52,12 @@ export const reducer = createReducer(initialState,
             return { ...state, loading: false, error: action.error }
         }
     ),
+    on(RegionsActions.paginationChanged, (state, action) => {
+        return { ...state, pageIndex: action.pageIndex, pageSize: action.pageSize };
+    }),
+    on(RegionsActions.sortChanged, (state, action) => {
+        return { ...state, ascending: action.asc, sortActive: action.active };
+    }),
     on(RegionsActions.readAllSuccess, (state, action) => {
         return { ...state, loading: false, regions: action.regions }
     }),

@@ -31,6 +31,10 @@ def get_db() -> Session:
         db.close()
 
 
+def get_base_query(limit: int = 100, skip: int = 0):
+    return {"limit": limit, "skip": skip}
+
+
 def get_region_service(db: Session = Depends(get_db)) -> RegionsService:
     service = RegionsService(db=db)
     return service

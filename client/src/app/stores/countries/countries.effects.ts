@@ -12,7 +12,10 @@ export class CountriesApiEffects {
         return this.actions$.pipe(
             ofType(CountriesActions.readAll),
             exhaustMap(() => {
-                return this.countriesService.getAll().pipe(
+                return this.countriesService.getAll({
+    limit: 0,
+    skip: 0
+}).pipe(
                     map(countries => CountriesActions.readAllSuccess({ countries })),
                     catchError(error => of(CountriesActions.readAllFailure({ error })))
                 )

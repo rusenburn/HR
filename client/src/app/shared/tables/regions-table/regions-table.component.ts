@@ -1,6 +1,17 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output, ViewChild, } from '@angular/core';
+import { MatPaginator, PageEvent } from '@angular/material/paginator';
+import { Sort } from '@angular/material/sort';
 import { Router } from '@angular/router';
+import { Store } from '@ngrx/store';
+import { Observable, } from 'rxjs';
 import { RegionModel } from 'src/app/models/regions/region.model';
+import { paginationChanged, sortChanged } from 'src/app/stores/region/regions.actions';
+import {
+  selectRegionPageIndex,
+  selectRegionPageSize,
+  selectRegionsLength,
+  selectRegionsSortedSlice
+} from 'src/app/stores/region/regions.selectors';
 
 @Component({
   selector: 'app-regions-table',
@@ -12,11 +23,20 @@ export class RegionsTableComponent {
   regions: RegionModel[] = [];
   @Output()
   editRegion = new EventEmitter<RegionModel>();
-
+  pageIndex$: Observable<number>;
+  pageSize$: Observable<number>;
   displayedColumns: string[] = ["regionName", "regionId", "actions"];
+  regions$: Observable<RegionModel[]>;
+  length$: Observable<number>;
   constructor(
-    private _router: Router
-  ) { }
+    private _router: Router,
+    private _store: Store
+  ) {
+    this.pageIndex$ = this._store.select(selectRegionPageIndex);
+    this.pageSize$ = this._store.select(selectRegionPageSize);
+    this.regions$ = this._store.select(selectRegionsSortedSlice);
+    this.length$ = this._store.select(selectRegionsLength);
+  }
 
   public edit(region: RegionModel) {
     this.editRegion.emit(region);
@@ -24,5 +44,14 @@ export class RegionsTableComponent {
 
   public detail(regionId: number) {
     this._router.navigate(["/regions", regionId]);
+  }
+
+  public onPageEvent(event: PageEvent) {
+    // console.log(event);
+    this._store.dispatch(paginationChanged({ ...event }));
+  }
+
+  public sortChange(sortState: Sort) {
+    this._store.dispatch(sortChanged({ active: sortState.active, asc: sortState.direction === "asc" }))
   }
 }

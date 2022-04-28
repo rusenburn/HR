@@ -1,17 +1,19 @@
 import { createAction, props } from "@ngrx/store";
 import { RegionCreateModel } from "src/app/models/regions/region-create.model";
 import { RegionDetailModel } from "src/app/models/regions/region-detail.model";
+import { RegionQueryModel } from "src/app/models/regions/region-query.model";
 import { RegionUpdateModel } from "src/app/models/regions/region-update.model";
 import { RegionModel } from "src/app/models/regions/region.model";
 
-export const readAll = createAction("[REGIONS] ReadAll");
+export const readAll = createAction("[REGIONS] ReadAll", props<RegionQueryModel>());
 export const createOne = createAction("[REGIONS] CreateOne", props<{ region: RegionCreateModel }>());
 export const updateOne = createAction("[REGIONS] UpdateOne", props<{ region: RegionUpdateModel }>());
 export const deleteOne = createAction("[REGIONS] DeleteOne", props<{ id: number }>());
 
+export const paginationChanged = createAction("[REGIONS] PaginationChanged", props<{ pageIndex: number, pageSize: number }>());
+export const sortChanged = createAction("[REGIONS] SortChanged", props<{ active: string, asc: boolean }>());
 
 export const readOne = createAction("[REGIONS PARAM] ReadOne", props<{ regionId: number }>());
-// export const readOneNever = createAction("[REGIONS PARAM] ReadOneNever]");
 
 // API ACTIONS
 export const readAllSuccess = createAction("[REGIONS API] ReadAllSuccess", props<{ regions: RegionModel[] }>());

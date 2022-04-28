@@ -1,4 +1,3 @@
-
 import { createReducer, on } from "@ngrx/store";
 import { CountryDetailModel } from "src/app/models/countries/country-detail.model";
 import { CountryModel } from "src/app/models/countries/country.model";
@@ -16,13 +15,23 @@ export interface CountriesState {
     loading: boolean;
     error: Error | null;
     countryDetail: CountryDetailModel | null;
+    pageIndex: number;
+    pageSize: number;
+    sortActive: string;
+    ascending: boolean;
+    byRegion: number | null;
 }
 
 const initialState: CountriesState = {
     countries: [],
     loading: false,
     error: null,
-    countryDetail: null
+    countryDetail: null,
+    pageIndex: 0,
+    pageSize: 20,
+    ascending: true,
+    sortActive: "countryId",
+    byRegion: null
 }
 
 export const reducer = createReducer(initialState,
@@ -42,6 +51,18 @@ export const reducer = createReducer(initialState,
         (state, action) => {
             return { ...state, loading: false, error: action.error };
         }),
+    on(CountriesActions.updatePagination, (state, action) => {
+        return { ...state, pageIndex: action.pageIndex, pageSize: action.pageSize };
+    }),
+    on(CountriesActions.updateSort, (state, action) => {
+        return { ...state, sortActive: action.active, ascending: action.asc };
+    }),
+    on(CountriesActions.clearRegionFilter, (state) => {
+        return { ...state, byRegion: null };
+    }),
+    on(CountriesActions.setRegionFilter, (state, action) => {
+        return { ...state, byRegion: action.regionId };
+    }),
     on(CountriesActions.readAllSuccess, (state, action) => {
         return { ...state, loading: false, countries: action.countries }
     }),
@@ -59,13 +80,13 @@ export const reducer = createReducer(initialState,
         return { ...state, loading: false, countries }
     }),
     on(CountriesActions.readOneSuccess, (state, action) => {
-        const index = state.countries.findIndex(c=>c.countryId===action.country.countryId);
+        const index = state.countries.findIndex(c => c.countryId === action.country.countryId);
         let countries = state.countries;
-        if(index !== -1){
+        if (index !== -1) {
             countries = [...state.countries];
-            countries.splice(index,1,action.country);
+            countries.splice(index, 1, action.country);
         }
-        return { ...state, loading: false, countryDetail: action.country ,countries}
+        return { ...state, loading: false, countryDetail: action.country, countries }
     })
 );
 

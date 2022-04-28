@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { Observable, Subject, Subscription, takeUntil } from 'rxjs';
+import { Observable, Subject, takeUntil } from 'rxjs';
 import { RegionDetailModel } from 'src/app/models/regions/region-detail.model';
 import { readOne } from '../../../stores/region/regions.actions';
 import { selectLoading, selectRegionDetail } from '../../../stores/region/regions.selectors';
