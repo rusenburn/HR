@@ -12,6 +12,7 @@ import { readAll as readAllDepartments } from 'src/app/stores/departments/depart
 import { readAll as readAllJobs } from 'src/app/stores/jobs/jobs.actions';
 import { defaultDepartmentQuery } from 'src/app/models/departments/department-query.model';
 import { defaultJobQuery } from 'src/app/models/jobs/job-query.model';
+import { defaultEmployeeQuery } from 'src/app/models/employees/employee-query.model';
 @Component({
   selector: 'app-index',
   templateUrl: './index.component.html',
@@ -37,7 +38,7 @@ export class IndexComponent implements OnInit {
 
   public openDialog(jobHistory: JobHistoryUpdateModel | null): void {
     if (!this.dialogOpenedOnce) {
-      this._store.dispatch(readAllEmployees());
+      this._store.dispatch(readAllEmployees({...defaultEmployeeQuery}));
       this._store.dispatch(readAllDepartments({ ...defaultDepartmentQuery }));
       this._store.dispatch(readAllJobs({ ...defaultJobQuery }));
     };

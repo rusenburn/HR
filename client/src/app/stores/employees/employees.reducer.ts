@@ -1,5 +1,6 @@
 import { createReducer, on } from "@ngrx/store";
 import { EmployeeDetailModel } from "src/app/models/employees/employee-detail.model";
+import { defaultEmployeeFilter, EmployeeFilterModel } from "src/app/models/employees/employee-filter.model";
 import { EmployeeModel } from "src/app/models/employees/employee.model";
 import * as EmployeesActions from "./employees.actions";
 
@@ -16,6 +17,12 @@ export interface EmployeesState {
     loading: boolean,
     error: Error | null,
     employeeDetail: EmployeeDetailModel | null,
+    pageIndex: number,
+    pageSize: number,
+    sortActive: string,
+    ascending: boolean,
+    filters: EmployeeFilterModel
+
 }
 
 const initialState: EmployeesState = {
@@ -23,6 +30,11 @@ const initialState: EmployeesState = {
     loading: false,
     error: null,
     employeeDetail: null,
+    pageIndex: 0,
+    pageSize: 10,
+    sortActive: "employeeId",
+    ascending: true,
+    filters: { ...defaultEmployeeFilter }
 };
 
 export const reducer = createReducer(initialState,
@@ -60,5 +72,17 @@ export const reducer = createReducer(initialState,
     }),
     on(EmployeesActions.readOneSuccess, (state, action) => {
         return { ...state, loading: false, employeeDetail: action.employeeDetail };
+    }),
+    on(EmployeesActions.updatePagination, (state, action) => {
+        return { ...state, pageIndex: action.pageIndex, pageSize: action.pageSize };
+    }),
+    on(EmployeesActions.updateSorting, (state, action) => {
+        return { ...state, sortActive: action.sortActive, ascending: action.asc };
+    }),
+    on(EmployeesActions.setFilters, (state, action) => {
+        return { ...state, filters: { ...action.filters } };
+    }),
+    on(EmployeesActions.removeFilters, (state) => {
+        return { ...state, filters: { ...defaultEmployeeFilter } }
     })
 );

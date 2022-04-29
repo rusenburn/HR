@@ -1,4 +1,4 @@
-from fastapi import Depends
+from fastapi import Depends, Query
 from sqlalchemy.orm import Session
 
 from .mappers.job_mapper import JobMapper
@@ -34,6 +34,15 @@ def get_db() -> Session:
 def get_base_query(limit: int = 100, skip: int = 0):
     return {"limit": limit, "skip": skip}
 
+def get_employee_query(
+        base_Query=Depends(get_base_query),
+        department_id:int|None=Query(0,alias="departmentId"),
+        job_id:int|None=Query(0,alias="jobId"),
+        manager_id:int|None=Query(0,alias="managerId")):
+    return {**base_Query,
+        "department_id":department_id,
+        "job_id":job_id,
+        "manager_id":manager_id}
 
 def get_region_service(db: Session = Depends(get_db)) -> RegionsService:
     service = RegionsService(db=db)

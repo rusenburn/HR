@@ -7,6 +7,7 @@ import { selectAllEmployees, selectLoading } from 'src/app/stores/employees/empl
 import { readAll as readAllEmployees } from 'src/app/stores/employees/employees.actions';
 import { EmployeeUpdateModel } from 'src/app/models/employees/employee-update.model';
 import { EmployeeUpsertDialogComponent } from '../employee-upsert-dialog/employee-upsert-dialog.component';
+import { defaultEmployeeQuery } from 'src/app/models/employees/employee-query.model';
 
 @Component({
   selector: 'app-index',
@@ -23,11 +24,11 @@ export class IndexComponent implements OnInit {
   ) {
     this.employees$ = this._store.select(selectAllEmployees);
     this.loading$ = this._store.select(selectLoading);
-    this.displayedColumns = ["employeeId", "firstName", "lastName","actions"];
+    this.displayedColumns = ["employeeId", "firstName", "lastName", "actions"];
   }
 
   ngOnInit(): void {
-    this._store.dispatch(readAllEmployees());
+    this._store.dispatch(readAllEmployees({ ...defaultEmployeeQuery }));
   }
 
   public openDialog(employee: EmployeeUpdateModel | null): void {

@@ -28,6 +28,9 @@
                 <mat-tab label="Job History">
                     <app-job-history-table [jobHistoryCollection]="employee?.jobHistories||[]"></app-job-history-table>
                 </mat-tab>
+                <mat-tab label="Employees">
+                    <app-employees-table ></app-employees-table>
+                </mat-tab>
             </mat-tab-group>
         </mat-card-content>
         <mat-card-actions></mat-card-actions>

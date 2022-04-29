@@ -15,8 +15,8 @@ export class EmployeesAPIEffects {
     readAll$ = createEffect(() =>
         this.actions$.pipe(
             ofType(EmployeesActions.readAll),
-            exhaustMap(() => {
-                return this.employeesService.getAll().pipe(
+            exhaustMap((action) => {
+                return this.employeesService.getAll({...action}).pipe(
                     map((employees) => EmployeesActions.readAllSuccess({ employees })),
                     catchError(error => of(EmployeesActions.readAllFailure({ error })))
                 )

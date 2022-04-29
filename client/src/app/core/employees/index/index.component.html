@@ -5,10 +5,5 @@
     <div>
         <button mat-raised-button color="primary" (click)="openDialog(null)">Add new employee</button>
     </div>
-    <app-employees-table *ngIf="(employees$|async)?.length" [employees]="(employees$|async)||[]"
-        (editEmployee)="openDialog($event)"></app-employees-table>
+    <app-employees-table (editEmployee)="openDialog($event)"></app-employees-table>
 </div>
-
-<ng-template #whenEmpty>
-    <p>There are no Employees .</p>
-</ng-template>
