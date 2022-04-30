@@ -1,0 +1,25 @@
+<div class="form-dialog">
+    <mat-card>
+        <mat-card-subtitle *ngIf="region?.regionId;else whenEmpty">
+            {{region.regionName}}
+        </mat-card-subtitle>
+        <mat-card-content>
+            <form [formGroup]="regionForm" (ngSubmit)="submitForm()">
+                <mat-form-field>
+                    <mat-label>Region Name</mat-label>
+                    <input matInput type="text" formControlName="regionName" autofocus autocomplete="off">
+                </mat-form-field>
+                <div class="button-container">
+                    <button type="submit" mat-raised-button color="primary"
+                        [disabled]="regionForm.invalid">Submit</button>
+                    <button type="button" (click)="close()" mat-raised-button>Cancel</button>
+                </div>
+            </form>
+        </mat-card-content>
+    </mat-card>
+</div>
+
+
+<ng-template #whenEmpty>
+    Create New Region
+</ng-template>

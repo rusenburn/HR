@@ -3,8 +3,8 @@ import { ActivatedRoute, ParamMap } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { Observable, Subject, takeUntil } from 'rxjs';
 import { RegionDetailModel } from 'src/app/models/regions/region-detail.model';
-import { readOne } from '../../../stores/region/regions.actions';
-import { selectLoading, selectRegionDetail } from '../../../stores/region/regions.selectors';
+import { readOne } from 'src/app/stores/region/regions.actions';
+import { selectLoading, selectRegionDetail } from 'src/app/stores/region/regions.selectors';
 
 @Component({
   selector: 'app-region-detail',
@@ -12,7 +12,6 @@ import { selectLoading, selectRegionDetail } from '../../../stores/region/region
   styleUrls: ['./region-detail.component.css']
 })
 export class RegionDetailComponent implements OnInit {
-  // region: RegionDetailModel | null = null;
   region$: Observable<RegionDetailModel | null>;
   loading$: Observable<boolean>;
   destroy$ = new Subject<void>();
@@ -20,12 +19,6 @@ export class RegionDetailComponent implements OnInit {
     private _route: ActivatedRoute,
     private _store: Store
   ) {
-
-    // this._store.select(selectRegionDetail)
-    //   .pipe(takeUntil(this.destroy$))
-    //   .subscribe((region) => {
-    //     this.region = region;
-    //   });
     this.loading$ = this._store.select(selectLoading);
     this.region$ = this._store.select(selectRegionDetail);
 

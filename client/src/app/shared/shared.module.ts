@@ -17,6 +17,8 @@ import { DepartmentsStore } from '../stores/departments/departments.store';
 import { EmployeeStore } from '../stores/employees/employees.store';
 import { JobsStore } from '../stores/jobs/jobs.store';
 import { JobHisotryStore } from '../stores/job-history/job-history.store';
+import { RegionUpsertDialogComponent } from './dialoges/region-upsert-dialog/region-upsert-dialog.component';
+import { CountryUpsertDialogComponent } from './dialoges/country-upsert-dialog/country-upsert-dialog.component';
 
 const components = [
   RegionsTableComponent,
@@ -26,6 +28,9 @@ const components = [
   JobsTableComponent,
   JobHistoryDetailTableComponent,
   JobHistoryTableComponent,
+
+  RegionUpsertDialogComponent,
+  CountryUpsertDialogComponent,
 ];
 const modules = [
   CommonModule,
@@ -44,7 +49,7 @@ const modules = [
   declarations: [
     NotFoundComponent,
     components,
-    
+
   ],
   imports: [
     modules

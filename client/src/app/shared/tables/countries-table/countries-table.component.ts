@@ -6,7 +6,7 @@ import { Store } from '@ngrx/store';
 import { mergeMap, Observable, of, Subject, takeUntil } from 'rxjs';
 import { defaultCountryQuery } from 'src/app/models/countries/country-query.model';
 import { CountryModel } from 'src/app/models/countries/country.model';
-import { clearRegionFilter, readAll, setRegionFilter, updatePagination, updateSort } from 'src/app/stores/countries/countries.action';
+import { clearRegionFilter, openForm, readAll, setRegionFilter, updatePagination, updateSort } from 'src/app/stores/countries/countries.action';
 import { selectAllCountries, selectPageIndex, selectPageSize, selectRegionCountriesLength as selectRegionCountriesLength,  selectSortedRegionCountriesSlice } from 'src/app/stores/countries/countries.selectors';
 
 
@@ -54,7 +54,7 @@ export class CountriesTableComponent {
     this.destroy$.complete();
   }
   public edit(country: CountryModel) {
-    this.editCountry.emit(country);
+    this._store.dispatch(openForm({country}));
   }
 
   public detail(countryId: number): void {

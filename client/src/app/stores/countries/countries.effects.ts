@@ -1,9 +1,12 @@
 import { Injectable } from "@angular/core";
 import { MatDialog } from "@angular/material/dialog";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
-import { catchError, concatMap, exhaustMap, map, mergeMap, of } from "rxjs";
+import { Store } from "@ngrx/store";
+import { catchError, concatMap, exhaustMap, map, mergeMap, of, withLatestFrom } from "rxjs";
 import { CountriesService } from "src/app/services/countries.service";
+import { CountryUpsertDialogComponent } from "src/app/shared/dialoges/country-upsert-dialog/country-upsert-dialog.component";
 import * as CountriesActions from "./countries.action";
+import { selectDialogId } from "./countries.selectors";
 
 @Injectable()
 export class CountriesApiEffects {
@@ -75,6 +78,45 @@ export class CountriesApiEffects {
                     map((country) => CountriesActions.readOneSuccess({ country })),
                     catchError((error) => of(CountriesActions.readOneFailure({ error })))
                 )
+            })
+        )
+    });
+}
+@Injectable()
+export class CountriesDialogEffects {
+    constructor(private actions$: Actions, private store: Store, private dialog: MatDialog) { }
+
+
+
+    openForm$ = createEffect(() => {
+        return this.actions$.pipe(
+            ofType(CountriesActions.openForm),
+            map((action) => {
+                const dialog = this.dialog.open(CountryUpsertDialogComponent, {
+                    data: action.country
+                });
+                return CountriesActions.openFormSuccess({ dialogId: dialog.id });
+            })
+        );
+    });
+
+    upsertSuccess$ = createEffect(() => {
+        return this.actions$.pipe(
+            ofType(CountriesActions.updateOneSuccess, CountriesActions.createOneSuccess),
+            withLatestFrom(this.store.select(selectDialogId)),
+            map(([_, formId]) => {
+                return CountriesActions.closeForm({ formId });
+            })
+        )
+    });
+
+    closeForm$ = createEffect(() => {
+        return this.actions$.pipe(
+            ofType(CountriesActions.closeForm),
+            map(action => {
+                const dialogRef = this.dialog.getDialogById(action.formId);
+                dialogRef?.close();
+                return CountriesActions.closeFormSuccess();
             })
         )
     });

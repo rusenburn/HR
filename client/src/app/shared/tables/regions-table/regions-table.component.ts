@@ -6,7 +6,7 @@ import { Store } from '@ngrx/store';
 import { Observable, } from 'rxjs';
 import { defaultRegionQuery } from 'src/app/models/regions/region-query.model';
 import { RegionModel } from 'src/app/models/regions/region.model';
-import { paginationChanged, readAll, sortChanged } from 'src/app/stores/region/regions.actions';
+import { openForm, paginationChanged, readAll, sortChanged } from 'src/app/stores/region/regions.actions';
 import {
   selectRegionPageIndex,
   selectRegionPageSize,
@@ -22,8 +22,8 @@ import {
 export class RegionsTableComponent {
   @Input()
   regions: RegionModel[] = [];
-  @Output()
-  editRegion = new EventEmitter<RegionModel>();
+  // @Output()
+  // editRegion = new EventEmitter<RegionModel>();
   pageIndex$: Observable<number>;
   pageSize$: Observable<number>;
   displayedColumns: string[] = ["regionName", "regionId", "actions"];
@@ -41,7 +41,8 @@ export class RegionsTableComponent {
   }
 
   public edit(region: RegionModel) {
-    this.editRegion.emit(region);
+    // this.editRegion.emit(region);
+    this._store.dispatch(openForm({ region }));
   }
 
   public detail(regionId: number) {

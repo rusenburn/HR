@@ -3,9 +3,9 @@
         <h1>Regions</h1>
     </div>
     <div>
-        <button mat-raised-button color="primary" (click)="openDialog(null)">
-            Add new region
+        <button mat-raised-button color="primary" (click)="createNew()">
+            <mat-icon>add</mat-icon>Add New Region 
         </button>
     </div>
-    <app-regions-table [regions]="(regions$|async)||[]" (editRegion)="openDialog($event)"></app-regions-table>
+    <app-regions-table [regions]="(regions$|async)||[]"></app-regions-table>
 </div>

@@ -1,3 +1,4 @@
+<ng-container *ngTemplateOutlet="paginator"></ng-container>
 <table mat-table [dataSource]="(regions$|async)||[]" matSort (matSortChange)="sortChange($event)">
     <ng-container matColumnDef="regionName">
         <th mat-header-cell *matHeaderCellDef mat-sort-header="regionName">Region</th>
@@ -27,5 +28,11 @@
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
     <tr mat-row *matRowDef="let row;columns:displayedColumns;"></tr>
 </table>
-<mat-paginator [length]="length$|async" [pageIndex]="pageIndex$|async" [pageSize]="pageSize$|async"
-    (page)="onPageEvent($event)" [pageSizeOptions]="[5,10,20,40]" aria-label="select-page"></mat-paginator>
+<ng-container *ngTemplateOutlet="paginator"></ng-container>
+
+
+<ng-template #paginator>
+    <mat-paginator [length]="length$|async" [pageIndex]="pageIndex$|async" [pageSize]="pageSize$|async"
+        (page)="onPageEvent($event)" [pageSizeOptions]="[5,10,20,40]" aria-label="select-page"
+        [showFirstLastButtons]="true"></mat-paginator>
+</ng-template>

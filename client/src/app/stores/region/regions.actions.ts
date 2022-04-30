@@ -1,9 +1,11 @@
+import { MatDialogRef } from "@angular/material/dialog";
 import { createAction, props } from "@ngrx/store";
 import { RegionCreateModel } from "src/app/models/regions/region-create.model";
 import { RegionDetailModel } from "src/app/models/regions/region-detail.model";
 import { RegionQueryModel } from "src/app/models/regions/region-query.model";
 import { RegionUpdateModel } from "src/app/models/regions/region-update.model";
 import { RegionModel } from "src/app/models/regions/region.model";
+import { RegionUpsertDialogComponent } from "src/app/shared/dialoges/region-upsert-dialog/region-upsert-dialog.component";
 
 export const readAll = createAction("[REGIONS] ReadAll", props<RegionQueryModel>());
 export const createOne = createAction("[REGIONS] CreateOne", props<{ region: RegionCreateModel }>());
@@ -13,7 +15,9 @@ export const deleteOne = createAction("[REGIONS] DeleteOne", props<{ id: number 
 export const paginationChanged = createAction("[REGIONS] PaginationChanged", props<{ pageIndex: number, pageSize: number }>());
 export const sortChanged = createAction("[REGIONS] SortChanged", props<{ active: string, asc: boolean }>());
 
+
 export const readOne = createAction("[REGIONS PARAM] ReadOne", props<{ regionId: number }>());
+
 
 // API ACTIONS
 export const readAllSuccess = createAction("[REGIONS API] ReadAllSuccess", props<{ regions: RegionModel[] }>());
@@ -31,6 +35,8 @@ export const deleteOneFailure = createAction("[REGIONS API] DeleteOneFailure", p
 export const readOneSuccess = createAction("[REGIONS API] ReadOneSuccess", props<{ region: RegionDetailModel }>());
 export const readOneFailure = createAction("[REGIONS API] ReadOneFailure", props<{ error: Error }>());
 
-export const closeDialogSuccess = createAction("[REGION API] CloseDialog");
-
-
+// FORM
+export const openForm = createAction("[REGIONS FORM] OpenForm", props<{ region: RegionUpdateModel | null }>());
+export const openFormSuccess = createAction("[REGIONS FORM] OpenFormSuccess", props<{ matDialogRefId: string }>());
+export const closeForm = createAction("[REGIONS FORM] CloseForm", props<{ formId: string }>());
+export const closeFormSuccess = createAction("[REGIONS FORM] CloseFormSuccess");

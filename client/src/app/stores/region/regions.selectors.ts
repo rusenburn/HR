@@ -11,6 +11,9 @@ const _selectPageIndex = (state: RegionsState) => state.pageIndex;
 const _selectPageSize = (state: RegionsState) => state.pageSize;
 const _selectSortActive = (state: RegionsState) => state.sortActive;
 const _selectAscending = (state: RegionsState) => state.ascending;
+const _selectDialogRefId = (state:RegionsState)=>{
+  return state.dialogRefId
+};
 const _sort = (regions: RegionModel[], active: string, asc: boolean): RegionModel[] => {
   const res = [...regions];
   switch (active) {
@@ -34,6 +37,12 @@ export const selectRegionState = createSelector(
   selectSharedRegionState,
   (sharedRegionFeatureState) => sharedRegionFeatureState.regions
 );
+
+export const selectDialogRefId= createSelector(
+  selectRegionState,
+  _selectDialogRefId
+);
+
 export const selectAllRegions = createSelector(
   selectRegionState,
   _selectAllRegions

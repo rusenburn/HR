@@ -4,6 +4,7 @@ import { CountryDetailModel } from "src/app/models/countries/country-detail.mode
 import { CountryQueryModel } from "src/app/models/countries/country-query.model";
 import { CountryUpdateModel } from "src/app/models/countries/country-update.model";
 import { CountryModel } from "src/app/models/countries/country.model";
+import { RegionModel } from "src/app/models/regions/region.model";
 
 export const readAll = createAction("[COUNTRIES] ReadAll", props<CountryQueryModel>());
 export const createOne = createAction("[COUNTRIES] CreateOne", props<{ country: CountryCreateModel }>());
@@ -34,3 +35,10 @@ export const deleteOneFailure = createAction("[COUNTRIES API] DeleteOneFailure",
 
 export const readOneSuccess = createAction("[COUNTRIES API] ReadOneSuccess", props<{ country: CountryDetailModel }>());
 export const readOneFailure = createAction("[COUNTRIES API] ReadOneFailure", props<{ error: Error }>());
+
+
+// FORM
+export const openForm = createAction("[COUNTRIES FORM] OpenForm", props<{ country: CountryUpdateModel | null }>());
+export const openFormSuccess = createAction("[COUNTRIES FORM] OpenFormSuccess", props<{ dialogId: string }>());
+export const closeForm = createAction("[COUNTRIES FORM] CloseForm", props<{ formId: string }>());
+export const closeFormSuccess = createAction("[COUNTRIES FORM] CloseFormSuccess");

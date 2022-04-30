@@ -1,5 +1,6 @@
 import { createReducer, on } from "@ngrx/store";
 import { JobHistoryDetailModel } from "src/app/models/job-histories/job-history-detail.model";
+import { defaultJobHistoryFilter, JobHistoryFilterModel } from "src/app/models/job-histories/job-history-filter.model";
 import * as JobHistoryActions from "./job-history.actions";
 
 const cloneArrayWithUpdatedItem = function (jobHistoryCollection: JobHistoryDetailModel[], jobHistory: JobHistoryDetailModel): JobHistoryDetailModel[] {
@@ -13,12 +14,22 @@ export interface JobHistoryState {
     jobHistoryCollection: JobHistoryDetailModel[];
     loading: boolean;
     error: Error | null;
+    pageIndex: number;
+    pageSize: number;
+    sortActive: string;
+    ascending: boolean;
+    filter: JobHistoryFilterModel;
 }
 
 export const initialState: JobHistoryState = {
     jobHistoryCollection: [],
     loading: false,
-    error: null
+    error: null,
+    pageIndex: 0,
+    pageSize: 10,
+    sortActive: "startDate",
+    ascending: false,
+    filter: { ...defaultJobHistoryFilter }
 }
 
 export const reducer = createReducer(
@@ -67,5 +78,17 @@ export const reducer = createReducer(
             jobHistoryCollection.splice(index, 1);
             return { ...state, loading: false, jobHistoryCollection };
         }
-    )
-)
+    ),
+    on(JobHistoryActions.updatePagination, (state, action) => {
+        return { ...state, pageIndex: action.pageIndex, pageSize: action.pageSize };
+    }),
+    on(JobHistoryActions.updateSorting, (state, action) => {
+        return { ...state, sortActive: action.sortActive, ascending: action.asc };
+    }),
+    on(JobHistoryActions.setFilter, (state, action) => {
+        return { ...state, filter: action.filter };
+    }),
+    on(JobHistoryActions.removeFilter, (state) => {
+        return { ...state, filter: { ...defaultJobHistoryFilter } }
+    })
+);

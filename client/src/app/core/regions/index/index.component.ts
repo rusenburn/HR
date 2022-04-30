@@ -5,8 +5,9 @@ import { RegionModel } from 'src/app/models/regions/region.model';
 import { selectAllRegions, selectLoading } from 'src/app/stores/region/regions.selectors';
 import { RegionUpdateModel } from 'src/app/models/regions/region-update.model';
 import { MatDialog } from '@angular/material/dialog';
-import { RegionUpsertDialogComponent } from '../region-upsert-dialog/region-upsert-dialog.component';
+import { RegionUpsertDialogComponent } from 'src/app/shared/dialoges/region-upsert-dialog/region-upsert-dialog.component';
 import { Router } from '@angular/router';
+import { openForm } from 'src/app/stores/region/regions.actions';
 
 @Component({
   selector: 'app-index',
@@ -27,14 +28,10 @@ export class IndexComponent {
     this.loading$ = this._store.select(selectLoading);
   }
 
-  openDialog(region: RegionUpdateModel | null): void {
-    const di = this._dialog.open(RegionUpsertDialogComponent, {
-      width: '600px',
-      data: region,
-      disableClose: true,
-    });
-  }
   detail(regionId: number): void {
     this._router.navigate(["/regions", regionId])
+  }
+  createNew(): void {
+    this._store.dispatch(openForm({ region: null }));
   }
 }

@@ -20,7 +20,8 @@ export interface RegionsState {
     pageSize: number,
     pageIndex: number,
     ascending: boolean,
-    sortActive: string
+    sortActive: string,
+    dialogRefId: string
 }
 
 const initialState: RegionsState = {
@@ -31,7 +32,8 @@ const initialState: RegionsState = {
     pageSize: 20,
     pageIndex: 0,
     ascending: true,
-    sortActive: "regionId"
+    sortActive: "regionId",
+    dialogRefId: ""
 }
 
 export const reducer = createReducer(initialState,
@@ -85,5 +87,11 @@ export const reducer = createReducer(initialState,
             ar[index] = { ...ar[index], ...action.region };
         }
         return { ...state, loading: false, regionDetail: { ...action.region } }
+    }),
+    on(RegionsActions.openFormSuccess, (state, action) => {
+        return { ...state, dialogRefId: action.matDialogRefId };
+    }),
+    on(RegionsActions.closeFormSuccess, (state) => {
+        return { ...state, dialogRefId: "" };
     })
 );

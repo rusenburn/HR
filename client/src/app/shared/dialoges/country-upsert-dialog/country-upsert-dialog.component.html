@@ -18,7 +18,7 @@
                     <mat-option>
                         ------
                     </mat-option>
-                    <mat-option *ngFor="let region of regions" [value]="region.regionId">
+                    <mat-option *ngFor="let region of regions$|async" [value]="region.regionId">
                         {{region.regionName}}
                     </mat-option>
                 </mat-select>

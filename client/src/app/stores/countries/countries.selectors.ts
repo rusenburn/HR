@@ -21,6 +21,8 @@ const _selectPageSize = (state: CountriesState) => state.pageSize;
 const _selectSortActive = (state: CountriesState) => state.sortActive;
 const _selectAscending = (state: CountriesState) => state.ascending;
 const _selectByRegion = (state: CountriesState) => state.byRegion;
+const _selectDialogId = (state: CountriesState) => state.dialogId;
+
 const _sort = (countries: CountryModel[], sortActive: string, ascending: boolean): CountryModel[] => {
     const result = [...countries];
     switch (sortActive) {
@@ -97,6 +99,11 @@ const selectByRegion = createSelector(
     _selectByRegion
 );
 
+export const selectDialogId = createSelector(
+    selectCountriesState,
+    _selectDialogId
+);
+
 export const selectCountryDepartments = createSelector(
     selectCountryDetail,
     selectAllDepartments,
@@ -152,4 +159,5 @@ export const selectCountriesLength = createSelector(
 export const selectRegionCountriesLength = createSelector(
     selectAllRegionCountries,
     (countries) => countries.length
-)
+);
+

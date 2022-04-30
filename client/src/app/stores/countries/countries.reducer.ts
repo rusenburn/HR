@@ -20,6 +20,7 @@ export interface CountriesState {
     sortActive: string;
     ascending: boolean;
     byRegion: number | null;
+    dialogId: string;
 }
 
 const initialState: CountriesState = {
@@ -31,7 +32,8 @@ const initialState: CountriesState = {
     pageSize: 20,
     ascending: true,
     sortActive: "countryId",
-    byRegion: null
+    byRegion: null,
+    dialogId: ""
 }
 
 export const reducer = createReducer(initialState,
@@ -87,6 +89,12 @@ export const reducer = createReducer(initialState,
             countries.splice(index, 1, action.country);
         }
         return { ...state, loading: false, countryDetail: action.country, countries }
+    }),
+    on(CountriesActions.openFormSuccess, (state, action) => {
+        return { ...state, dialogId: action.dialogId };
+    }),
+    on(CountriesActions.closeFormSuccess, (state) => {
+        return { ...state, dialogId: "" };
     })
 );
 

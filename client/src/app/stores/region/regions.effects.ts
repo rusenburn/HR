@@ -1,17 +1,20 @@
 import { Injectable } from "@angular/core";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
-import { catchError, concatMap, exhaustMap, map, mergeMap, of } from "rxjs";
+import { catchError, concatMap, exhaustMap, map, mergeMap, of, withLatestFrom } from "rxjs";
 import { RegionsService } from "src/app/services/regions.service";
 import * as RegionActions from "./regions.actions";
-import { MatDialog, MatDialogRef, } from "@angular/material/dialog";
-import { RegionUpsertDialogComponent } from "src/app/core/regions/region-upsert-dialog/region-upsert-dialog.component";
+import { MatDialog } from "@angular/material/dialog";
 import { RegionQueryModel } from "src/app/models/regions/region-query.model";
+import { Store } from "@ngrx/store";
+import { selectDialogRefId } from "./regions.selectors";
+import { RegionUpsertDialogComponent } from "src/app/shared/dialoges/region-upsert-dialog/region-upsert-dialog.component";
 
 
 
 @Injectable()
 export class RegionsApiEffects {
-    constructor(private regionService: RegionsService, private actions$: Actions, private dialog: MatDialog) { }
+    constructor(private regionService: RegionsService, private actions$: Actions, private dialog: MatDialog, private store$: Store) {
+    }
 
     readAll$ = createEffect(() => {
         return this.actions$.pipe(
@@ -32,19 +35,17 @@ export class RegionsApiEffects {
     createOne$ = createEffect(() => {
         return this.actions$.pipe(
             ofType(RegionActions.createOne),
-            concatMap((action) => {
+            // withLatestFrom(this.store$.select(selectDialogRefId)),
+            concatMap((action ) => {
                 return this.regionService.createOne(action.region).pipe(
                     map(region => {
-                        if (this.dialog.openDialogs.length) {
-                            this.dialog.closeAll();
-                        }
                         return RegionActions.createOneSuccess({ region })
                     }),
                     catchError(error => of(RegionActions.createOneFailure({ error })))
                 )
             })
         )
-    })
+    });
 
     deleteOne$ = createEffect(() => {
         return this.actions$.pipe(
@@ -56,7 +57,7 @@ export class RegionsApiEffects {
                 )
             })
         )
-    })
+    });
 
     updateOne$ = createEffect(() => {
         return this.actions$.pipe(
@@ -87,10 +88,36 @@ export class RegionsApiEffects {
         )
     });
 
-    // paginationChanged$ = createEffect(() => {
-    //     return this.actions$.pipe(
-    //         ofType(RegionActions.paginationChanged),
-    //         exhaustMap(x => of(RegionActions.readAll(x)))
-    //     )
-    // });
+    upsertSuccess = createEffect(() => {
+        return this.actions$.pipe(
+            ofType(RegionActions.updateOneSuccess, RegionActions.createOneSuccess),
+            withLatestFrom(this.store$.select(selectDialogRefId)),
+            map(([_, formId]) => {
+                return RegionActions.closeForm({ formId });
+            })
+        )
+    })
+
+    openForm$ = createEffect(() => {
+        return this.actions$.pipe(
+            ofType(RegionActions.openForm),
+            map((action) => {
+                const dialog = this.dialog.open(RegionUpsertDialogComponent, {
+                    data: { ...action.region },
+                    disableClose:true,
+                });
+                return RegionActions.openFormSuccess({ matDialogRefId: dialog.id });
+            })
+        );
+    });
+    closeForm$ = createEffect(() => {
+        return this.actions$.pipe(
+            ofType(RegionActions.closeForm),
+            map(action => {
+                const dialogRef = this.dialog.getDialogById(action.formId);
+                dialogRef?.close();
+                return RegionActions.closeFormSuccess();
+            })
+        )
+    });
 }

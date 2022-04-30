@@ -1,26 +1,19 @@
 import { NgModule } from '@angular/core';
-import { EffectsModule } from '@ngrx/effects';
-import { StoreModule } from '@ngrx/store';
-import { SharedModule } from '../../shared/shared.module';
+import { SharedModule } from 'src/app/shared/shared.module';
 import { CountriesRoutingModule } from './countries-routing.module';
-import { CountriesApiEffects } from '../../stores/countries/countries.effects';
-import * as CountryState from "../../stores/countries/countries.state";
 import { IndexComponent } from './index/index.component';
-import { CountryUpsertDialogComponent } from './country-upsert-dialog/country-upsert-dialog.component';
 import { CountryDetailComponent } from './country-detail/country-detail.component';
 
 
 @NgModule({
   declarations: [
     IndexComponent,
-    CountryUpsertDialogComponent,
+    // CountryUpsertDialogComponent,
     CountryDetailComponent
   ],
   imports: [
     SharedModule,
     CountriesRoutingModule,
-    // StoreModule.forFeature("[COUNTRIES]", CountryState.reducers, { metaReducers: CountryState.metaReducers }),
-    // EffectsModule.forFeature([CountriesApiEffects])
   ]
 })
 export class CountriesModule { }
