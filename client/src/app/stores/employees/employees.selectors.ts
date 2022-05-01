@@ -21,7 +21,7 @@ const _selectPageSize = (state: EmployeesState) => state.pageSize;
 const _selectSortActive = (state: EmployeesState) => state.sortActive;
 const _selectAscending = (state: EmployeesState) => state.ascending;
 const _selectfilter = (state: EmployeesState) => state.filters;
-
+const _selectFormId = (state:EmployeesState)=>state.formId;
 const _sort = (employees: EmployeeModel[], sortActive: string, ascending: boolean): EmployeeModel[] => {
     const result = [...employees];
     switch (sortActive) {
@@ -42,7 +42,7 @@ const _sort = (employees: EmployeeModel[], sortActive: string, ascending: boolea
             break;
             // case "hireDate":
             //     result.sort((a,b)=>stringComparer(a.hireDate,b.hireDate));
-            break;
+            // break;
         case "jobId":
             result.sort((a, b) => (a.jobId || 0) - (b.jobId || 0));
             break;
@@ -130,6 +130,11 @@ export const selectAscending = createSelector(
 export const selectFilter = createSelector(
     selectEmployeesState,
     _selectfilter
+);
+
+export const selectFormId = createSelector(
+    selectEmployeesState,
+    _selectFormId
 );
 
 export const selectFilteredEmployees = createSelector(

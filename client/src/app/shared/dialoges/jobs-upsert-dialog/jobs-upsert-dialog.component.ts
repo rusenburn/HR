@@ -12,7 +12,7 @@ import { Subject, takeUntil } from 'rxjs';
   templateUrl: './jobs-upsert-dialog.component.html',
   styleUrls: ['./jobs-upsert-dialog.component.css']
 })
-export class JobsUpsertDialogComponent implements OnInit, OnDestroy {
+export class JobsUpsertDialogComponent implements OnDestroy {
   job: JobUpdateModel;
   jobForm: FormGroup;
   private destroy$ = new Subject<void>();
@@ -21,9 +21,9 @@ export class JobsUpsertDialogComponent implements OnInit, OnDestroy {
     private _fb: FormBuilder,
     private diaglogRef: MatDialogRef<JobsUpsertDialogComponent>,
     private actions$: Actions,
-    @Inject(MAT_DIALOG_DATA) public data: any,
+    @Inject(MAT_DIALOG_DATA) public data: JobUpdateModel,
   ) {
-    this.job = data.job;
+    this.job = data;
     this.jobForm = this._fb.group({
       jobTitle: [this.job?.jobTitle, [Validators.required, Validators.maxLength(52)]],
       minSalary: [this.job?.minSalary, [Validators.required, Validators.min(0)]],
@@ -32,11 +32,11 @@ export class JobsUpsertDialogComponent implements OnInit, OnDestroy {
     this.jobForm.addValidators([CustomValidators.notSmaller("maxSalary", "minSalary")]);
   }
 
-  ngOnInit(): void {
-    this.actions$
-      .pipe(takeUntil(this.destroy$), ofType(createOneSuccess,updateOneSuccess))
-      .subscribe(() => this.diaglogRef.close())
-  }
+  // ngOnInit(): void {
+  //   // this.actions$
+  //   //   .pipe(takeUntil(this.destroy$), ofType(createOneSuccess,updateOneSuccess))
+  //   //   .subscribe(() => this.diaglogRef.close())
+  // }
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();

@@ -6,7 +6,7 @@ import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { defaultJobQuery } from 'src/app/models/jobs/job-query.model';
 import { JobModel } from 'src/app/models/jobs/job.model';
-import { readAll, updatePagination, updateSorting } from 'src/app/stores/jobs/jobs.actions';
+import { openForm, readAll, updatePagination, updateSorting } from 'src/app/stores/jobs/jobs.actions';
 import { selectAllJobs, selectJobsLength, selectPageIndex, selectPageSize, selectSortedJobsSlice } from 'src/app/stores/jobs/jobs.selectors';
 
 
@@ -17,10 +17,7 @@ import { selectAllJobs, selectJobsLength, selectPageIndex, selectPageSize, selec
   styleUrls: ['./jobs-table.component.css']
 })
 export class JobsTableComponent {
-
   jobs$: Observable<JobModel[]>;
-  @Output()
-  editJob = new EventEmitter<JobModel>();
   displayedColumns: string[] = ["jobId", "jobTitle", "minSalary", "maxSalary", "actions"];
   pageSize$: Observable<number>;
   pageIndex$: Observable<number>;
@@ -34,7 +31,7 @@ export class JobsTableComponent {
   }
 
   public edit(job: JobModel): void {
-    this.editJob.emit(job);
+        this._store.dispatch(openForm({ job }));
   }
 
   public detail(jobId: number): void {

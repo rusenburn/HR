@@ -19,6 +19,10 @@ import { JobsStore } from '../stores/jobs/jobs.store';
 import { JobHisotryStore } from '../stores/job-history/job-history.store';
 import { RegionUpsertDialogComponent } from './dialoges/region-upsert-dialog/region-upsert-dialog.component';
 import { CountryUpsertDialogComponent } from './dialoges/country-upsert-dialog/country-upsert-dialog.component';
+import { DepartmentsUpsertDialogComponent } from './dialoges/departments-upsert-dialog/departments-upsert-dialog.component';
+import { JobsUpsertDialogComponent } from './dialoges/jobs-upsert-dialog/jobs-upsert-dialog.component';
+import { EmployeeUpsertDialogComponent } from './dialoges/employee-upsert-dialog/employee-upsert-dialog.component';
+import { JobHistoryUpsertDialogComponent } from './dialoges/job-history-upsert-dialog/job-history-upsert-dialog.component';
 
 const components = [
   RegionsTableComponent,
@@ -31,6 +35,11 @@ const components = [
 
   RegionUpsertDialogComponent,
   CountryUpsertDialogComponent,
+  DepartmentsUpsertDialogComponent,
+  JobsUpsertDialogComponent,
+  EmployeeUpsertDialogComponent,
+  JobHistoryUpsertDialogComponent
+
 ];
 const modules = [
   CommonModule,

@@ -1,3 +1,4 @@
+<ng-container [ngTemplateOutlet]="paginator"></ng-container>
 <table mat-table [dataSource]="employees$" matSort (matSortChange)="sortChange($event)">
 
     <ng-container matColumnDef="employeeId">
@@ -60,6 +61,9 @@
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
     <tr mat-row *matRowDef="let row;columns:displayedColumns;"></tr>
 </table>
+<ng-container [ngTemplateOutlet]="paginator"></ng-container>
 
-<mat-paginator [length]="length$|async" [pageIndex]="pageIndex$|async" [pageSize]="pageSize$|async"
-    [pageSizeOptions]="[5,10,20,40]" (page)="onPageEvent($event)"></mat-paginator>
+<ng-template #paginator>
+    <mat-paginator [length]="length$|async" [pageIndex]="pageIndex$|async" [pageSize]="pageSize$|async"
+        [pageSizeOptions]="[5,10,20,40]" (page)="onPageEvent($event)"></mat-paginator>
+</ng-template>

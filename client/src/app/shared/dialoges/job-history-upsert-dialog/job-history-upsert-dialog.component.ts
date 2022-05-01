@@ -2,7 +2,7 @@ import { Component, Inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Store } from '@ngrx/store';
-import { Observable } from 'rxjs';
+import { Observable, Subject, takeUntil } from 'rxjs';
 import { DepartmentModel } from 'src/app/models/departments/department.model';
 import { EmployeeModel } from 'src/app/models/employees/employee.model';
 import { JobHistoryCreateModel } from 'src/app/models/job-histories/job-history-create.model';
@@ -12,19 +12,21 @@ import { selectAllDepartments } from 'src/app/stores/departments/departments.sel
 import { selectAllEmployees } from 'src/app/stores/employees/employees.selectors';
 import { selectAllJobs } from 'src/app/stores/jobs/jobs.selectors';
 import { createOne, updateOne } from 'src/app/stores/job-history/job-history.actions';
+import { selectIsCreateForm } from 'src/app/stores/job-history/job-history.selectors';
 @Component({
   selector: 'app-job-history-upsert-dialog',
   templateUrl: './job-history-upsert-dialog.component.html',
   styleUrls: ['./job-history-upsert-dialog.component.css']
 })
 export class JobHistoryUpsertDialogComponent {
-  jobHistoryForm: FormGroup;
+  jobHistoryForm: FormGroup | null = null;
   jobHistoryModel: JobHistoryCreateModel | null;
-  create: boolean;
   employees$: Observable<EmployeeModel[]>;
+  create$: Observable<boolean>;
   jobs$: Observable<JobModel[]>;
   departments$: Observable<DepartmentModel[]>;
-
+  create: boolean = true;
+  destroy$ = new Subject<void>();
 
   constructor(
     private _store: Store,
@@ -35,26 +37,31 @@ export class JobHistoryUpsertDialogComponent {
     this.employees$ = this._store.select(selectAllEmployees);
     this.jobs$ = this._store.select(selectAllJobs);
     this.departments$ = this._store.select(selectAllDepartments);
-    this.create = data.create === true;
-    this.jobHistoryModel = data.jobHistory;
-    if (this.create) {
-      this.jobHistoryForm = this._fb.group({
-        employeeId: [0, [Validators.required, Validators.min(1)]],
-        startDate: [Date.now(), [Validators.required]],
-        salary: [0, [Validators.required, Validators.min(0)]],
-        jobId: [0, [Validators.required, Validators.min(0)]],
-        departmentId: [0, [Validators.required, Validators.min(0)]]
-      })
-    } else {
-      this.jobHistoryForm = this._fb.group({
-        endDate: [null,]
-      });
-    }
-    console.log(this.jobHistoryForm);
+    this.create$ = this._store.select(selectIsCreateForm)
+      .pipe(takeUntil(this.destroy$));
+
+    this.create$.subscribe((isCreate) => {
+      this.create = isCreate;
+      if (isCreate) {
+        this.jobHistoryForm = this._fb.group({
+          employeeId: [0, [Validators.required, Validators.min(1)]],
+          startDate: [Date.now(), [Validators.required]],
+          salary: [0, [Validators.required, Validators.min(0)]],
+          jobId: [0, [Validators.required, Validators.min(0)]],
+          departmentId: [0, [Validators.required, Validators.min(0)]]
+        })
+      } else {
+        this.jobHistoryForm = this._fb.group({
+          endDate: [null,]
+        });
+      }
+    });
+    this.jobHistoryModel = data;
   }
 
 
   public submitForm(): void {
+    if (!this.jobHistoryForm) return;
     if (this.create) {
       const model = this.createFormToModel();
       this._store.dispatch(createOne({ jobHistory: model }));
@@ -70,11 +77,11 @@ export class JobHistoryUpsertDialogComponent {
 
   private createFormToModel(): JobHistoryCreateModel {
     const model: JobHistoryCreateModel = {
-      employeeId: this.jobHistoryForm.value.employeeId,
-      startDate: (this.jobHistoryForm.value.startDate as Date).toISOString() ,
-      salary: this.jobHistoryForm.value.salary || 0,
-      jobId: this.jobHistoryForm.value.jobId || 0,
-      departmentId: this.jobHistoryForm.value.departmentId || 0
+      employeeId: this.jobHistoryForm?.value.employeeId,
+      startDate: (this.jobHistoryForm?.value.startDate as Date).toISOString(),
+      salary: this.jobHistoryForm?.value.salary || 0,
+      jobId: this.jobHistoryForm?.value.jobId || 0,
+      departmentId: this.jobHistoryForm?.value.departmentId || 0
     };
     return model;
   }
@@ -86,9 +93,8 @@ export class JobHistoryUpsertDialogComponent {
     const model: JobHistoryUpdateModel = {
       employeeId: this.jobHistoryModel.employeeId,
       startDate: this.jobHistoryModel.startDate,
-      endDate: (this.jobHistoryForm.value.endDate as Date).toISOString() || null
+      endDate: (this.jobHistoryForm?.value.endDate as Date).toISOString() || null
     }
     return model;
   }
-
 }

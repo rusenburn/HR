@@ -19,6 +19,8 @@ export interface JobHistoryState {
     sortActive: string;
     ascending: boolean;
     filter: JobHistoryFilterModel;
+    formId: string;
+    isCreateForm: boolean;
 }
 
 export const initialState: JobHistoryState = {
@@ -29,7 +31,9 @@ export const initialState: JobHistoryState = {
     pageSize: 10,
     sortActive: "startDate",
     ascending: false,
-    filter: { ...defaultJobHistoryFilter }
+    filter: { ...defaultJobHistoryFilter },
+    formId: "",
+    isCreateForm: true
 }
 
 export const reducer = createReducer(
@@ -90,5 +94,17 @@ export const reducer = createReducer(
     }),
     on(JobHistoryActions.removeFilter, (state) => {
         return { ...state, filter: { ...defaultJobHistoryFilter } }
+    }),
+    on(JobHistoryActions.openCreateForm, (state) => {
+        return { ...state, isCreateForm: true };
+    }),
+    on(JobHistoryActions.openUpdateForm, (state) => {
+        return { ...state, isCreateForm: false };
+    }),
+    on(JobHistoryActions.openFormSuccess, (state, action) => {
+        return { ...state, formId: action.formId };
+    }),
+    on(JobHistoryActions.closeFormSuccess, (state) => {
+        return { ...state, formId: "" };
     })
 );

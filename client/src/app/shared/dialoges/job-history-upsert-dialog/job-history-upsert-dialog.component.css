@@ -1,0 +1,32 @@
+.form-dialog{
+    width: 100%;
+    max-width: 600px;
+    margin: auto;
+}
+mat-card {
+    width: 90%;
+    margin: auto;
+}
+
+form {
+    width: 100%;
+}
+
+mat-form-field {
+    width: 90%;
+    margin: 5px 5%;
+}
+
+.button-container {
+    display: flex;
+    width: 100%;
+    justify-content: space-evenly;
+}
+
+@media (min-width:600px) {
+    mat-form-field {
+        width: 44%;
+        margin: 5px 0;
+        margin-left: 4%;
+    }
+}

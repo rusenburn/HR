@@ -1,6 +1,7 @@
 import { createAction, props } from "@ngrx/store";
 import { DepartmentCreateModel } from "src/app/models/departments/department-create.model";
 import { DepartmentDetailModel } from "src/app/models/departments/department-detail.model";
+import { DepartmentLocationedModel } from "src/app/models/departments/department-locationed";
 import { DepartmentQueryModel } from "src/app/models/departments/department-query.model";
 import { DepartmentUpdateModel } from "src/app/models/departments/department-update.model";
 import { DepartmentModel } from "src/app/models/departments/department.model";
@@ -38,3 +39,10 @@ export const deleteOneFailure = createAction("[DEPARTMENTS API] DeleteOneFailure
 
 export const readOneSuccess = createAction("[DEPARTMENTS API] ReadOneSuccess", props<{ department: DepartmentDetailModel }>());
 export const readOneFailure = createAction("[DEPARTMENTS API] ReadOneFailure", props<{ error: Error }>());
+
+
+// FORM ACTIONS
+export const openForm = createAction("[DEPARTMENTS FORM] OpenForm",props<{department:DepartmentLocationedModel|null}>());
+export const openFormSuccess = createAction("[DEPARTMENTS OpenFormSuccess]",props<{formId:string}>());
+export const closeForm = createAction("[DEPARTMENTS FORM] CloseForm",props<{formId:string}>());
+export const closeFormSuccess = createAction("[DEPARTMENTS FORM] CloseFormSuccess");

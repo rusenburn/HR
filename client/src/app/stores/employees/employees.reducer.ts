@@ -21,7 +21,8 @@ export interface EmployeesState {
     pageSize: number,
     sortActive: string,
     ascending: boolean,
-    filters: EmployeeFilterModel
+    filters: EmployeeFilterModel,
+    formId: string
 
 }
 
@@ -34,7 +35,8 @@ const initialState: EmployeesState = {
     pageSize: 10,
     sortActive: "employeeId",
     ascending: true,
-    filters: { ...defaultEmployeeFilter }
+    filters: { ...defaultEmployeeFilter },
+    formId: ""
 };
 
 export const reducer = createReducer(initialState,
@@ -84,5 +86,11 @@ export const reducer = createReducer(initialState,
     }),
     on(EmployeesActions.removeFilters, (state) => {
         return { ...state, filters: { ...defaultEmployeeFilter } }
+    }),
+    on(EmployeesActions.openFormSuccess, (state, action) => {
+        return { ...state, formId: action.formId };
+    }),
+    on(EmployeesActions.closeFormSuccess, (state) => {
+        return { ...state, formId: "" };
     })
 );

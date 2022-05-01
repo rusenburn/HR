@@ -11,7 +11,7 @@ export const deleteOne = createAction("[JOBHISTORY] DeleteOne", props<{ employee
 
 export const updateSorting = createAction("[JOBHISTORY] UpdateSorting", props<{ sortActive: string, asc: boolean }>());
 export const updatePagination = createAction("[JOBHISTORY] UpdatePagination", props<{ pageIndex: number, pageSize: number }>());
-export const setFilter = createAction("[JOBHISTORY SetFilter]",props<{filter:JobHistoryFilterModel}>());
+export const setFilter = createAction("[JOBHISTORY SetFilter]", props<{ filter: JobHistoryFilterModel }>());
 export const removeFilter = createAction("[JOBHISTORY RemoveFilter]");
 
 // API ACTIONS
@@ -26,3 +26,12 @@ export const updateOneFailure = createAction("[JOBHISTORY API] UpdateOneFailure"
 
 export const deleteOneSuccess = createAction("[JOBHISTORY API] DeleteOneSuccess", props<{ employeeId: number, startDate: string }>());
 export const deleteOneFailure = createAction("[JOBHISTORY API] DeleteOneFailure", props<{ error: Error }>());
+
+
+// FORM ACTIONS
+
+export const openCreateForm = createAction("[JOBHISORY FORM] OpenCreateForm", props<{ jobHistory: JobHistoryCreateModel | null }>());
+export const openUpdateForm = createAction("[JOBHISORY FORM] OpenUpdateForm", props<{ jobHistory: JobHistoryUpdateModel }>());
+export const openFormSuccess = createAction("[JOBHISORY FORM] OpenFormSuccess", props<{ formId: string }>());
+export const closeForm = createAction("[JOBHISORY FORM] CloseForm", props<{ formId: string }>());
+export const closeFormSuccess = createAction("[JOBHISORY FORM] CloseFormSuccess");

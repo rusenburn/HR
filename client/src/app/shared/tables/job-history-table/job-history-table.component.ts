@@ -6,7 +6,7 @@ import { Store } from '@ngrx/store';
 import { Observable, of, Subject, switchMap, takeUntil } from 'rxjs';
 import { defaultJobHistoryFilter } from 'src/app/models/job-histories/job-history-filter.model';
 import { JobHistoryModel } from 'src/app/models/job-histories/job-history.model';
-import { readAll, removeFilter, setFilter, updatePagination, updateSorting } from 'src/app/stores/job-history/job-history.actions';
+import { openUpdateForm, readAll, removeFilter, setFilter, updatePagination, updateSorting } from 'src/app/stores/job-history/job-history.actions';
 import { selectJobHistoryLength, selectJobHistoryPage, selectPageIndex, selectPageSize } from 'src/app/stores/job-history/job-history.selectors';
 
 @Component({
@@ -14,11 +14,7 @@ import { selectJobHistoryLength, selectJobHistoryPage, selectPageIndex, selectPa
   templateUrl: './job-history-table.component.html',
   styleUrls: ['./job-history-table.component.css']
 })
-export class JobHistoryTableComponent  implements OnDestroy,OnInit{
-  // @Input()
-  // jobHistoryCollection: JobHistoryModel[] = [];
-  @Output()
-  editHistory = new EventEmitter<JobHistoryModel>();
+export class JobHistoryTableComponent implements OnDestroy, OnInit {
   displayedColumns: string[] = ["employeeId", "startDate", "endDate", "departmentId", "jobId", "salary", "actions"];
   jobHistoryCollection$: Observable<JobHistoryModel[]>;
   pageIndex$: Observable<number>;
@@ -31,7 +27,7 @@ export class JobHistoryTableComponent  implements OnDestroy,OnInit{
     this.pageIndex$ = this._store.select(selectPageIndex);
     this.pageSize$ = this._store.select(selectPageSize);
     this.length$ = this._store.select(selectJobHistoryLength);
-    
+
     this._route.paramMap.pipe(
       takeUntil(this.destroy$),
       switchMap(params => {
@@ -53,9 +49,9 @@ export class JobHistoryTableComponent  implements OnDestroy,OnInit{
       }),
     ).subscribe();
   }
-  
+
   edit(jobHistory: JobHistoryModel): void {
-    this.editHistory.emit(jobHistory);
+    this._store.dispatch(openUpdateForm({ jobHistory }));
   }
 
   public parseDate(date: Date | null | undefined | string): string {

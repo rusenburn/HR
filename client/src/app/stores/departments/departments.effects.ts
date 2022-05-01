@@ -1,11 +1,14 @@
 import { Injectable } from "@angular/core";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
-import { catchError, concatMap, exhaustMap, map, mergeMap, of } from "rxjs";
+import { catchError, concatMap, exhaustMap, map, mergeMap, of, withLatestFrom } from "rxjs";
 import { DepartmentsService } from "src/app/services/departments.service";
 import { LocationsService } from "src/app/services/locations.service";
 import * as DepartmentActions from "./departments.actions";
 import { DepartmentUpdateModel } from "src/app/models/departments/department-update.model";
-import { MatDialog, MatDialogActions } from "@angular/material/dialog";
+import { MatDialog } from "@angular/material/dialog";
+import { Store } from "@ngrx/store";
+import { DepartmentsUpsertDialogComponent } from "src/app/shared/dialoges/departments-upsert-dialog/departments-upsert-dialog.component";
+import { selectFormId } from "./departments.selectors";
 
 @Injectable()
 export class DepartmentsAPIEffects {
@@ -100,5 +103,44 @@ export class DepartmentsAPIEffects {
                 )
             })
         )
+    });
+}
+
+@Injectable()
+export class DepartmentsFormEffects {
+    constructor(private actions$: Actions, private dialog: MatDialog, private store: Store) { }
+
+    openForm$ = createEffect(() => {
+        return this.actions$.pipe(
+            ofType(DepartmentActions.openForm),
+            map(action => {
+                const dialogRef = this.dialog.open(DepartmentsUpsertDialogComponent, {
+                    data: action.department,
+                    disableClose: true
+                })
+                return DepartmentActions.openFormSuccess({ formId: dialogRef.id })
+            })
+        );
+    });
+
+    upsertSuccess$ = createEffect(() => {
+        return this.actions$.pipe(
+            ofType(DepartmentActions.updateOneSuccess, DepartmentActions.createOneSuccess),
+            withLatestFrom(this.store.select(selectFormId)),
+            map(([_, formId]) => {
+                return DepartmentActions.closeForm({ formId })
+            })
+        )
+    });
+
+    closeForm$ = createEffect(() => {
+        return this.actions$.pipe(
+            ofType(DepartmentActions.closeForm),
+            map(action => {
+                const dialogRef = this.dialog.getDialogById(action.formId);
+                dialogRef?.close();
+                return DepartmentActions.closeFormSuccess()
+            })
+        );
     });
 }

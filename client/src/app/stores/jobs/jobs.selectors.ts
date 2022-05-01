@@ -21,6 +21,8 @@ const _selectPageSize = (state: JobsState) => state.pageSize;
 const _selectSortActive = (state: JobsState) => state.sortActive;
 const _selectAscending = (state: JobsState) => state.ascending;
 
+const _selectFormId = (state: JobsState) => state.formId;
+
 const _sort = (jobs: JobModel[], sortActive: string, ascending: boolean): JobModel[] => {
     const result = [...jobs];
     switch (sortActive) {
@@ -90,6 +92,10 @@ export const selectAscending = createSelector(
     _selectAscending
 );
 
+export const selectFormId = createSelector(
+    selectJobsState,
+    _selectFormId
+);
 
 export const selectSortedJobs = createSelector(
     selectAllJobs,

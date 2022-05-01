@@ -17,10 +17,12 @@ export class EmployeeUpsertDialogComponent {
   constructor(private _store: Store,
     private _fb: FormBuilder,
     private _dialogRef: MatDialogRef<EmployeeUpsertDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: any) {
-
-    this.employee = { ...data.employee };
-    console.log(this.employee);
+    @Inject(MAT_DIALOG_DATA) public data: EmployeeUpdateModel | null) {
+    if (data) {
+      this.employee = { ...data };
+    } else {
+      this.employee = null;
+    }
     this.employeeForm = this._fb.group({
       firstName: [this.employee?.firstName || "", [Validators.required, Validators.maxLength(52)]],
       lastName: [this.employee?.lastName || "", [Validators.required, Validators.maxLength(52)]],

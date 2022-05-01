@@ -21,6 +21,8 @@ const _selectPageSize = (state: JobHistoryState) => state.pageSize;
 const _selectSortActive = (state: JobHistoryState) => state.sortActive;
 const _selectAscending = (state: JobHistoryState) => state.ascending;
 const _selectFilter = (state: JobHistoryState) => state.filter;
+const _selectFormId = (state: JobHistoryState) => state.formId;
+const _selectIsCreateForm = (state: JobHistoryState) => state.isCreateForm;
 
 const _filter = (collection: JobHistoryModel[], filter: JobHistoryFilterModel) => {
     if (!filter.departmentId && !filter.employeeId && !filter.jobId) {
@@ -118,6 +120,17 @@ export const selectFilter = createSelector(
     _selectFilter
 );
 
+
+export const selectFormId = createSelector(
+    selectJobHistoryState,
+    _selectFormId
+);
+
+export const selectIsCreateForm = createSelector(
+    selectJobHistoryState,
+    _selectIsCreateForm
+);
+
 export const selectFilteredJobHistory = createSelector(
     selectAllJobHistory,
     selectFilter,
@@ -126,7 +139,7 @@ export const selectFilteredJobHistory = createSelector(
 
 export const selectJobHistoryLength = createSelector(
     selectFilteredJobHistory,
-    (collection)=>collection.length
+    (collection) => collection.length
 );
 
 export const selectSortedJobHistory = createSelector(

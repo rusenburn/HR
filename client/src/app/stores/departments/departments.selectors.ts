@@ -22,6 +22,7 @@ const _selectPageSize = (state: DepartmentsState) => state.pageSize;
 const _selectSortActive = (state: DepartmentsState) => state.sortActive;
 const _selectAscending = (state: DepartmentsState) => state.ascending
 const _selectByCountry = (state: DepartmentsState) => state.byCountry
+const _selectFormId = (state:DepartmentsState)=>state.formId;
 
 const _sort = (departments: DepartmentLocationedModel[], sortActive: string, ascending: boolean): DepartmentLocationedModel[] => {
     const result = [...departments];
@@ -116,6 +117,11 @@ export const selectAscending = createSelector(
 export const selectByCountry = createSelector(
     selectDepartmentsState,
     _selectByCountry
+);
+
+export const selectFormId = createSelector(
+    selectDepartmentsState,
+    _selectFormId
 );
 
 export const selectCountryDepartmentsOrAll = createSelector(

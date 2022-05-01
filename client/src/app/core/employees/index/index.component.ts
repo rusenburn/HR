@@ -4,9 +4,7 @@ import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { EmployeeModel } from 'src/app/models/employees/employee.model';
 import { selectAllEmployees, selectLoading } from 'src/app/stores/employees/employees.selectors';
-import { readAll as readAllEmployees } from 'src/app/stores/employees/employees.actions';
-import { EmployeeUpdateModel } from 'src/app/models/employees/employee-update.model';
-import { EmployeeUpsertDialogComponent } from '../employee-upsert-dialog/employee-upsert-dialog.component';
+import { openForm, readAll as readAllEmployees } from 'src/app/stores/employees/employees.actions';
 import { defaultEmployeeQuery } from 'src/app/models/employees/employee-query.model';
 
 @Component({
@@ -20,7 +18,6 @@ export class IndexComponent implements OnInit {
   displayedColumns: string[];
   constructor(
     private _store: Store,
-    private _dialog: MatDialog,
   ) {
     this.employees$ = this._store.select(selectAllEmployees);
     this.loading$ = this._store.select(selectLoading);
@@ -31,13 +28,7 @@ export class IndexComponent implements OnInit {
     this._store.dispatch(readAllEmployees({ ...defaultEmployeeQuery }));
   }
 
-  public openDialog(employee: EmployeeUpdateModel | null): void {
-    console.log(employee);
-    const di = this._dialog.open(EmployeeUpsertDialogComponent, {
-      data: {
-        employee
-      },
-      disableClose: true
-    })
+  public openDialog(): void {
+    this._store.dispatch(openForm({ employee: null }))
   }
 }

@@ -31,3 +31,10 @@ export const deleteOneFailure = createAction("[JOBS API] DeleteOneFailure", prop
 
 export const readOneSuccess = createAction("[JOBS PARAM] ReadOneSuccess", props<{ jobDetail: JobDetailModel }>());
 export const readOneFailure = createAction("[JOBS PARAM] ReadOneFailure", props<{ error: Error }>());
+
+
+// FORM
+export const openForm = createAction("[JOBS FORM] OpenForm", props<{ job: JobUpdateModel|null }>());
+export const openFormSuccess = createAction("[JOBB FORM] OpenFormSuccess", props<{ formId: string }>());
+export const closeForm = createAction("[JOBS FORM] CloseForm", props<{ formId: string }>());
+export const closeFormSuccess = createAction("[JOBS FORM] CloseFormSuccess");

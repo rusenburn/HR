@@ -1,8 +1,13 @@
 import { Injectable } from "@angular/core";
+import { MatDialog } from "@angular/material/dialog";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
-import { catchError, concatMap, exhaustMap, map, mergeMap, of } from "rxjs";
+import { Store } from "@ngrx/store";
+import { catchError, concatMap, exhaustMap, map, mergeMap, of, withLatestFrom } from "rxjs";
 import { JobHistoryService } from "src/app/services/job-history.service";
+import { JobHistoryUpsertDialogComponent } from "src/app/shared/dialoges/job-history-upsert-dialog/job-history-upsert-dialog.component";
 import * as JobHistoryActions from "./job-history.actions";
+import { selectFormId } from "./job-history.selectors";
+
 @Injectable()
 export class JobHistoryAPIEffects {
     constructor(private jobHistoryService: JobHistoryService, private actions$: Actions) { }
@@ -54,4 +59,44 @@ export class JobHistoryAPIEffects {
             })
         )
     });
+}
+
+@Injectable()
+export class JobHistoryFormEffects {
+    constructor(private store: Store, private dialog: MatDialog, private actions$: Actions) { }
+
+    openForm$ = createEffect(() => {
+        return this.actions$.pipe(
+            ofType(JobHistoryActions.openCreateForm, JobHistoryActions.openUpdateForm),
+            map(action => {
+                const dialogRef = this.dialog.open(JobHistoryUpsertDialogComponent, {
+                    data: action.jobHistory,
+                    disableClose: true
+                });
+                return JobHistoryActions.openFormSuccess({ formId: dialogRef.id });
+            })
+        );
+    });
+
+    upsertSuccess$ = createEffect(() => {
+        return this.actions$.pipe(
+            ofType(JobHistoryActions.updateOneSuccess, JobHistoryActions.createOneSuccess),
+            withLatestFrom(this.store.select(selectFormId)),
+            map(([_, formId]) => {
+                return JobHistoryActions.closeForm({ formId });
+            })
+        );
+    });
+
+    closeForm$ = createEffect(() => {
+        return this.actions$.pipe(
+            ofType(JobHistoryActions.closeForm),
+            map(action => {
+                const dialogRef = this.dialog.getDialogById(action.formId);
+                dialogRef?.close();
+                return JobHistoryActions.closeFormSuccess();
+            })
+        );
+    });
+
 }

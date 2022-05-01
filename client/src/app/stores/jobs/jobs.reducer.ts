@@ -19,6 +19,7 @@ export interface JobsState {
     pageSize: number;
     ascending: boolean;
     sortActive: string;
+    formId:string
 }
 
 const initialState: JobsState = {
@@ -29,7 +30,8 @@ const initialState: JobsState = {
     pageIndex: 0,
     pageSize: 20,
     ascending: true,
-    sortActive: "jobId"
+    sortActive: "jobId",
+    formId:""
 };
 
 export const reducer = createReducer(
@@ -89,6 +91,12 @@ export const reducer = createReducer(
     on(JobsActions.readOneSuccess,
         (state, action) => {
             return { ...state, loading: false, jobDetail: action.jobDetail };
-        })
+    }),
+    on(JobsActions.openFormSuccess,(state,action)=>{
+        return {...state,formId:action.formId};
+    }),
+    on(JobsActions.closeFormSuccess,(state)=>{
+        return {...state,formId:""}
+    })
 
 )

@@ -3,10 +3,10 @@
         <h1>Job History</h1>
     </div>
     <div>
-        <button mat-raised-button (click)="openDialog(null)" color="primary">Add new history</button>
+        <button mat-raised-button (click)="createNew()" color="primary">Add new history</button>
     </div>
     <app-job-history-detail-table [jobHistoryCollection]="(jobHistoryCollection$ |async)||[]"
-        (editJobHistory)="openDialog($event)" *ngIf="(jobHistoryCollection$|async)?.length;else whenEmpty">
+        *ngIf="(jobHistoryCollection$|async)?.length;else whenEmpty">
     </app-job-history-detail-table>
 </div>
 

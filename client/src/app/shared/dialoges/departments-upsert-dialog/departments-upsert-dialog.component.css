@@ -1,5 +1,12 @@
+.form-dialog{
+    width: 600px;
+    max-width: 100%;
+    margin: auto;
+}
+
 mat-card{
     width: 90%;
+    margin: auto;
 }
 form{
     width: 100%;

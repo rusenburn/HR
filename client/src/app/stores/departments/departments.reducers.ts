@@ -21,6 +21,7 @@ export interface DepartmentsState {
     sortActive: string;
     ascending: boolean;
     byCountry: number | null;
+    formId: string
 }
 
 const initialState: DepartmentsState = {
@@ -32,7 +33,8 @@ const initialState: DepartmentsState = {
     pageSize: 10,
     sortActive: "departmentId",
     ascending: true,
-    byCountry: null
+    byCountry: null,
+    formId: ""
 };
 
 export const reducer = createReducer(
@@ -93,5 +95,11 @@ export const reducer = createReducer(
     on(DepartmentsActions.readOneSuccess,
         (state, action) => {
             return { ...state, loading: false, departmentDetail: action.department }
-        })
+        }),
+    on(DepartmentsActions.openFormSuccess, (state, action) => {
+        return { ...state, formId: action.formId };
+    }),
+    on(DepartmentsActions.closeFormSuccess, (state) => {
+        return { ...state, formId: "" };
+    })
 )

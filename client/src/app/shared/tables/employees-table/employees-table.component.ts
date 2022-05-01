@@ -7,7 +7,7 @@ import { Observable, of, Subject, switchMap, takeUntil } from 'rxjs';
 import { defaultEmployeeFilter, EmployeeFilterModel } from 'src/app/models/employees/employee-filter.model';
 import { defaultEmployeeQuery } from 'src/app/models/employees/employee-query.model';
 import { EmployeeModel } from 'src/app/models/employees/employee.model';
-import { readAll, removeFilters, setFilters, updatePagination, updateSorting } from 'src/app/stores/employees/employees.actions';
+import { openForm, readAll, removeFilters, setFilters, updatePagination, updateSorting } from 'src/app/stores/employees/employees.actions';
 import { selectFilteredEmployeesLength, selectPageIndex, selectPageSize, selectSortedEmployeesSlice } from 'src/app/stores/employees/employees.selectors';
 
 @Component({
@@ -17,9 +17,6 @@ import { selectFilteredEmployeesLength, selectPageIndex, selectPageSize, selectS
 })
 export class EmployeesTableComponent implements OnDestroy {
   displayedColumns: string[] = ["employeeId", "firstName", "lastName", "actions"];
-
-  @Output()
-  editEmployee = new EventEmitter<EmployeeModel>();
   employees$: Observable<EmployeeModel[]>;
   pageIndex$: Observable<number>;
   pageSize$: Observable<number>;
@@ -57,7 +54,7 @@ export class EmployeesTableComponent implements OnDestroy {
 
 
   public edit(employee: EmployeeModel): void {
-    return this.editEmployee.emit(employee);
+    this._store.dispatch(openForm({ employee }));
   }
 
   public detail(employeeId: number): void {

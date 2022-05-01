@@ -3,7 +3,7 @@
         <h1>Employees</h1>
     </div>
     <div>
-        <button mat-raised-button color="primary" (click)="openDialog(null)">Add new employee</button>
+        <button mat-raised-button color="primary" (click)="openDialog()">Add new employee</button>
     </div>
-    <app-employees-table (editEmployee)="openDialog($event)"></app-employees-table>
+    <app-employees-table></app-employees-table>
 </div>

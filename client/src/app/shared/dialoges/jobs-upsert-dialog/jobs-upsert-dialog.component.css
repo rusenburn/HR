@@ -1,5 +1,12 @@
+.form-dialog {
+    width: 600px;
+    max-width: 100%;
+    margin: auto;
+}
+
 mat-card {
     width: 90%;
+    margin: auto;
 }
 
 form {
@@ -7,20 +14,12 @@ form {
 }
 
 mat-form-field {
-    width: 90%;
-    margin: 5px 5%;
+    width: 100%;
+    min-width: 300px;
 }
 
 .button-container {
     display: flex;
     width: 100%;
     justify-content: space-evenly;
-}
-
-@media (min-width:600px) {
-    mat-form-field {
-        width: 44%;
-        margin: 5px 0;
-        margin-left: 4%;
-    }
 }
