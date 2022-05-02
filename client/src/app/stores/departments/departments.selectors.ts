@@ -22,7 +22,27 @@ const _selectPageSize = (state: DepartmentsState) => state.pageSize;
 const _selectSortActive = (state: DepartmentsState) => state.sortActive;
 const _selectAscending = (state: DepartmentsState) => state.ascending
 const _selectByCountry = (state: DepartmentsState) => state.byCountry
-const _selectFormId = (state:DepartmentsState)=>state.formId;
+const _selectFormId = (state: DepartmentsState) => state.formId;
+const _selectTextFilter = (state: DepartmentsState) => state.textFilter;
+
+
+const _filterByText = (departments: DepartmentLocationedModel[], textFilter: string): DepartmentLocationedModel[] => {
+    if (!textFilter.length) {
+        return departments;
+    }
+    textFilter = textFilter.toLocaleLowerCase();
+    const result = departments.filter(d => {
+        return d.departmentId.toString().includes(textFilter) ||
+            d.departmentName.toLocaleLowerCase().includes(textFilter) ||
+            d.locationId.toString().includes(textFilter)||
+            d.location.city.toLocaleLowerCase().includes(textFilter)||
+            d.location.postalCode?.toLocaleLowerCase().includes(textFilter)||
+            d.location.stateProvince.toLocaleLowerCase().includes(textFilter)||
+            d.location.streetAddress.toLocaleLowerCase().includes(textFilter)
+    });
+    return result;
+}
+
 
 const _sort = (departments: DepartmentLocationedModel[], sortActive: string, ascending: boolean): DepartmentLocationedModel[] => {
     const result = [...departments];
@@ -124,14 +144,27 @@ export const selectFormId = createSelector(
     _selectFormId
 );
 
+
+export const selectTextFilter = createSelector(
+    selectDepartmentsState,
+    _selectTextFilter
+);
+
 export const selectCountryDepartmentsOrAll = createSelector(
     selectAllDepartments,
     selectByCountry,
     _filterByCountryOrAll
 );
 
-export const selectSortedCountryDepartments = createSelector(
+export const selectFilteredCountryDepartments = createSelector(
     selectCountryDepartmentsOrAll,
+    selectTextFilter,
+    _filterByText
+);
+
+export const selectSortedCountryDepartments = createSelector(
+    // selectCountryDepartmentsOrAll,
+    selectFilteredCountryDepartments,
     selectSortActive,
     selectAscending,
     _sort
@@ -148,8 +181,8 @@ export const selectAllDepartmentsLength = createSelector(
     selectAllDepartments,
     (departments) => departments.length
 );
-export const selectCountryDepartmentsOrAllLength = createSelector(
-    selectCountryDepartmentsOrAll,
+export const selectFilteredDepartmentsLength = createSelector(
+    selectFilteredCountryDepartments,
     (departments) => departments.length
 );
 

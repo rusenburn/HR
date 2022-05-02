@@ -21,7 +21,26 @@ const _selectPageSize = (state: EmployeesState) => state.pageSize;
 const _selectSortActive = (state: EmployeesState) => state.sortActive;
 const _selectAscending = (state: EmployeesState) => state.ascending;
 const _selectfilter = (state: EmployeesState) => state.filters;
-const _selectFormId = (state:EmployeesState)=>state.formId;
+const _selectFormId = (state: EmployeesState) => state.formId;
+const _selectTextFilter = (state: EmployeesState) => state.textFilter;
+
+
+const _filterByText = (employees: EmployeeModel[], textFilter: string): EmployeeModel[] => {
+    if (!textFilter.length) {
+        return employees;
+    }
+    textFilter = textFilter.toLocaleLowerCase();
+    const result = employees.filter(e =>
+        e.employeeId.toString().includes(textFilter) ||
+        (e.firstName + " " + e.lastName).toLocaleLowerCase().includes(textFilter) ||
+        e.email.toLocaleLowerCase().includes(textFilter) ||
+        e.phoneNumber.toLocaleLowerCase().includes(textFilter) ||
+        e.salary?.toLocaleString().includes(textFilter) ||
+        e.hireDate?.toLocaleString().includes(textFilter)
+    );
+    return result;
+};
+
 const _sort = (employees: EmployeeModel[], sortActive: string, ascending: boolean): EmployeeModel[] => {
     const result = [...employees];
     switch (sortActive) {
@@ -40,9 +59,9 @@ const _sort = (employees: EmployeeModel[], sortActive: string, ascending: boolea
         case "phoneNumber":
             result.sort((a, b) => stringComparer(a.phoneNumber, b.phoneNumber));
             break;
-            // case "hireDate":
-            //     result.sort((a,b)=>stringComparer(a.hireDate,b.hireDate));
-            // break;
+        // case "hireDate":
+        //     result.sort((a,b)=>stringComparer(a.hireDate,b.hireDate));
+        // break;
         case "jobId":
             result.sort((a, b) => (a.jobId || 0) - (b.jobId || 0));
             break;
@@ -132,31 +151,41 @@ export const selectFilter = createSelector(
     _selectfilter
 );
 
+export const selectTextFilter = createSelector(
+    selectEmployeesState,
+    _selectTextFilter
+);
+
 export const selectFormId = createSelector(
     selectEmployeesState,
     _selectFormId
 );
 
-export const selectFilteredEmployees = createSelector(
+export const selectEmployeesFilteredByForeignKeys = createSelector(
     selectAllEmployees,
     selectFilter,
     _filterByKeys
 );
+export const selectFilteredEmployeesByText= createSelector(
+    selectEmployeesFilteredByForeignKeys,
+    selectTextFilter,
+    _filterByText
+);
 
 export const selectSortedEmployees = createSelector(
-    selectFilteredEmployees,
+    selectFilteredEmployeesByText,
     selectSortActive,
     selectAscending,
     _sort
 );
 
 export const selectFilteredEmployeesLength = createSelector(
-    selectFilteredEmployees,
+    selectFilteredEmployeesByText,
     (employees) => employees.length
 );
 
 
-export const selectSortedEmployeesSlice = createSelector(
+export const selectEmployeesPage = createSelector(
     selectSortedEmployees,
     selectPageIndex,
     selectPageSize,

@@ -1,4 +1,32 @@
-table{
-    width: 100%;
+table {
     margin: auto;
+    width: 100%;
+    table-layout: fixed;
+}
+.search-paginator-container{
+    margin-top: 5px;
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    flex-direction: column;
+}
+.col-search{
+    width: 50%;
+    min-width: 150px;
+}
+.col-paginator{
+    width: 100%;
+    min-width: 460px;
+}
+@media (min-width:700px){
+    .search-paginator-container{
+        flex-direction: row;
+    }
+    
+    .col-search{
+        width: 25%;
+    }
+    .col-paginator{
+        width: 65%;
+    }
 }

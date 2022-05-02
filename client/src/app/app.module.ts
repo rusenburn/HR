@@ -11,7 +11,6 @@ import { AppConfig } from './app.config';
 import { EffectsModule } from '@ngrx/effects';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
-import { HomeComponent } from './core/home/home.component';
 import { CoreModule } from './core/core.module';
 import { MatDialogModule } from '@angular/material/dialog';
 

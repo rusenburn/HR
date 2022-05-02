@@ -13,6 +13,8 @@ export const updateSorting = createAction("[JOBHISTORY] UpdateSorting", props<{ 
 export const updatePagination = createAction("[JOBHISTORY] UpdatePagination", props<{ pageIndex: number, pageSize: number }>());
 export const setFilter = createAction("[JOBHISTORY SetFilter]", props<{ filter: JobHistoryFilterModel }>());
 export const removeFilter = createAction("[JOBHISTORY RemoveFilter]");
+export const textFilterChanged = createAction("[JOBHISTORY textFilterChanged]",props<{textFilter:string}>());
+export const resetTextFilter = createAction("[JOBHISOTRY] resetTextFilter");
 
 // API ACTIONS
 export const readAllSuccess = createAction("[JOBHISTORY API] ReadAllSuccess", props<{ jobHistoryList: JobHistoryDetailModel[] }>());

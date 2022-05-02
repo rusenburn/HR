@@ -21,6 +21,7 @@ export interface JobHistoryState {
     filter: JobHistoryFilterModel;
     formId: string;
     isCreateForm: boolean;
+    textFilter: string;
 }
 
 export const initialState: JobHistoryState = {
@@ -33,7 +34,8 @@ export const initialState: JobHistoryState = {
     ascending: false,
     filter: { ...defaultJobHistoryFilter },
     formId: "",
-    isCreateForm: true
+    isCreateForm: true,
+    textFilter: ""
 }
 
 export const reducer = createReducer(
@@ -106,5 +108,11 @@ export const reducer = createReducer(
     }),
     on(JobHistoryActions.closeFormSuccess, (state) => {
         return { ...state, formId: "" };
+    }),
+    on(JobHistoryActions.textFilterChanged, (state, action) => {
+        return { ...state, textFilter: action.textFilter };
+    }),
+    on(JobHistoryActions.resetTextFilter, (state) => {
+        return { ...state, textFilter: "" };
     })
 );

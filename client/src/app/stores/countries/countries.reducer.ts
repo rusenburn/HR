@@ -21,6 +21,7 @@ export interface CountriesState {
     ascending: boolean;
     byRegion: number | null;
     dialogId: string;
+    textFilter: string;
 }
 
 const initialState: CountriesState = {
@@ -33,7 +34,8 @@ const initialState: CountriesState = {
     ascending: true,
     sortActive: "countryId",
     byRegion: null,
-    dialogId: ""
+    dialogId: "",
+    textFilter: ""
 }
 
 export const reducer = createReducer(initialState,
@@ -95,6 +97,12 @@ export const reducer = createReducer(initialState,
     }),
     on(CountriesActions.closeFormSuccess, (state) => {
         return { ...state, dialogId: "" };
+    }),
+    on(CountriesActions.textFilterChanged, (state, action) => {
+        return { ...state, textFilter: action.textFilter };
+    }),
+    on(CountriesActions.resetTextFilter, (state) => {
+        return { ...state, textFilter: "" };
     })
 );
 

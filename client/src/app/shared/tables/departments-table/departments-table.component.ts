@@ -7,8 +7,8 @@ import { Observable, of, Subject, switchMap, takeUntil } from 'rxjs';
 import { defaultCountryQuery } from 'src/app/models/countries/country-query.model';
 import { DepartmentLocationedModel } from 'src/app/models/departments/department-locationed';
 import { readAll as readAllCountries } from 'src/app/stores/countries/countries.action';
-import { clearCountryFilter, setCountryFilter, updatePagination, updateSorting } from 'src/app/stores/departments/departments.actions';
-import { selectCountryDepartmentsOrAllLength, selectPageIndex, selectPageSize, selectSortedCountryDepartmentsSlice } from 'src/app/stores/departments/departments.selectors';
+import { clearCountryFilter, setCountryFilter, textFilterChanged, updatePagination, updateSorting } from 'src/app/stores/departments/departments.actions';
+import { selectFilteredDepartmentsLength, selectPageIndex, selectPageSize, selectSortedCountryDepartmentsSlice } from 'src/app/stores/departments/departments.selectors';
 
 
 @Component({
@@ -25,13 +25,14 @@ export class DepartmentsTableComponent implements OnDestroy {
   displayedColumns: string[] = ["departmentId", "departmentName", "city", "streetAddress", "actions"];
   pageIndex$: Observable<number>;
   pageSize$: Observable<number>;
+  textFilter: string = "";
   constructor(
     private _router: Router,
     private _store: Store,
     private _route: ActivatedRoute) {
 
     this.departments$ = this._store.select(selectSortedCountryDepartmentsSlice);
-    this.length$ = this._store.select(selectCountryDepartmentsOrAllLength);
+    this.length$ = this._store.select(selectFilteredDepartmentsLength);
     this.pageIndex$ = this._store.select(selectPageIndex);
     this.pageSize$ = this._store.select(selectPageSize);
 
@@ -69,6 +70,10 @@ export class DepartmentsTableComponent implements OnDestroy {
   }
   public sortChange(sortState: Sort) {
     this._store.dispatch(updateSorting({ active: sortState.active, asc: sortState.direction === "asc" }));
+  }
+
+  public textFilterChange():void{
+    this._store.dispatch(textFilterChanged({textFilter:this.textFilter}))
   }
 
   ngOnDestroy(): void {

@@ -16,6 +16,9 @@ export const updateSort = createAction("[COUNTRIES] updateSort", props<{ active:
 
 export const setRegionFilter = createAction("[COUNTRIES] SetByRegionFilter", props<{ regionId: number | null }>());
 export const clearRegionFilter = createAction("[COUNTRIES] ClearByRegionFilter");
+export const textFilterChanged = createAction("[COUNTRIES] textFilterChanged", props<{ textFilter: string }>());
+export const resetTextFilter = createAction("[COUNTRIES] resetTextFilter");
+
 // ACTIVATE ROUTE 
 export const readOne = createAction("[COUNTRIES PARAM] ReadOne", props<{ countryId: number }>());
 

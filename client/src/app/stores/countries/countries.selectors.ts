@@ -22,7 +22,20 @@ const _selectSortActive = (state: CountriesState) => state.sortActive;
 const _selectAscending = (state: CountriesState) => state.ascending;
 const _selectByRegion = (state: CountriesState) => state.byRegion;
 const _selectDialogId = (state: CountriesState) => state.dialogId;
+const _selectTextFilter = (state: CountriesState) => state.textFilter;
 
+const _filterByText = (countries: CountryModel[], textFilter: string): CountryModel[] => {
+    if (!textFilter.length) {
+        return countries;
+    }
+    textFilter = textFilter.toLocaleLowerCase();
+    const result = countries.filter(c => {
+        return c.countryId.toString().includes(textFilter) ||
+            c.countryName.toLocaleLowerCase().includes(textFilter) ||
+            c.regionId.toLocaleString().includes(textFilter)
+    });
+    return result;
+}
 const _sort = (countries: CountryModel[], sortActive: string, ascending: boolean): CountryModel[] => {
     const result = [...countries];
     switch (sortActive) {
@@ -104,6 +117,13 @@ export const selectDialogId = createSelector(
     _selectDialogId
 );
 
+export const selectTextFilter = createSelector(
+    selectCountriesState,
+    _selectTextFilter
+);
+
+
+// TODO check if You gonna delete it
 export const selectCountryDepartments = createSelector(
     selectCountryDetail,
     selectAllDepartments,
@@ -115,19 +135,19 @@ export const selectAllCountries = createSelector(
     _selectAllCountries
 );
 
-export const selectAllCountriesSorted = createSelector(
-    selectAllCountries,
-    selectSortActive,
-    selectAscending,
-    _sort
-);
+// export const selectAllCountriesSorted = createSelector(
+//     selectAllCountries,
+//     selectSortActive,
+//     selectAscending,
+//     _sort
+// );
 
-export const selectSortedCountriesSlice = createSelector(
-    selectAllCountriesSorted,
-    selectPageIndex,
-    selectPageSize,
-    _sliced
-);
+// export const selectSortedCountriesSlice = createSelector(
+//     selectAllCountriesSorted,
+//     selectPageIndex,
+//     selectPageSize,
+//     _sliced
+// );
 
 export const selectAllRegionCountries = createSelector(
     selectAllCountries,
@@ -135,29 +155,35 @@ export const selectAllRegionCountries = createSelector(
     _filterByRegion
 );
 
-export const selectSortedRegionCountries = createSelector(
+export const selectFilteredCountries = createSelector(
     selectAllRegionCountries,
+    selectTextFilter,
+    _filterByText
+);
+
+export const selectSortedCountries = createSelector(
+    selectFilteredCountries,
     selectSortActive,
     selectAscending,
     _sort
+);
 
-)
-export const selectSortedRegionCountriesSlice = createSelector(
-    selectSortedRegionCountries,
+export const selectCountriesPage = createSelector(
+    selectSortedCountries,
     selectPageIndex,
     selectPageSize,
     _sliced
 );
 
-export const selectCountriesLength = createSelector(
+export const selectAllCountriesLength = createSelector(
     selectAllCountries,
     (countries) => {
         return countries.length;
     }
 );
 
-export const selectRegionCountriesLength = createSelector(
-    selectAllRegionCountries,
+export const selectFilteredCountriesLength = createSelector(
+    selectFilteredCountries,
     (countries) => countries.length
 );
 

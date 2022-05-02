@@ -20,6 +20,9 @@ export const updateSorting = createAction("[DEPARTMENTS] UpdateSorting", props<{
 
 export const setCountryFilter = createAction("[DEPARTMENTS] setCountryFilter", props<{ countryId: number | null }>());
 export const clearCountryFilter = createAction("[DEPARTMENTS] clearCountryFilter");
+export const textFilterChanged = createAction("[DEPARTMENTS] textFilterChanged",props<{textFilter:string}>());
+export const resetTextFilter = createAction("[DEPARTMENTS] ResetTextFilter");
+
 // PARAM ACTIONS
 export const readOne = createAction("[DEPARTMENTS PARAM] ReadOne", props<{ departmentId: number }>());
 

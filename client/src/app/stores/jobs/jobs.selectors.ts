@@ -22,7 +22,22 @@ const _selectSortActive = (state: JobsState) => state.sortActive;
 const _selectAscending = (state: JobsState) => state.ascending;
 
 const _selectFormId = (state: JobsState) => state.formId;
+const _selectTextFilter = (state: JobsState) => state.textFilter;
 
+
+const _filterByText = (jobs: JobModel[], textFilter: string): JobModel[] => {
+    if (!textFilter.length) {
+        return jobs;
+    }
+    textFilter = textFilter.toLocaleLowerCase();
+    const result = jobs.filter(j =>
+        j.jobId.toString().includes(textFilter) ||
+        j.jobTitle.toLocaleLowerCase().includes(textFilter) ||
+        j.maxSalary.toString().includes(textFilter) ||
+        j.minSalary.toString().includes(textFilter)
+    );
+    return result;
+}
 const _sort = (jobs: JobModel[], sortActive: string, ascending: boolean): JobModel[] => {
     const result = [...jobs];
     switch (sortActive) {
@@ -97,14 +112,26 @@ export const selectFormId = createSelector(
     _selectFormId
 );
 
-export const selectSortedJobs = createSelector(
+
+export const selectTextFilter = createSelector(
+    selectJobsState,
+    _selectTextFilter
+);
+
+export const selectFilteredJobs = createSelector(
     selectAllJobs,
+    selectTextFilter,
+    _filterByText
+);
+
+export const selectSortedJobs = createSelector(
+    selectFilteredJobs,
     selectSortActive,
     selectAscending,
     _sort
 );
 
-export const selectSortedJobsSlice = createSelector(
+export const selectJobsPage = createSelector(
     selectSortedJobs,
     selectPageIndex,
     selectPageSize,
@@ -115,3 +142,8 @@ export const selectJobsLength = createSelector(
     selectAllJobs,
     (jobs) => jobs.length
 );
+
+export const selectFilteredJobsLength = createSelector(
+    selectFilteredJobs,
+    (jobs)=>jobs.length
+)

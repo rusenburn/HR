@@ -16,6 +16,9 @@ export const updateSorting = createAction("[EMPLOYEES] updateSorting", props<{ s
 
 export const setFilters = createAction("[EMPLOYEES] SetFilters", props<{ filters: EmployeeFilterModel }>());
 export const removeFilters = createAction("[EMPLOYEES] removeFilters");
+export const textFilterChanged = createAction("[EMPLOYEES] TextFilterChanged",props<{textFilter:string}>());
+export const resetTextFilter= createAction("[EMPLOYEES] ResetTextFilter");
+
 
 // Route
 export const readOne = createAction("[EMPLOYEES ROUTE] ReadOne", props<{ employeeId: number }>());

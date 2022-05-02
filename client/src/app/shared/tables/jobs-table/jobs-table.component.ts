@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { Sort } from '@angular/material/sort';
 import { Router } from '@angular/router';
@@ -6,8 +6,8 @@ import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { defaultJobQuery } from 'src/app/models/jobs/job-query.model';
 import { JobModel } from 'src/app/models/jobs/job.model';
-import { openForm, readAll, updatePagination, updateSorting } from 'src/app/stores/jobs/jobs.actions';
-import { selectAllJobs, selectJobsLength, selectPageIndex, selectPageSize, selectSortedJobsSlice } from 'src/app/stores/jobs/jobs.selectors';
+import { openForm, readAll, textFilterChanged, updatePagination, updateSorting } from 'src/app/stores/jobs/jobs.actions';
+import {  selectPageIndex, selectPageSize, selectJobsPage, selectFilteredJobsLength } from 'src/app/stores/jobs/jobs.selectors';
 
 
 
@@ -22,11 +22,12 @@ export class JobsTableComponent {
   pageSize$: Observable<number>;
   pageIndex$: Observable<number>;
   length$: Observable<number>;
+  textFilter:string="";
   constructor(private _router: Router, private _store: Store) {
-    this.jobs$ = this._store.select(selectSortedJobsSlice);
+    this.jobs$ = this._store.select(selectJobsPage);
     this.pageSize$ = this._store.select(selectPageSize);
     this.pageIndex$ = this._store.select(selectPageIndex);
-    this.length$ = this._store.select(selectJobsLength);
+    this.length$ = this._store.select(selectFilteredJobsLength);
     this._store.dispatch(readAll({ ...defaultJobQuery }));
   }
 
@@ -43,5 +44,9 @@ export class JobsTableComponent {
   }
   public sortChange(sortState: Sort) {
     this._store.dispatch(updateSorting({ sortActive: sortState.active, asc: sortState.direction === "asc" }));
+  }
+
+  public textFilterChange():void{
+    this._store.dispatch(textFilterChanged({textFilter:this.textFilter}));
   }
 }

@@ -6,7 +6,7 @@ import { Store } from '@ngrx/store';
 import { Observable, of, Subject, switchMap, takeUntil } from 'rxjs';
 import { defaultJobHistoryFilter } from 'src/app/models/job-histories/job-history-filter.model';
 import { JobHistoryModel } from 'src/app/models/job-histories/job-history.model';
-import { openUpdateForm, readAll, removeFilter, setFilter, updatePagination, updateSorting } from 'src/app/stores/job-history/job-history.actions';
+import { openUpdateForm, readAll, removeFilter, setFilter, textFilterChanged, updatePagination, updateSorting } from 'src/app/stores/job-history/job-history.actions';
 import { selectJobHistoryLength, selectJobHistoryPage, selectPageIndex, selectPageSize } from 'src/app/stores/job-history/job-history.selectors';
 
 @Component({
@@ -21,6 +21,7 @@ export class JobHistoryTableComponent implements OnDestroy, OnInit {
   pageSize$: Observable<number>;
   destroy$ = new Subject<void>();
   length$: Observable<number>;
+  textFilter:string="";
 
   constructor(private _store: Store, private _route: ActivatedRoute) {
     this.jobHistoryCollection$ = this._store.select(selectJobHistoryPage);
@@ -68,6 +69,9 @@ export class JobHistoryTableComponent implements OnDestroy, OnInit {
 
   public onSortChange(sortState: Sort): void {
     this._store.dispatch(updateSorting({ sortActive: sortState.active, asc: sortState.direction === "asc" }));
+  }
+  public onTextFilterChange():void{
+    this._store.dispatch(textFilterChanged({textFilter:this.textFilter}));
   }
   ngOnInit(): void {
     this._store.dispatch(readAll());

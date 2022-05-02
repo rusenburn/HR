@@ -7,8 +7,8 @@ import { Observable, of, Subject, switchMap, takeUntil } from 'rxjs';
 import { defaultEmployeeFilter, EmployeeFilterModel } from 'src/app/models/employees/employee-filter.model';
 import { defaultEmployeeQuery } from 'src/app/models/employees/employee-query.model';
 import { EmployeeModel } from 'src/app/models/employees/employee.model';
-import { openForm, readAll, removeFilters, setFilters, updatePagination, updateSorting } from 'src/app/stores/employees/employees.actions';
-import { selectFilteredEmployeesLength, selectPageIndex, selectPageSize, selectSortedEmployeesSlice } from 'src/app/stores/employees/employees.selectors';
+import { openForm, readAll, removeFilters, setFilters, textFilterChanged, updatePagination, updateSorting } from 'src/app/stores/employees/employees.actions';
+import { selectFilteredEmployeesLength, selectPageIndex, selectPageSize, selectEmployeesPage } from 'src/app/stores/employees/employees.selectors';
 
 @Component({
   selector: 'app-employees-table',
@@ -22,8 +22,9 @@ export class EmployeesTableComponent implements OnDestroy {
   pageSize$: Observable<number>;
   length$: Observable<number>;
   destory$ = new Subject<void>();
+  textFilter:string="";
   constructor(private _router: Router, private _store: Store, private _route: ActivatedRoute) {
-    this.employees$ = this._store.select(selectSortedEmployeesSlice);
+    this.employees$ = this._store.select(selectEmployeesPage);
     this.pageIndex$ = this._store.select(selectPageIndex);
     this.pageSize$ = this._store.select(selectPageSize);
     this.length$ = this._store.select(selectFilteredEmployeesLength);
@@ -66,6 +67,9 @@ export class EmployeesTableComponent implements OnDestroy {
   }
   public sortChange(sortState: Sort): void {
     this._store.dispatch(updateSorting({ sortActive: sortState.active, asc: sortState.direction === "asc" }));
+  }
+  public textFilterChange():void{
+    this._store.dispatch(textFilterChanged({textFilter:this.textFilter}));
   }
 
   ngOnDestroy(): void {

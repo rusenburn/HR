@@ -1,4 +1,16 @@
-<ng-container [ngTemplateOutlet]="paginator"></ng-container>
+<div class="search-paginator-container">
+    <div class="col-search">
+        <mat-form-field>
+            <mat-label>Search</mat-label>
+            <input type="text" matInput name="textFilter" [(ngModel)]="textFilter"
+                (ngModelChange)="textFilterChange()" />
+        </mat-form-field>
+    </div>
+    <div class="col-paginator">
+        <ng-container [ngTemplateOutlet]="paginator"></ng-container>
+    </div>
+</div>
+
 <table mat-table matSort [dataSource]="(departments$|async)||[]" (matSortChange)="sortChange($event)">
     <ng-container matColumnDef="departmentName">
         <th mat-header-cell *matHeaderCellDef mat-sort-header="departmentName">Name</th>
@@ -41,5 +53,5 @@
 
 <ng-template #paginator>
     <mat-paginator [pageIndex]="pageIndex$|async" [pageSize]="pageSize$|async" [pageSizeOptions]="[5,10,20,40]"
-    [length]="length$|async" (page)="onPageEvent($event)"></mat-paginator>
+        [length]="length$|async" (page)="onPageEvent($event)"></mat-paginator>
 </ng-template>

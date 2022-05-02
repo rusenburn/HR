@@ -11,9 +11,21 @@ const _selectPageIndex = (state: RegionsState) => state.pageIndex;
 const _selectPageSize = (state: RegionsState) => state.pageSize;
 const _selectSortActive = (state: RegionsState) => state.sortActive;
 const _selectAscending = (state: RegionsState) => state.ascending;
-const _selectDialogRefId = (state:RegionsState)=>{
-  return state.dialogRefId
-};
+const _selectDialogRefId = (state: RegionsState) => state.dialogRefId;
+const _selectTextFilter = (state: RegionsState) => state.textFilter;
+
+const _filterByText = (regions: RegionModel[], textFilter: string): RegionModel[] => {
+  if (!textFilter.length) {
+    return regions;
+  }
+  // TODO  needs improvements
+  textFilter = textFilter.toLocaleLowerCase();
+  const result = regions.filter(
+    (r) => r.regionName.toLocaleLowerCase().includes(textFilter) || r.regionId.toString().includes(textFilter)
+  );
+  return result;
+}
+
 const _sort = (regions: RegionModel[], active: string, asc: boolean): RegionModel[] => {
   const res = [...regions];
   switch (active) {
@@ -38,7 +50,7 @@ export const selectRegionState = createSelector(
   (sharedRegionFeatureState) => sharedRegionFeatureState.regions
 );
 
-export const selectDialogRefId= createSelector(
+export const selectDialogRefId = createSelector(
   selectRegionState,
   _selectDialogRefId
 );
@@ -71,27 +83,45 @@ export const selectRegionPageSize = createSelector(
   _selectPageSize
 );
 
-export const selectRegionsLength = createSelector(
+export const selectAllRegionsLength = createSelector(
   selectAllRegions,
   (regions) => regions.length
 );
 
-
 export const selectSortActive = createSelector(
   selectRegionState,
   _selectSortActive
-)
+);
 
 export const selectAscending = createSelector(
   selectRegionState,
   _selectAscending
-)
-export const selectAllRegionsSorted = createSelector(
+);
+
+export const selectTextFilter = createSelector(
+  selectRegionState,
+  _selectTextFilter
+);
+
+export const selectRegionsFilteredByText = createSelector(
   selectAllRegions,
+  selectTextFilter,
+  _filterByText
+);
+
+export const selectFilteredRegionsLength = createSelector(
+  selectRegionsFilteredByText,
+  (regions) => regions.length
+);
+
+export const selectAllRegionsSorted = createSelector(
+  // selectAllRegions,
+  selectRegionsFilteredByText,
   selectSortActive,
   selectAscending,
   _sort,
 );
+
 
 export const selectRegionsSortedSlice = createSelector(
   selectAllRegionsSorted,

@@ -6,12 +6,13 @@ import { Store } from '@ngrx/store';
 import { Observable, } from 'rxjs';
 import { defaultRegionQuery } from 'src/app/models/regions/region-query.model';
 import { RegionModel } from 'src/app/models/regions/region.model';
-import { openForm, paginationChanged, readAll, sortChanged } from 'src/app/stores/region/regions.actions';
+import { openForm, paginationChanged, readAll, sortChanged, textFilterChanged } from 'src/app/stores/region/regions.actions';
 import {
   selectRegionPageIndex,
   selectRegionPageSize,
-  selectRegionsLength,
-  selectRegionsSortedSlice
+  selectAllRegionsLength,
+  selectRegionsSortedSlice,
+  selectFilteredRegionsLength
 } from 'src/app/stores/region/regions.selectors';
 
 @Component({
@@ -22,13 +23,12 @@ import {
 export class RegionsTableComponent {
   @Input()
   regions: RegionModel[] = [];
-  // @Output()
-  // editRegion = new EventEmitter<RegionModel>();
   pageIndex$: Observable<number>;
   pageSize$: Observable<number>;
   displayedColumns: string[] = ["regionName", "regionId", "actions"];
   regions$: Observable<RegionModel[]>;
   length$: Observable<number>;
+  textFilter:string="";
   constructor(
     private _router: Router,
     private _store: Store
@@ -37,11 +37,10 @@ export class RegionsTableComponent {
     this.pageIndex$ = this._store.select(selectRegionPageIndex);
     this.pageSize$ = this._store.select(selectRegionPageSize);
     this.regions$ = this._store.select(selectRegionsSortedSlice);
-    this.length$ = this._store.select(selectRegionsLength);
+    this.length$ = this._store.select(selectFilteredRegionsLength);
   }
 
   public edit(region: RegionModel) {
-    // this.editRegion.emit(region);
     this._store.dispatch(openForm({ region }));
   }
 
@@ -55,5 +54,9 @@ export class RegionsTableComponent {
 
   public sortChange(sortState: Sort) {
     this._store.dispatch(sortChanged({ active: sortState.active, asc: sortState.direction === "asc" }))
+  }
+
+  public textFilterChange(){
+    this._store.dispatch(textFilterChanged({textFilter:this.textFilter}))
   }
 }

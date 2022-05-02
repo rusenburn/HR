@@ -1,4 +1,15 @@
-<ng-container [ngTemplateOutlet]="paginator"></ng-container>
+<div class="search-paginator-container">
+    <div class="col-search">
+        <mat-form-field>
+            <mat-label>Search</mat-label>
+            <input type="text" name="textFilter" matInput [(ngModel)]="textFilter" (ngModelChange)="onTextFilterChange()">
+        </mat-form-field>
+    </div>
+    <div class="col-paginator">
+        <ng-container [ngTemplateOutlet]="paginator"></ng-container>
+    </div>
+</div>
+
 <table mat-table [dataSource]="(jobHistoryCollection$|async)??[]" matSort (matSortChange)="onSortChange($event)">
 
     <ng-container matColumnDef="employeeId">

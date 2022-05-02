@@ -12,7 +12,8 @@ export const deleteOne = createAction("[JOBS] DeleteOne", props<{ id: number }>(
 
 export const updatePagination = createAction("[JOBS] UpdatePagination", props<{ pageIndex: number, pageSize: number }>());
 export const updateSorting = createAction("[JOBS] UpdateSorting", props<{ sortActive: string, asc: boolean }>());
-
+export const textFilterChanged = createAction("[JOBS] TextFilterChanged",props<{textFilter:string}>());
+export const resetTextFilter = createAction("[JOBS] ResetTextFilter");
 // Route ACTIONS
 export const readOneJob = createAction("[JOBS PARAM] ReadOne", props<{ jobId: number }>());
 

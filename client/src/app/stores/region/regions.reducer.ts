@@ -21,7 +21,8 @@ export interface RegionsState {
     pageIndex: number,
     ascending: boolean,
     sortActive: string,
-    dialogRefId: string
+    dialogRefId: string,
+    textFilter: string
 }
 
 const initialState: RegionsState = {
@@ -33,7 +34,8 @@ const initialState: RegionsState = {
     pageIndex: 0,
     ascending: true,
     sortActive: "regionId",
-    dialogRefId: ""
+    dialogRefId: "",
+    textFilter: ""
 }
 
 export const reducer = createReducer(initialState,
@@ -93,5 +95,11 @@ export const reducer = createReducer(initialState,
     }),
     on(RegionsActions.closeFormSuccess, (state) => {
         return { ...state, dialogRefId: "" };
+    }),
+    on(RegionsActions.textFilterChanged, (state, action) => {
+        return { ...state, textFilter: action.textFilter };
+    }),
+    on(RegionsActions.resetTextFilter, (state) => {
+        return { ...state, textFilter: "" };
     })
 );

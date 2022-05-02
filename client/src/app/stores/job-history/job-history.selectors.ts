@@ -23,8 +23,23 @@ const _selectAscending = (state: JobHistoryState) => state.ascending;
 const _selectFilter = (state: JobHistoryState) => state.filter;
 const _selectFormId = (state: JobHistoryState) => state.formId;
 const _selectIsCreateForm = (state: JobHistoryState) => state.isCreateForm;
+const _selectTextFilter = (state: JobHistoryState) => state.textFilter;
 
-const _filter = (collection: JobHistoryModel[], filter: JobHistoryFilterModel) => {
+const _filterByText = (collection: JobHistoryModel[], textFilter: string): JobHistoryModel[] => {
+    if (!textFilter.length) {
+        return collection;
+    }
+    textFilter = textFilter.toLocaleLowerCase();
+    const result = collection.filter(j =>
+        j.employeeId.toString().includes(textFilter) ||
+        j.startDate.toLocaleLowerCase().includes(textFilter) ||
+        j.salary.toString().includes(textFilter) ||
+        j.startDate.toLocaleLowerCase().includes(textFilter) ||
+        j.endDate?.toLocaleLowerCase().includes(textFilter)
+    );
+    return result;
+}
+const _filterbyKeys = (collection: JobHistoryModel[], filter: JobHistoryFilterModel): JobHistoryModel[] => {
     if (!filter.departmentId && !filter.employeeId && !filter.jobId) {
         return collection;
     }
@@ -115,7 +130,7 @@ export const selectAscending = createSelector(
     _selectAscending
 );
 
-export const selectFilter = createSelector(
+export const selectForeignKeysFilter = createSelector(
     selectJobHistoryState,
     _selectFilter
 );
@@ -131,19 +146,35 @@ export const selectIsCreateForm = createSelector(
     _selectIsCreateForm
 );
 
-export const selectFilteredJobHistory = createSelector(
-    selectAllJobHistory,
-    selectFilter,
-    _filter
+
+export const selectTextFilter = createSelector(
+    selectJobHistoryState,
+    _selectTextFilter
 );
 
+export const selectForeignKeysFilteredJobHistory = createSelector(
+    selectAllJobHistory,
+    selectForeignKeysFilter,
+    _filterbyKeys
+);
+
+export const selectFilteredJobHisotryByText = createSelector(
+    selectForeignKeysFilteredJobHistory,
+    selectTextFilter,
+    _filterByText
+);
+
+export const selectAllJobHistoryLength = createSelector(
+    selectAllJobHistory,
+    (collection)=>collection.length
+)
 export const selectJobHistoryLength = createSelector(
-    selectFilteredJobHistory,
+    selectFilteredJobHisotryByText,
     (collection) => collection.length
 );
 
 export const selectSortedJobHistory = createSelector(
-    selectFilteredJobHistory,
+    selectFilteredJobHisotryByText,
     selectSortActive,
     selectAscending,
     _sort

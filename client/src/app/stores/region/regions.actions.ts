@@ -1,11 +1,9 @@
-import { MatDialogRef } from "@angular/material/dialog";
 import { createAction, props } from "@ngrx/store";
 import { RegionCreateModel } from "src/app/models/regions/region-create.model";
 import { RegionDetailModel } from "src/app/models/regions/region-detail.model";
 import { RegionQueryModel } from "src/app/models/regions/region-query.model";
 import { RegionUpdateModel } from "src/app/models/regions/region-update.model";
 import { RegionModel } from "src/app/models/regions/region.model";
-import { RegionUpsertDialogComponent } from "src/app/shared/dialoges/region-upsert-dialog/region-upsert-dialog.component";
 
 export const readAll = createAction("[REGIONS] ReadAll", props<RegionQueryModel>());
 export const createOne = createAction("[REGIONS] CreateOne", props<{ region: RegionCreateModel }>());
@@ -14,8 +12,9 @@ export const deleteOne = createAction("[REGIONS] DeleteOne", props<{ id: number 
 
 export const paginationChanged = createAction("[REGIONS] PaginationChanged", props<{ pageIndex: number, pageSize: number }>());
 export const sortChanged = createAction("[REGIONS] SortChanged", props<{ active: string, asc: boolean }>());
-
-
+export const textFilterChanged = createAction("[REGIONS] TextFilterChanged", props<{ textFilter: string }>());
+export const resetTextFilter = createAction("[REGIONS] ResetTextFilter");
+// PARAMS ACTIONS // ROUTE ACTIONS
 export const readOne = createAction("[REGIONS PARAM] ReadOne", props<{ regionId: number }>());
 
 
