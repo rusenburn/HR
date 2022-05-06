@@ -1,4 +1,5 @@
 import { createFeatureSelector, createSelector } from "@ngrx/store";
+import { JobHistoryDetailModel } from "src/app/models/job-histories/job-history-detail.model";
 import { JobHistoryFilterModel } from "src/app/models/job-histories/job-history-filter.model";
 import { JobHistoryModel } from "src/app/models/job-histories/job-history.model";
 import { JobHistoryState } from "./job-history.reducer";
@@ -25,7 +26,7 @@ const _selectFormId = (state: JobHistoryState) => state.formId;
 const _selectIsCreateForm = (state: JobHistoryState) => state.isCreateForm;
 const _selectTextFilter = (state: JobHistoryState) => state.textFilter;
 
-const _filterByText = (collection: JobHistoryModel[], textFilter: string): JobHistoryModel[] => {
+const _filterByText = (collection: JobHistoryModel[]|JobHistoryDetailModel[], textFilter: string): JobHistoryModel[]|JobHistoryDetailModel[] => {
     if (!textFilter.length) {
         return collection;
     }
@@ -39,7 +40,7 @@ const _filterByText = (collection: JobHistoryModel[], textFilter: string): JobHi
     );
     return result;
 }
-const _filterbyKeys = (collection: JobHistoryModel[], filter: JobHistoryFilterModel): JobHistoryModel[] => {
+const _filterbyKeys = (collection: JobHistoryModel[]|JobHistoryDetailModel[], filter: JobHistoryFilterModel): JobHistoryModel[]|JobHistoryDetailModel[]=> {
     if (!filter.departmentId && !filter.employeeId && !filter.jobId) {
         return collection;
     }
@@ -55,8 +56,9 @@ const _filterbyKeys = (collection: JobHistoryModel[], filter: JobHistoryFilterMo
     }
     return result;
 }
-const _sort = (collection: JobHistoryModel[], sortActive: string, ascending: boolean): JobHistoryModel[] => {
+const _sort = (collection: JobHistoryModel[]|JobHistoryDetailModel[], sortActive: string, ascending: boolean): JobHistoryModel[]|JobHistoryDetailModel[]=> {
     const result = [...collection];
+    console.log(sortActive)
     switch (sortActive) {
         case "startDate":
             result.sort((a, b) => stringComparer(a.startDate, b.startDate));
@@ -82,7 +84,7 @@ const _sort = (collection: JobHistoryModel[], sortActive: string, ascending: boo
     return result.reverse();
 };
 
-const _slice = (collection: JobHistoryModel[], pageIndex: number, pageSize: number) => {
+const _slice = (collection: JobHistoryModel[]|JobHistoryDetailModel[], pageIndex: number, pageSize: number) => {
 
     const start = pageIndex * pageSize;
     const end = start + pageSize;

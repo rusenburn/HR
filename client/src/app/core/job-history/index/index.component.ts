@@ -12,7 +12,7 @@ import { readAll as readAllJobs } from 'src/app/stores/jobs/jobs.actions';
 import { defaultDepartmentQuery } from 'src/app/models/departments/department-query.model';
 import { defaultJobQuery } from 'src/app/models/jobs/job-query.model';
 import { defaultEmployeeQuery } from 'src/app/models/employees/employee-query.model';
-import { JobHistoryCreateModel } from 'src/app/models/job-histories/job-history-create.model';
+// import { JobHistoryCreateModel } from 'src/app/models/job-histories/job-history-create.model';
 @Component({
   selector: 'app-index',
   templateUrl: './index.component.html',

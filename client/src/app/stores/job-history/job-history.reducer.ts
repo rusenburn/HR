@@ -8,7 +8,7 @@ const cloneArrayWithUpdatedItem = function (jobHistoryCollection: JobHistoryDeta
     const i = temp.findIndex((jh) => jh.employeeId === jobHistory.employeeId && jh.startDate === jobHistory.startDate);
     temp.splice(i, 1, ...[jobHistory]);
     return temp;
-}
+};
 
 export interface JobHistoryState {
     jobHistoryCollection: JobHistoryDetailModel[];
@@ -36,7 +36,7 @@ export const initialState: JobHistoryState = {
     formId: "",
     isCreateForm: true,
     textFilter: ""
-}
+};
 
 export const reducer = createReducer(
     initialState,

@@ -5,8 +5,7 @@
     <div>
         <button mat-raised-button (click)="createNew()" color="primary">Add new history</button>
     </div>
-    <app-job-history-detail-table [jobHistoryCollection]="(jobHistoryCollection$ |async)||[]"
-        *ngIf="(jobHistoryCollection$|async)?.length;else whenEmpty">
+    <app-job-history-detail-table *ngIf="(jobHistoryCollection$|async)?.length;else whenEmpty">
     </app-job-history-detail-table>
 </div>
 
