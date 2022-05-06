@@ -17,7 +17,6 @@ import { MatDialogModule } from '@angular/material/dialog';
 @NgModule({
   declarations: [
     AppComponent,
-    // HomeComponent
   ],
   imports: [
     BrowserModule,

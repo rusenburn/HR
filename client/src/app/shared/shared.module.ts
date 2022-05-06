@@ -23,6 +23,7 @@ import { DepartmentsUpsertDialogComponent } from './dialoges/departments-upsert-
 import { JobsUpsertDialogComponent } from './dialoges/jobs-upsert-dialog/jobs-upsert-dialog.component';
 import { EmployeeUpsertDialogComponent } from './dialoges/employee-upsert-dialog/employee-upsert-dialog.component';
 import { JobHistoryUpsertDialogComponent } from './dialoges/job-history-upsert-dialog/job-history-upsert-dialog.component';
+import { RouterModule } from '@angular/router';
 
 const components = [
   RegionsTableComponent,
@@ -43,6 +44,7 @@ const components = [
 ];
 const modules = [
   CommonModule,
+  RouterModule,
   ReactiveFormsModule,
   FormsModule,
   HttpClientModule,

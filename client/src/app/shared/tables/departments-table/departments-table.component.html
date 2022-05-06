@@ -19,7 +19,11 @@
 
     <ng-container matColumnDef="departmentId">
         <th mat-header-cell *matHeaderCellDef mat-sort-header="departmentId">Id</th>
-        <td mat-cell *matCellDef="let department">{{department.departmentId}}</td>
+        <td mat-cell *matCellDef="let department">
+            <a [routerLink]="['/departments/',department.departmentId]" mat-button color="primary">
+                {{department.departmentId}}
+            </a>
+        </td>
     </ng-container>
 
     <ng-container matColumnDef="city">
@@ -30,6 +34,11 @@
     <ng-container matColumnDef="streetAddress">
         <th mat-header-cell *matHeaderCellDef mat-sort-header="streetAddress">Street Address</th>
         <td mat-cell *matCellDef="let department">{{department.location.streetAddress}}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="country">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header="countryId">Country Id</th>
+        <td mat-cell *matCellDef="let department">{{department.location.countryId}}</td>
     </ng-container>
 
     <ng-container matColumnDef="actions">

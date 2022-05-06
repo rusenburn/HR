@@ -29,18 +29,35 @@
 
     <ng-container matColumnDef="employee">
         <th mat-header-cell *matHeaderCellDef mat-sort-header="employeeId">Employee</th>
-        <td mat-cell *matCellDef="let jobHistory">{{(jobHistory.employee?.firstName + " "+ jobHistory.employee?.lastName)||
-            "N/A"}}</td>
+        <td mat-cell *matCellDef="let jobHistory">
+            {{(jobHistory.employee?.firstName + " "+ jobHistory.employee?.lastName || "N/A")}}
+            <a mat-icon-button [routerLink]="['/employees/',jobHistory.employee?.employeeId]"
+                *ngIf="jobHistory.employee?.employeeId" color="primary">
+                <mat-icon>info</mat-icon>
+            </a>
+        </td>
     </ng-container>
 
     <ng-container matColumnDef="department">
         <th mat-header-cell *matHeaderCellDef mat-sort-header="departmentId">Department</th>
-        <td mat-cell *matCellDef="let jobHistory">{{jobHistory.department?.departmentName || "N/A"}}</td>
+        <td mat-cell *matCellDef="let jobHistory">
+            {{jobHistory.department?.departmentName || "N/A"}}
+            <a [routerLink]="['/departments/',jobHistory.department.departmentId]"
+                *ngIf="jobHistory.department?.departmentId" mat-icon-button color="primary">
+                <mat-icon>info</mat-icon>
+            </a>
+        </td>
     </ng-container>
 
     <ng-container matColumnDef="job">
         <th mat-header-cell *matHeaderCellDef mat-sort-header="jobId">Job</th>
-        <td mat-cell *matCellDef="let jobHistory">{{jobHistory.job?.jobTitle || "N/A"}}</td>
+        <td mat-cell *matCellDef="let jobHistory">
+            {{jobHistory.job?.jobTitle||"N/A"}}
+            <a [routerLink]="['/jobs/',jobHistory.job.jobId]" *ngIf="jobHistory.job?.jobId" mat-icon-button
+                color="primary">
+                <mat-icon>info</mat-icon>
+            </a>
+        </td>
     </ng-container>
 
     <ng-container matColumnDef="salary">
@@ -66,4 +83,8 @@
 <ng-template #paginator>
     <mat-paginator [length]="length$|async" [pageIndex]="pageIndex$|async" [pageSize]="pageSize$|async"
         [pageSizeOptions]="[5,10,15,20]" (page)="onPageEvent($event)"></mat-paginator>
+</ng-template>
+
+<ng-template #na>
+    <p>N/A</p>
 </ng-template>

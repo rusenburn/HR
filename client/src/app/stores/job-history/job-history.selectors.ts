@@ -169,7 +169,8 @@ export const selectFilteredJobHisotryByText = createSelector(
 export const selectAllJobHistoryLength = createSelector(
     selectAllJobHistory,
     (collection)=>collection.length
-)
+);
+
 export const selectJobHistoryLength = createSelector(
     selectFilteredJobHisotryByText,
     (collection) => collection.length
