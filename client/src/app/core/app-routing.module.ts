@@ -1,29 +1,23 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { CountriesModule } from './countries/countries.module';
-import { RegionsModule } from './regions/regions.module';
 import { NotFoundComponent } from '../shared/not-found.component';
 import { HomeComponent } from './home/home.component';
-import { DepartmentsModule } from './departments/departments.module';
-import { JobsModule } from './jobs/jobs.module';
-import { EmployeesModule } from './employees/employees.module';
-import { JobHistoryModule } from './job-history/job-history.module';
 
 const routes: Routes = [
 
   { path: "home", component: HomeComponent },
-  { path: "regions", loadChildren: () => RegionsModule },
-  { path: "countries", loadChildren: () => CountriesModule },
-  { path: "departments", loadChildren: () => DepartmentsModule, },
-  { path: "jobs", loadChildren: () => JobsModule, },
-  { path: "employees", loadChildren: () => EmployeesModule, },
-  { path: "job-history", loadChildren: () => JobHistoryModule, },
+  { path: "regions", loadChildren: () => import('./regions/regions.module').then(m => m.RegionsModule) },
+  { path: "countries", loadChildren: () => import('./countries/countries.module').then(m=>m.CountriesModule) },
+  { path: "departments", loadChildren: () => import("./departments/departments.module").then(m=>m.DepartmentsModule) },
+  { path: "jobs", loadChildren: () => import("./jobs/jobs.module").then(m=>m.JobsModule) },
+  { path: "employees", loadChildren: () => import("./employees/employees.module").then(m=>m.EmployeesModule) },
+  { path: "job-history", loadChildren: () => import("./job-history/job-history.module").then(m=>m.JobHistoryModule) },
   { path: "", redirectTo: "/home", pathMatch: "full" },
   { path: "**", component: NotFoundComponent },
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
+  imports: [RouterModule.forRoot(routes,{useHash:true})],
   exports: [RouterModule]
 })
 export class AppRoutingModule { }

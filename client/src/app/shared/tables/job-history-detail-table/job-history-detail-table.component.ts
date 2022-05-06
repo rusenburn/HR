@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { Sort } from '@angular/material/sort';
 import { Store } from '@ngrx/store';
@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
 import { JobHistoryDetailModel } from 'src/app/models/job-histories/job-history-detail.model';
 import { openUpdateForm, textFilterChanged, updatePagination, updateSorting } from 'src/app/stores/job-history/job-history.actions';
 import { selectJobHistoryLength, selectJobHistoryPage, selectPageIndex, selectPageSize } from 'src/app/stores/job-history/job-history.selectors';
-
+import { JobHistoryModel } from 'src/app/models/job-histories/job-history.model';
 @Component({
   selector: 'app-job-history-detail-table',
   templateUrl: './job-history-detail-table.component.html',
@@ -18,7 +18,7 @@ export class JobHistoryDetailTableComponent {
   textFilter: string = "";
 
   displayedColumns: string[] = ["employee", "startDate", "endDate", "department", "job", "salary", "actions"];
-  jobHistoryCollection$: Observable<import("c:/Users/lucif/source/python/temp/HRApplication/client/src/app/models/job-histories/job-history.model").JobHistoryModel[]>;
+  jobHistoryCollection$: Observable<JobHistoryModel[]>;
   pageIndex$: Observable<number>;
   pageSize$: Observable<number>;
   length$: Observable<number>;
@@ -47,7 +47,7 @@ export class JobHistoryDetailTableComponent {
   public sortChange(sortState: Sort): void {
     this._store.dispatch(updateSorting({ sortActive: sortState.active, asc: sortState.direction === "asc" }));
   }
-  public onTextFilterChange():void{
-    this._store.dispatch(textFilterChanged({textFilter:this.textFilter}))
+  public onTextFilterChange(): void {
+    this._store.dispatch(textFilterChanged({ textFilter: this.textFilter }))
   }
 }
