@@ -8,6 +8,5 @@ import { reducers, metaReducers } from "./regions.state";
         StoreModule.forFeature("[REGIONS]", reducers, { metaReducers }),
         EffectsModule.forFeature([RegionsApiEffects]),
     ],
-    
 })
 export class RegionsStore { }

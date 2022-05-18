@@ -4,7 +4,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Store } from '@ngrx/store';
 import { EmployeeUpdateModel } from 'src/app/models/employees/employee-update.model';
 import { CustomValidators } from 'src/app/shared/validators/customValidators.validator';
-import { createOne, updateOne } from 'src/app/stores/employees/employees.actions';
+import { createOne, updateOne } from 'src/app/core/store/employees/employees.actions';
 
 @Component({
   selector: 'app-employee-upsert-dialog',

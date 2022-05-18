@@ -3,8 +3,8 @@ import { ActivatedRoute, ParamMap } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { Observable, Subject, takeUntil } from 'rxjs';
 import { RegionDetailModel } from 'src/app/models/regions/region-detail.model';
-import { readOne } from 'src/app/stores/region/regions.actions';
-import { selectLoading, selectRegionDetail } from 'src/app/stores/region/regions.selectors';
+import { readOne } from 'src/app/core/store/region/regions.actions';
+import { selectLoading, selectRegionDetail } from 'src/app/core/store/region/regions.selectors';
 
 @Component({
   selector: 'app-region-detail',

@@ -4,7 +4,7 @@ import { Actions, createEffect, ofType } from "@ngrx/effects";
 import { Store } from "@ngrx/store";
 import { catchError, concatMap, exhaustMap, map, mergeMap, of, withLatestFrom } from "rxjs";
 import { JobsUpsertDialogComponent } from "src/app/shared/dialoges/jobs-upsert-dialog/jobs-upsert-dialog.component";
-import { JobsService } from "src/app/services/jobs.service";
+import { JobsService } from "src/app/core/http-services/jobs.service";
 import * as JobsActions from "./jobs.actions";
 import { selectFormId } from "./jobs.selectors";
 

@@ -2,12 +2,12 @@ import { Component } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { RegionModel } from 'src/app/models/regions/region.model';
-import { selectAllRegions, selectLoading } from 'src/app/stores/region/regions.selectors';
+import { selectAllRegions, selectLoading } from 'src/app/core/store/region/regions.selectors';
 import { RegionUpdateModel } from 'src/app/models/regions/region-update.model';
 import { MatDialog } from '@angular/material/dialog';
 import { RegionUpsertDialogComponent } from 'src/app/shared/dialoges/region-upsert-dialog/region-upsert-dialog.component';
 import { Router } from '@angular/router';
-import { openForm } from 'src/app/stores/region/regions.actions';
+import { openForm } from 'src/app/core/store/region/regions.actions';
 
 @Component({
   selector: 'app-index',

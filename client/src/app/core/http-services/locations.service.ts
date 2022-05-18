@@ -1,11 +1,11 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { AppConfig } from '../app.config';
-import { LocationCreateModel } from '../models/locations/location-create.model';
-import { locationDetailModel } from '../models/locations/location-detail.model';
-import { LocationUpdateModel } from '../models/locations/location-update.model';
-import { LocationModel } from '../models/locations/location.model';
+import { AppConfig } from '../../app.config';
+import { LocationCreateModel } from '../../models/locations/location-create.model';
+import { locationDetailModel } from '../../models/locations/location-detail.model';
+import { LocationUpdateModel } from '../../models/locations/location-update.model';
+import { LocationModel } from '../../models/locations/location.model';
 
 @Injectable({
   providedIn: 'root'

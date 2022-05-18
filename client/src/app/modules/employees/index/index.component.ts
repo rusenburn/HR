@@ -3,8 +3,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { EmployeeModel } from 'src/app/models/employees/employee.model';
-import { selectAllEmployees, selectLoading } from 'src/app/stores/employees/employees.selectors';
-import { openForm, readAll as readAllEmployees } from 'src/app/stores/employees/employees.actions';
+import { selectAllEmployees, selectLoading } from 'src/app/core/store/employees/employees.selectors';
+import { openForm, readAll as readAllEmployees } from 'src/app/core/store/employees/employees.actions';
 import { defaultEmployeeQuery } from 'src/app/models/employees/employee-query.model';
 
 @Component({

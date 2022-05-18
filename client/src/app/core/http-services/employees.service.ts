@@ -1,12 +1,12 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { AppConfig } from '../app.config';
-import { EmployeeCreateModel } from '../models/employees/employee-create.model';
-import { EmployeeDetailModel } from '../models/employees/employee-detail.model';
-import { EmployeeQueryModel } from '../models/employees/employee-query.model';
-import { EmployeeUpdateModel } from '../models/employees/employee-update.model';
-import { EmployeeModel } from '../models/employees/employee.model';
+import { AppConfig } from '../../app.config';
+import { EmployeeCreateModel } from '../../models/employees/employee-create.model';
+import { EmployeeDetailModel } from '../../models/employees/employee-detail.model';
+import { EmployeeQueryModel } from '../../models/employees/employee-query.model';
+import { EmployeeUpdateModel } from '../../models/employees/employee-update.model';
+import { EmployeeModel } from '../../models/employees/employee.model';
 
 @Injectable({
   providedIn: 'root'

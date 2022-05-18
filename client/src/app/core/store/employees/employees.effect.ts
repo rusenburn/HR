@@ -3,7 +3,7 @@ import { MatDialog } from "@angular/material/dialog";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
 import { Store } from "@ngrx/store";
 import { catchError, concatMap, exhaustMap, map, mergeMap, of, withLatestFrom } from "rxjs";
-import { EmployeesService } from "src/app/services/employees.service";
+import { EmployeesService } from "src/app/core/http-services/employees.service";
 import { EmployeeUpsertDialogComponent } from "src/app/shared/dialoges/employee-upsert-dialog/employee-upsert-dialog.component";
 import * as EmployeesActions from "./employees.actions";
 import { selectFormId } from "./employees.selectors";

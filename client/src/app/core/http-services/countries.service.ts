@@ -1,12 +1,13 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { AppConfig } from '../app.config';
-import { CountryCreateModel } from '../models/countries/country-create.model';
-import { CountryDetailModel } from '../models/countries/country-detail.model';
-import { CountryQueryModel } from '../models/countries/country-query.model';
-import { CountryUpdateModel } from '../models/countries/country-update.model';
-import { CountryModel } from '../models/countries/country.model';
+import { AppConfig } from '../../app.config';
+
+import { CountryCreateModel } from '../../models/countries/country-create.model';
+import { CountryDetailModel } from '../../models/countries/country-detail.model';
+import { CountryQueryModel } from '../../models/countries/country-query.model';
+import { CountryUpdateModel } from '../../models/countries/country-update.model';
+import { CountryModel } from '../../models/countries/country.model';
 
 @Injectable({
   providedIn: 'root'
@@ -17,9 +18,9 @@ export class CountriesService {
     this._baseURL = `${appConfig.apiEndpoint}/countries`;
   }
 
-  public getAll(query:CountryQueryModel): Observable<CountryModel[]> {
-    const params = new HttpParams({fromObject:{...query}});
-    return this._client.get<CountryModel[]>(`${this._baseURL}/`,{params});
+  public getAll(query: CountryQueryModel): Observable<CountryModel[]> {
+    const params = new HttpParams({ fromObject: { ...query } });
+    return this._client.get<CountryModel[]>(`${this._baseURL}/`, { params });
   }
 
   public getOne(countryId: number): Observable<CountryDetailModel> {

@@ -6,9 +6,9 @@ import { Observable } from 'rxjs';
 import { CountryUpdateModel } from 'src/app/models/countries/country-update.model';
 import { CountryModel } from 'src/app/models/countries/country.model';
 import { RegionModel } from 'src/app/models/regions/region.model';
-import { createOne as createCountryAction } from 'src/app/stores/countries/countries.action';
-import { updateOne as updateCountryAction } from 'src/app/stores/countries/countries.action';
-import { selectAllRegions } from 'src/app/stores/region/regions.selectors';
+import { createOne as createCountryAction } from 'src/app/core/store/countries/countries.action';
+import { updateOne as updateCountryAction } from 'src/app/core/store/countries/countries.action';
+import { selectAllRegions } from 'src/app/core/store/region/regions.selectors';
 
 
 @Component({

@@ -3,8 +3,8 @@ import { ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { Observable, Subscription } from 'rxjs';
 import { EmployeeDetailModel } from 'src/app/models/employees/employee-detail.model';
-import { readOne } from '../../../stores/employees/employees.actions';
-import { selectEmployeeDetail, selectLoading } from '../../../stores/employees/employees.selectors';
+import { readOne } from '../../../core/store/employees/employees.actions';
+import { selectEmployeeDetail, selectLoading } from '../../../core/store/employees/employees.selectors';
 
 @Component({
   selector: 'app-employee-detail',

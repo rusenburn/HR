@@ -1,10 +1,10 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { AppConfig } from '../app.config';
-import { JobHistoryCreateModel } from '../models/job-histories/job-history-create.model';
-import { JobHistoryDetailModel } from '../models/job-histories/job-history-detail.model';
-import { JobHistoryUpdateModel } from '../models/job-histories/job-history-update';
+import { AppConfig } from '../../app.config';
+import { JobHistoryCreateModel } from '../../models/job-histories/job-history-create.model';
+import { JobHistoryDetailModel } from '../../models/job-histories/job-history-detail.model';
+import { JobHistoryUpdateModel } from '../../models/job-histories/job-history-update';
 
 @Injectable({
   providedIn: 'root'

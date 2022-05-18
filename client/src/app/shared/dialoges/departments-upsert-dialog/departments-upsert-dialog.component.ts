@@ -8,9 +8,9 @@ import { CountryModel } from 'src/app/models/countries/country.model';
 import { DepartmentLocationedModel } from 'src/app/models/departments/department-locationed';
 import { DepartmentUpdateModel } from 'src/app/models/departments/department-update.model';
 import { LocationUpdateModel } from 'src/app/models/locations/location-update.model';
-import { readAll as readAllCountries } from 'src/app/stores/countries/countries.action';
-import { selectAllCountries } from 'src/app/stores/countries/countries.selectors';
-import { createOne, updateOne } from "src/app/stores/departments/departments.actions";
+import { readAll as readAllCountries } from 'src/app/core/store/countries/countries.action';
+import { selectAllCountries } from 'src/app/core/store/countries/countries.selectors';
+import { createOne, updateOne } from "src/app/core/store/departments/departments.actions";
 
 @Component({
   selector: 'app-departments-upsert-dialog',

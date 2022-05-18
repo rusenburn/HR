@@ -6,8 +6,8 @@ import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { defaultJobQuery } from 'src/app/models/jobs/job-query.model';
 import { JobModel } from 'src/app/models/jobs/job.model';
-import { openForm, readAll, textFilterChanged, updatePagination, updateSorting } from 'src/app/stores/jobs/jobs.actions';
-import {  selectPageIndex, selectPageSize, selectJobsPage, selectFilteredJobsLength } from 'src/app/stores/jobs/jobs.selectors';
+import { openForm, readAll, textFilterChanged, updatePagination, updateSorting } from 'src/app/core/store/jobs/jobs.actions';
+import {  selectPageIndex, selectPageSize, selectJobsPage, selectFilteredJobsLength } from 'src/app/core/store/jobs/jobs.selectors';
 
 
 

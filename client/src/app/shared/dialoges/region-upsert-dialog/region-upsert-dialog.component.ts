@@ -4,7 +4,7 @@ import { MatDialogRef } from '@angular/material/dialog';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Store } from '@ngrx/store';
 import { RegionUpdateModel } from 'src/app/models/regions/region-update.model';
-import * as RegionActions from 'src/app/stores/region/regions.actions';
+import * as RegionActions from 'src/app/core/store/region/regions.actions';
 
 
 @Component({

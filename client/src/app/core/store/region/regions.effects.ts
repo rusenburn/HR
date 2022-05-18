@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
 import { catchError, concatMap, exhaustMap, map, mergeMap, of, withLatestFrom } from "rxjs";
-import { RegionsService } from "src/app/services/regions.service";
+import { RegionsService } from "src/app/core/http-services/regions.service";
 import * as RegionActions from "./regions.actions";
 import { MatDialog } from "@angular/material/dialog";
 import { RegionQueryModel } from "src/app/models/regions/region-query.model";

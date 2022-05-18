@@ -1,11 +1,11 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { AppConfig } from '../app.config';
-import { DepartmentCreateModel } from '../models/departments/department-create.model';
-import { DepartmentDetailModel } from '../models/departments/department-detail.model';
-import { DepartmentUpdateModel } from '../models/departments/department-update.model';
-import { DepartmentModel } from '../models/departments/department.model';
+import { AppConfig } from '../../app.config';
+import { DepartmentCreateModel } from '../../models/departments/department-create.model';
+import { DepartmentDetailModel } from '../../models/departments/department-detail.model';
+import { DepartmentUpdateModel } from '../../models/departments/department-update.model';
+import { DepartmentModel } from '../../models/departments/department.model';
 
 @Injectable({
   providedIn: 'root'

@@ -3,7 +3,7 @@ import { MatDialog } from "@angular/material/dialog";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
 import { Store } from "@ngrx/store";
 import { catchError, concatMap, exhaustMap, map, mergeMap, of, withLatestFrom } from "rxjs";
-import { CountriesService } from "src/app/services/countries.service";
+import { CountriesService } from "src/app/core/http-services/countries.service";
 import { CountryUpsertDialogComponent } from "src/app/shared/dialoges/country-upsert-dialog/country-upsert-dialog.component";
 import * as CountriesActions from "./countries.action";
 import { selectDialogId } from "./countries.selectors";

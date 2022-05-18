@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Store } from '@ngrx/store';
 import { JobUpdateModel } from 'src/app/models/jobs/job-update.model';
-import { createOne, createOneSuccess, updateOne, updateOneSuccess } from "src/app/stores/jobs/jobs.actions";
+import { createOne, createOneSuccess, updateOne, updateOneSuccess } from "src/app/core/store/jobs/jobs.actions";
 import { CustomValidators } from 'src/app/shared/validators/customValidators.validator';
 import { Actions, ofType } from '@ngrx/effects';
 import { Subject, takeUntil } from 'rxjs';

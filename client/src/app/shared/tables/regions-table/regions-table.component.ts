@@ -6,14 +6,14 @@ import { Store } from '@ngrx/store';
 import { Observable, } from 'rxjs';
 import { defaultRegionQuery } from 'src/app/models/regions/region-query.model';
 import { RegionModel } from 'src/app/models/regions/region.model';
-import { openForm, paginationChanged, readAll, sortChanged, textFilterChanged } from 'src/app/stores/region/regions.actions';
+import { openForm, paginationChanged, readAll, sortChanged, textFilterChanged } from 'src/app/core/store/region/regions.actions';
 import {
   selectRegionPageIndex,
   selectRegionPageSize,
   selectAllRegionsLength,
   selectRegionsSortedSlice,
   selectFilteredRegionsLength
-} from 'src/app/stores/region/regions.selectors';
+} from 'src/app/core/store/region/regions.selectors';
 
 @Component({
   selector: 'app-regions-table',

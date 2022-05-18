@@ -3,8 +3,8 @@ import { ActivatedRoute, ParamMap } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { Observable, Subject, takeUntil } from 'rxjs';
 import { JobDetailModel } from 'src/app/models/jobs/job-detail.model';
-import { readOneJob } from 'src/app/stores/jobs/jobs.actions';
-import { selectJobDetail, selectLoading } from 'src/app/stores/jobs/jobs.selectors';
+import { readOneJob } from 'src/app/core/store/jobs/jobs.actions';
+import { selectJobDetail, selectLoading } from 'src/app/core/store/jobs/jobs.selectors';
 
 @Component({
   selector: 'app-job-detail',

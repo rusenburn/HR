@@ -3,8 +3,8 @@ import { ActivatedRoute, ParamMap } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { Observable, Subject, takeUntil } from 'rxjs';
 import { DepartmentDetailModel } from 'src/app/models/departments/department-detail.model';
-import { readOne } from 'src/app/stores/departments/departments.actions';
-import { selectDepartmentDetail, selectLoading } from 'src/app/stores/departments/departments.selectors';
+import { readOne } from 'src/app/core/store/departments/departments.actions';
+import { selectDepartmentDetail, selectLoading } from 'src/app/core/store/departments/departments.selectors';
 
 @Component({
   selector: 'app-department-detail',

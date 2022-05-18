@@ -7,8 +7,8 @@ import { Observable, of, Subject, switchMap, takeUntil } from 'rxjs';
 import { defaultEmployeeFilter, EmployeeFilterModel } from 'src/app/models/employees/employee-filter.model';
 import { defaultEmployeeQuery } from 'src/app/models/employees/employee-query.model';
 import { EmployeeModel } from 'src/app/models/employees/employee.model';
-import { openForm, readAll, removeFilters, setFilters, textFilterChanged, updatePagination, updateSorting } from 'src/app/stores/employees/employees.actions';
-import { selectFilteredEmployeesLength, selectPageIndex, selectPageSize, selectEmployeesPage } from 'src/app/stores/employees/employees.selectors';
+import { openForm, readAll, removeFilters, setFilters, textFilterChanged, updatePagination, updateSorting } from 'src/app/core/store/employees/employees.actions';
+import { selectFilteredEmployeesLength, selectPageIndex, selectPageSize, selectEmployeesPage } from 'src/app/core/store/employees/employees.selectors';
 
 @Component({
   selector: 'app-employees-table',

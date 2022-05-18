@@ -6,9 +6,9 @@ import { Store } from '@ngrx/store';
 import { Observable, of, Subject, switchMap, takeUntil } from 'rxjs';
 import { defaultCountryQuery } from 'src/app/models/countries/country-query.model';
 import { DepartmentLocationedModel } from 'src/app/models/departments/department-locationed';
-import { readAll as readAllCountries } from 'src/app/stores/countries/countries.action';
-import { clearCountryFilter, setCountryFilter, textFilterChanged, updatePagination, updateSorting } from 'src/app/stores/departments/departments.actions';
-import { selectFilteredDepartmentsLength, selectPageIndex, selectPageSize, selectSortedCountryDepartmentsSlice } from 'src/app/stores/departments/departments.selectors';
+import { readAll as readAllCountries } from 'src/app/core/store/countries/countries.action';
+import { clearCountryFilter, setCountryFilter, textFilterChanged, updatePagination, updateSorting } from 'src/app/core/store/departments/departments.actions';
+import { selectFilteredDepartmentsLength, selectPageIndex, selectPageSize, selectSortedCountryDepartmentsSlice } from 'src/app/core/store/departments/departments.selectors';
 
 
 @Component({

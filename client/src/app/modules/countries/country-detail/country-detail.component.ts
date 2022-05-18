@@ -6,9 +6,9 @@ import { Observable, Subject, takeUntil } from 'rxjs';
 import { CountryDetailModel } from 'src/app/models/countries/country-detail.model';
 import { DepartmentLocationedModel } from 'src/app/models/departments/department-locationed';
 import { defaultDepartmentQuery } from 'src/app/models/departments/department-query.model';
-import { readOne } from 'src/app/stores/countries/countries.action';
-import { selectCountryDepartments, selectCountryDetail, selectLoading } from 'src/app/stores/countries/countries.selectors';
-import { readAll as readAllDepartments } from 'src/app/stores/departments/departments.actions';
+import { readOne } from 'src/app/core/store/countries/countries.action';
+import { selectCountryDepartments, selectCountryDetail, selectLoading } from 'src/app/core/store/countries/countries.selectors';
+import { readAll as readAllDepartments } from 'src/app/core/store/departments/departments.actions';
 
 @Component({
   selector: 'app-country-detail',

@@ -8,11 +8,11 @@ import { EmployeeModel } from 'src/app/models/employees/employee.model';
 import { JobHistoryCreateModel } from 'src/app/models/job-histories/job-history-create.model';
 import { JobHistoryUpdateModel } from 'src/app/models/job-histories/job-history-update';
 import { JobModel } from 'src/app/models/jobs/job.model';
-import { selectAllDepartments } from 'src/app/stores/departments/departments.selectors';
-import { selectAllEmployees } from 'src/app/stores/employees/employees.selectors';
-import { selectAllJobs } from 'src/app/stores/jobs/jobs.selectors';
-import { createOne, updateOne } from 'src/app/stores/job-history/job-history.actions';
-import { selectIsCreateForm } from 'src/app/stores/job-history/job-history.selectors';
+import { selectAllDepartments } from 'src/app/core/store/departments/departments.selectors';
+import { selectAllEmployees } from 'src/app/core/store/employees/employees.selectors';
+import { selectAllJobs } from 'src/app/core/store/jobs/jobs.selectors';
+import { createOne, updateOne } from 'src/app/core/store/job-history/job-history.actions';
+import { selectIsCreateForm } from 'src/app/core/store/job-history/job-history.selectors';
 @Component({
   selector: 'app-job-history-upsert-dialog',
   templateUrl: './job-history-upsert-dialog.component.html',

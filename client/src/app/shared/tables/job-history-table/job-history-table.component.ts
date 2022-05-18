@@ -6,8 +6,8 @@ import { Store } from '@ngrx/store';
 import { Observable, of, Subject, switchMap, takeUntil } from 'rxjs';
 import { defaultJobHistoryFilter } from 'src/app/models/job-histories/job-history-filter.model';
 import { JobHistoryModel } from 'src/app/models/job-histories/job-history.model';
-import { openUpdateForm, readAll, removeFilter, setFilter, textFilterChanged, updatePagination, updateSorting } from 'src/app/stores/job-history/job-history.actions';
-import { selectJobHistoryLength, selectJobHistoryPage, selectPageIndex, selectPageSize } from 'src/app/stores/job-history/job-history.selectors';
+import { openUpdateForm, readAll, removeFilter, setFilter, textFilterChanged, updatePagination, updateSorting } from 'src/app/core/store/job-history/job-history.actions';
+import { selectJobHistoryLength, selectJobHistoryPage, selectPageIndex, selectPageSize } from 'src/app/core/store/job-history/job-history.selectors';
 
 @Component({
   selector: 'app-job-history-table',

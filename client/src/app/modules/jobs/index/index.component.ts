@@ -2,8 +2,8 @@ import { Component } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { JobModel } from 'src/app/models/jobs/job.model';
-import { selectAllJobs, selectLoading } from 'src/app/stores/jobs/jobs.selectors';
-import { openForm } from 'src/app/stores/jobs/jobs.actions';
+import { selectAllJobs, selectLoading } from 'src/app/core/store/jobs/jobs.selectors';
+import { openForm } from 'src/app/core/store/jobs/jobs.actions';
 
 @Component({
   selector: 'app-index',

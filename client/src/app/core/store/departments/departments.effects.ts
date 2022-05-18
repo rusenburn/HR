@@ -1,8 +1,8 @@
 import { Injectable } from "@angular/core";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
 import { catchError, concatMap, exhaustMap, map, mergeMap, of, withLatestFrom } from "rxjs";
-import { DepartmentsService } from "src/app/services/departments.service";
-import { LocationsService } from "src/app/services/locations.service";
+import { DepartmentsService } from "src/app/core/http-services/departments.service";
+import { LocationsService } from "src/app/core/http-services/locations.service";
 import * as DepartmentActions from "./departments.actions";
 import { DepartmentUpdateModel } from "src/app/models/departments/department-update.model";
 import { MatDialog } from "@angular/material/dialog";

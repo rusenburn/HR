@@ -6,8 +6,8 @@ import { Store } from '@ngrx/store';
 import { mergeMap, Observable, of, Subject, takeUntil } from 'rxjs';
 import { defaultCountryQuery } from 'src/app/models/countries/country-query.model';
 import { CountryModel } from 'src/app/models/countries/country.model';
-import { clearRegionFilter, openForm, readAll, setRegionFilter, textFilterChanged, updatePagination, updateSort } from 'src/app/stores/countries/countries.action';
-import { selectAllCountries, selectPageIndex, selectPageSize, selectFilteredCountriesLength as selectFilteredCountriesLength, selectCountriesPage } from 'src/app/stores/countries/countries.selectors';
+import { clearRegionFilter, openForm, readAll, setRegionFilter, textFilterChanged, updatePagination, updateSort } from 'src/app/core/store/countries/countries.action';
+import { selectAllCountries, selectPageIndex, selectPageSize, selectFilteredCountriesLength as selectFilteredCountriesLength, selectCountriesPage } from 'src/app/core/store/countries/countries.selectors';
 
 
 @Component({
