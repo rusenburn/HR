@@ -1,4 +1,4 @@
-import { JobHistoryModule } from "src/app/core/job-history/job-history.module";
+import { JobHistoryModule } from "src/app/modules/job-history/job-history.module";
 import { DepartmentModel } from "../departments/department.model";
 import { JobHistoryModel } from "../job-histories/job-history.model";
 import { JobModel } from "../jobs/job.model";
