@@ -1,7 +1,15 @@
 from fastapi import FastAPI, Depends
-from .routers import regions,countries,locations,departments,jobs,employees,job_histories
+from .routers import (
+    regions,
+    countries,
+    locations,
+    departments,
+    jobs,
+    employees,
+    job_histories,
+    users
+)
 from fastapi.middleware.cors import CORSMiddleware
-
 
 
 app = FastAPI()
@@ -16,7 +24,7 @@ origins = [
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
-    allow_credentials = True,
+    allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"]
 )
@@ -27,11 +35,13 @@ app.include_router(departments.router)
 app.include_router(jobs.router)
 app.include_router(employees.router)
 app.include_router(job_histories.router)
+app.include_router(users.router)
+
+
 def a(b):
     return b
+
 
 @app.get("/ping/")
 def root():
     return "pong"
-
-

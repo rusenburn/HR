@@ -14,6 +14,7 @@ from src.models.departments import Department
 from src.models.jobs import Job
 from src.models.employee import Employee
 from src.models.job_history import JobHistory
+from src.models.users import User
 # from src.models.departments_manager import DepartmentsManager
 
 # this is the Alembic Config object, which provides

@@ -5,4 +5,5 @@ from .departments import Department
 from .jobs import Job
 from .job_history import JobHistory
 from .employee import Employee
+from .users import User
 # from .departments_manager import DepartmentsManager

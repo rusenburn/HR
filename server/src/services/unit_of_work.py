@@ -1,5 +1,4 @@
 from sqlalchemy.orm import Session
-
 from ..database import Base
 
 from .regions import RegionsService
@@ -9,6 +8,7 @@ from .departments import DepartmentsService
 from .jobs import JobsService
 from .employees import EmployeesService
 from .job_histories import JobHistoriesService
+from .users import UsersService
 class UnitOfWork:
     def __init__(self,
         db:Session,
@@ -18,7 +18,8 @@ class UnitOfWork:
         departments_service:DepartmentsService,
         jobs_service:JobsService,
         employees_service:EmployeesService,
-        job_histories_service : JobHistoriesService
+        job_histories_service : JobHistoriesService,
+        users_service:UsersService
         ) -> None:
 
         self._db = db
@@ -29,6 +30,7 @@ class UnitOfWork:
         self.jobs = jobs_service
         self.employees = employees_service
         self.job_histories = job_histories_service
+        self.users = users_service
         assert self._db == self.regions._db == self.countries._db == self.locations._db == self.departments._db
     
     def commit_refresh(self,items:list[Base]|None=None):

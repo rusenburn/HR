@@ -1,6 +1,8 @@
 from fastapi import Depends, Query
 from sqlalchemy.orm import Session
 
+from .services.jwt import JwtService
+from fastapi.security import OAuth2PasswordBearer
 from .mappers.job_mapper import JobMapper
 from .mappers.department_mapper import DepartmentMapper
 from .mappers.location_mapper import LocationMapper
@@ -9,7 +11,7 @@ from .mappers.region_mapper import RegionMapper
 from .mappers.employee_mapper import EmployeeMapper
 from .mappers.job_history_mapper import JobHistoryMapper
 from .mappers.nested_mapper import NestedMapper
-
+from .mappers.user_mapper import UserMapper
 from .services import (
     CountriesServices,
     UnitOfWork,
@@ -18,9 +20,14 @@ from .services import (
     DepartmentsService,
     JobsService,
     JobHistoriesService,
-    EmployeesService)
+    EmployeesService,
+    UsersService,
+    CryptService)
 
 from .database import SessionFactory
+
+
+oauth2_schema = OAuth2PasswordBearer(tokenUrl="users/login")
 
 
 def get_db() -> Session:
@@ -34,15 +41,17 @@ def get_db() -> Session:
 def get_base_query(limit: int = 100, skip: int = 0):
     return {"limit": limit, "skip": skip}
 
+
 def get_employee_query(
         base_Query=Depends(get_base_query),
-        department_id:int|None=Query(0,alias="departmentId"),
-        job_id:int|None=Query(0,alias="jobId"),
-        manager_id:int|None=Query(0,alias="managerId")):
+        department_id: int | None = Query(0, alias="departmentId"),
+        job_id: int | None = Query(0, alias="jobId"),
+        manager_id: int | None = Query(0, alias="managerId")):
     return {**base_Query,
-        "department_id":department_id,
-        "job_id":job_id,
-        "manager_id":manager_id}
+            "department_id": department_id,
+            "job_id": job_id,
+            "manager_id": manager_id}
+
 
 def get_region_service(db: Session = Depends(get_db)) -> RegionsService:
     service = RegionsService(db=db)
@@ -79,6 +88,11 @@ def get_job_history_service(db: Session = Depends(get_db)) -> JobHistoriesServic
     return service
 
 
+def get_users_service(db: Session = Depends(get_db)) -> UsersService:
+    service = UsersService(db=db)
+    return service
+
+
 def get_unit_of_work(
     db: Session = Depends(get_db),
     region_service: RegionsService = Depends(get_region_service),
@@ -88,7 +102,8 @@ def get_unit_of_work(
     jobs_service: JobsService = Depends(get_job_service),
     job_history_service: JobHistoriesService = Depends(
         get_job_history_service),
-    employees_service: EmployeesService = Depends(get_employee_service)
+    employees_service: EmployeesService = Depends(get_employee_service),
+    users_service: UsersService = Depends(get_users_service)
 ) -> UnitOfWork:
 
     unit_of_work = UnitOfWork(db=db, regions_service=region_service,
@@ -97,8 +112,17 @@ def get_unit_of_work(
                               departments_service=departments_service,
                               jobs_service=jobs_service,
                               employees_service=employees_service,
-                              job_histories_service=job_history_service)
+                              job_histories_service=job_history_service,
+                              users_service=users_service)
     return unit_of_work
+
+
+def get_crypt_service() -> CryptService:
+    return CryptService()
+
+
+def get_jwt_service() -> JwtService:
+    return JwtService()
 
 
 def get_nested_mapper() -> NestedMapper:
@@ -131,3 +155,11 @@ def get_employee_mapper(nested: NestedMapper = Depends(get_nested_mapper)) -> Em
 
 def get_job_history_mapper(nested: NestedMapper = Depends(get_nested_mapper)) -> JobHistoryMapper:
     return JobHistoryMapper(nested=nested)
+
+
+def get_users_mapper(crypt_service: CryptService = Depends(get_crypt_service)) -> UserMapper:
+    return UserMapper(crypt_service=crypt_service)
+
+
+def get_current_user(token: str = Depends(oauth2_schema), jwt_service: JwtService = Depends(get_jwt_service)):
+    return jwt_service.get_current_user(token)
