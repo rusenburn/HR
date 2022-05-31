@@ -1,16 +1,16 @@
 from fastapi import APIRouter, Depends, HTTPException
 
-
 from ..DTOs.nested import CountryNested
 from ..DTOs.countries import CountryDTO, CountryCreateDTO, CountryUpdateDTO
 from ..mappers.country_mapper import CountryMapper
 from ..services.unit_of_work import UnitOfWork
-from ..dependencies import get_unit_of_work, get_country_mapper,get_base_query
+from ..dependencies import get_unit_of_work, get_country_mapper, get_base_query, require_admin_user
 
 router = APIRouter(
     prefix="/countries",
     tags=["countries"],
-    responses={404: {"description": "Not Found"}}
+    responses={404: {"description": "Not Found"}},
+    dependencies=[Depends(require_admin_user)]
 )
 
 
@@ -59,7 +59,7 @@ def update_one(update_dto: CountryNested,
     model = uow.countries.get_one(update_dto.country_id)
     if model is None:
         raise HTTPException(status_code=404)
-        
+
     region = uow.regions.get_one(update_dto.region_id)
     if region is None:
         raise HTTPException(

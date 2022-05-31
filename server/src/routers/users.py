@@ -2,11 +2,11 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordRequestForm
 from ..mappers.user_mapper import UserMapper
 from ..services import UsersService, CryptService, UnitOfWork
-from ..services.jwt import JwtService
+from ..services.jwt import JwtContainer, JwtService
 
 from ..DTOs.users import UserCreateDTO, UserDTO
 from ..DTOs.tokens import TokenDTO
-from ..dependencies import get_crypt_service, get_current_user, get_jwt_service, get_unit_of_work, get_users_mapper, get_users_service
+from ..dependencies import get_crypt_service, get_jwt_service, get_unit_of_work, get_users_mapper, get_users_service, require_logged_in_user
 
 router = APIRouter(
     prefix="/users",
@@ -16,15 +16,18 @@ router = APIRouter(
 
 
 @router.post("/register", response_model=UserDTO)
-def register(userCreate: UserCreateDTO = Depends(),
+def register(userCreate: UserCreateDTO,
              uow: UnitOfWork = Depends(get_unit_of_work),
              user_mapper: UserMapper = Depends(get_users_mapper)
              ):
 
     user = uow.users.get_one_by_username(userCreate.username)
     if user:
-        return HTTPException(status_code=status.HTTP_400_BAD_REQUEST)
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST)
     user = user_mapper.from_create_to_model(userCreate)
+    usersCount =  uow.users.get_users_count()
+    if usersCount == 0:
+        user.admin = True
     uow.users.create_one(user)
     uow.commit_refresh([user])
 
@@ -48,11 +51,9 @@ def login(form_data: OAuth2PasswordRequestForm = Depends(),
     return TokenDTO(access_token=access_token,token_type="bearer")
 
 @router.get("/me",response_model=UserDTO)
-def read_me(current_user:str = Depends(get_current_user),user_service:UsersService=Depends(get_users_service),user_mapper:UserMapper=Depends(get_users_mapper)):
-    if current_user is None:
-        raise HTTPException(status_code=401)
-    user = user_service.get_one_by_username(current_user)
+def read_me(jwt:JwtContainer = Depends(require_logged_in_user),user_service:UsersService=Depends(get_users_service),user_mapper:UserMapper=Depends(get_users_mapper)):
+    user = user_service.get_one_by_username(jwt.username)
     if user is None:
-        raise HTTPException(status_code=401)
+        raise HTTPException(status_code=400)
     dto = user_mapper.from_model_to_dto(user)
     return dto

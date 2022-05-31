@@ -3,7 +3,7 @@ from fastapi import APIRouter, Depends, Query, HTTPException
 from ..DTOs.nested import DepartmentNested
 
 from ..services.unit_of_work import UnitOfWork
-from ..dependencies import get_department_mapper, get_unit_of_work
+from ..dependencies import get_department_mapper, get_unit_of_work, require_admin_user
 from ..mappers.department_mapper import DepartmentMapper
 from ..DTOs.departments import DepartmentDTO, DepartmentCreate, DepartmentUpdate
 
@@ -13,7 +13,8 @@ router = APIRouter(
     tags=["departments"],
     responses={
         404: {"description": "Department not found"}
-    })
+    },
+    dependencies=[Depends(require_admin_user)])
 
 
 @router.get("/{department_id}", response_model=DepartmentDTO)

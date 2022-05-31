@@ -13,7 +13,12 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { CoreModule } from './core/core.module';
 import { MatDialogModule } from '@angular/material/dialog';
+import { JwtModule } from '@auth0/angular-jwt';
 
+
+export function tokenGetter() {
+  return localStorage.getItem("jwt");
+};
 @NgModule({
   declarations: [
     AppComponent,
@@ -26,7 +31,14 @@ import { MatDialogModule } from '@angular/material/dialog';
     EffectsModule.forRoot([]),
     BrowserAnimationsModule,
     CoreModule,
-    MatDialogModule
+    MatDialogModule,
+    JwtModule.forRoot({
+      config: {
+        tokenGetter: tokenGetter,
+        allowedDomains: [environment.domain],
+        disallowedRoutes: []
+      }
+    })
   ],
   providers: [
     { provide: AppConfig, useValue: new AppConfig() },

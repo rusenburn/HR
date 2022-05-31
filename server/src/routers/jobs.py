@@ -4,13 +4,14 @@ from ..models import Job
 from ..DTOs.jobs import JobDTO, JobCreate, JobUpdate
 from ..DTOs.nested import JobNested
 from ..mappers.job_mapper import JobMapper
-from ..dependencies import get_job_mapper, get_unit_of_work,get_base_query
+from ..dependencies import get_job_mapper, get_unit_of_work,get_base_query, require_admin_user
 from ..services import UnitOfWork
 
 router = APIRouter(
     prefix="/jobs",
     tags=["jobs"],
-    responses={404: {"description": "Job cannot be found"}}
+    responses={404: {"description": "Job cannot be found"}},
+    dependencies=[Depends(require_admin_user)]
 )
 
 

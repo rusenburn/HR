@@ -8,14 +8,17 @@ from ..DTOs.regions import RegionDTO
 from ..DTOs.regions.region_create_dto import RegionCreateDTO
 from ..DTOs.regions.region_update_dto import RegionUpdateDTO
 from ..services.unit_of_work import UnitOfWork
-from ..dependencies import get_base_query, get_region_mapper, get_unit_of_work
+from ..dependencies import get_base_query, get_region_mapper, get_unit_of_work, require_admin_user
 
 router = APIRouter(
     prefix="/regions",
     tags=["regions"],
     responses={
         404 : {"description":"Not Found"}
-    }
+    },
+    dependencies=[
+        Depends(require_admin_user)
+        ],
 )
 
 @router.get("/",response_model=list[RegionNested])

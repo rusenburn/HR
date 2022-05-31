@@ -1,7 +1,7 @@
-from fastapi import Depends, Query
+from fastapi import Depends, Query, HTTPException, status
 from sqlalchemy.orm import Session
 
-from .services.jwt import JwtService
+from .services.jwt import JwtContainer, JwtService
 from fastapi.security import OAuth2PasswordBearer
 from .mappers.job_mapper import JobMapper
 from .mappers.department_mapper import DepartmentMapper
@@ -27,7 +27,7 @@ from .services import (
 from .database import SessionFactory
 
 
-oauth2_schema = OAuth2PasswordBearer(tokenUrl="users/login")
+oauth2_schema = OAuth2PasswordBearer(tokenUrl="users/login",auto_error=False)
 
 
 def get_db() -> Session:
@@ -161,5 +161,29 @@ def get_users_mapper(crypt_service: CryptService = Depends(get_crypt_service)) -
     return UserMapper(crypt_service=crypt_service)
 
 
-def get_current_user(token: str = Depends(oauth2_schema), jwt_service: JwtService = Depends(get_jwt_service)):
-    return jwt_service.get_current_user(token)
+def get_jwt_container(token: str = Depends(oauth2_schema), jwt_service: JwtService = Depends(get_jwt_service)) -> JwtContainer:
+    return jwt_service.build_jwt_container(token)
+
+
+def get_current_user(jwt_container: JwtContainer = Depends(get_jwt_container)) -> str:
+    return jwt_container.username
+
+
+def require_logged_in_user(jwt_container: JwtContainer = Depends(get_jwt_container)) -> JwtContainer:
+    if (jwt_container.username == "" or jwt_container.username == None):
+        raise HTTPException(
+                    status_code=status.HTTP_401_UNAUTHORIZED,
+                    detail="UnAuthorized User, Must be logged in",
+                    headers={"WWW-Authenticate": "Bearer"},)
+    return jwt_container
+
+
+def require_admin_user(jwt_container: JwtContainer = Depends(get_jwt_container)):
+    if(jwt_container.username == "" or jwt_container.username == None
+            or not jwt_container.admin):
+        raise HTTPException(
+                    status_code=status.HTTP_401_UNAUTHORIZED,
+                    detail="Not authenticated,User must be an admin",
+                    headers={"WWW-Authenticate": "Bearer"},
+                )
+    return jwt_container

@@ -1,6 +1,6 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 class UserCreateDTO(BaseModel):
-    username:str
-    email:str
-    password:str
+    username:str =  Field(...)
+    email:str = Field(...) 
+    password:str = Field(...)

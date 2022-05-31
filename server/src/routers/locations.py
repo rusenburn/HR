@@ -4,13 +4,14 @@ from ..DTOs.locations import LocationCreate, LocationDTO, LocationUpdate
 from ..DTOs.nested import LocationNested
 from ..services.unit_of_work import UnitOfWork
 from ..mappers.location_mapper import LocationMapper
-from ..dependencies import get_location_mapper, get_unit_of_work
+from ..dependencies import get_location_mapper, get_unit_of_work, require_admin_user
 router = APIRouter(
     prefix="/locations",
     tags=["locations"],
     responses={
         404: {"description": "Location cannot be found"}
-    }
+    },
+    dependencies=[Depends(require_admin_user)]
 )
 
 

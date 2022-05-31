@@ -11,6 +11,8 @@
       <a mat-button routerLink="/jobs" class="toolbar-link">Jobs</a>
       <a mat-button routerLink="/employees" class="toolbar-link">Employees</a>
       <a mat-button routerLink="/job-history" class="toolbar-link">Job History</a>
+      <ng-container [ngTemplateOutlet]="(logged$|async)?logged:login">
+      </ng-container>
     </div>
   </mat-toolbar>
 </div>
@@ -38,9 +40,34 @@
       <a mat-list-item routerLink="/job-history" (click)="sidenav.close()">
         Job History
       </a>
+      <mat-divider>
+      </mat-divider>
+      <ng-container [ngTemplateOutlet]="(logged$|async)?loggedSidenav:loginSidenav">
+      </ng-container>
     </mat-nav-list>
   </mat-drawer>
   <mat-drawer-content>
     <router-outlet></router-outlet>
   </mat-drawer-content>
 </mat-drawer-container>
+
+<ng-template #logged>
+  <a mat-button class="toolbar-link" ng>Hello {{username$|async}}</a>
+  <button mat-button class="toolbar-link" (click)="onLogout()">Logout</button>
+</ng-template>
+
+<ng-template #login>
+  <a mat-button routerLink="/account/login" class="toolbar-link">Login</a>
+  <a mat-button routerLink="/account/register" class="toolbar-link">Register</a>
+</ng-template>
+
+<ng-template #loggedSidenav>
+  <a mat-list-item>
+    Hello {{username$|async}}
+  </a>
+  <button mat-list-item (click)="onLogout()">Logout</button>
+</ng-template>
+<ng-template #loginSidenav>
+  <a mat-list-item routerLink="/account/login" (click)="sidenav.close()">Login</a>
+  <a mat-button routerLink="/account/register" (click)="sidenav.close()">Register</a>
+</ng-template>

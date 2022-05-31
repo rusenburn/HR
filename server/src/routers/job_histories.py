@@ -5,14 +5,15 @@ from ..services.unit_of_work import UnitOfWork
 from ..mappers.job_history_mapper import JobHistoryMapper
 from ..DTOs.job_histories import JobHistoryCreate, JobHistoryDTO,JobHistoryUpdate
 from ..models import JobHistory
-from ..dependencies import get_job_history_mapper, get_unit_of_work
+from ..dependencies import get_job_history_mapper, get_unit_of_work, require_admin_user
 
 router = APIRouter(
     prefix="/job-history",
     tags=["job histories"],
     responses={404: {
         "decription": "Specific Job History cannot be found."
-    }}
+    }},
+    dependencies=[Depends(require_admin_user)]
 )
 
 

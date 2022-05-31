@@ -1,0 +1,22 @@
+<mat-card>
+    <mat-card-subtitle>
+        Login
+    </mat-card-subtitle>
+    <mat-card-content>
+        <form [formGroup]="loginForm" (ngSubmit)="submitForm()">
+            <mat-form-field>
+                <mat-label>Username</mat-label>
+                <input matInput type="text" formControlName="username" autofocus autocomplete="off" placeholder="Ex: Ronaldo07" name="username">
+            </mat-form-field>
+
+            <mat-form-field>
+                <mat-label>Password</mat-label>
+                <input matInput type="password" formControlName="password" name="password">
+            </mat-form-field>
+
+            <div class="button-container">
+                <button type="submit" mat-raised-button color="primary" [disabled]="loginForm.invalid">Submit</button>
+            </div>
+        </form>
+    </mat-card-content>
+</mat-card>

@@ -24,6 +24,7 @@ import { JobsUpsertDialogComponent } from './dialoges/jobs-upsert-dialog/jobs-up
 import { EmployeeUpsertDialogComponent } from './dialoges/employee-upsert-dialog/employee-upsert-dialog.component';
 import { JobHistoryUpsertDialogComponent } from './dialoges/job-history-upsert-dialog/job-history-upsert-dialog.component';
 import { RouterModule } from '@angular/router';
+import { AccountStore } from '../core/store/account/account.store';
 
 const components = [
   RegionsTableComponent,
@@ -54,7 +55,8 @@ const modules = [
   DepartmentsStore,
   EmployeeStore,
   JobsStore,
-  JobHisotryStore
+  JobHisotryStore,
+  AccountStore
 ];
 @NgModule({
   declarations: [
@@ -63,7 +65,8 @@ const modules = [
 
   ],
   imports: [
-    modules
+    modules,
+
   ],
   exports: [
     modules,
