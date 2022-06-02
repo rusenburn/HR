@@ -1,4 +1,6 @@
+const domain = "localhost:80";
 export const environment = {
   production: true,
-  apiEndpoint: "http://localhost:8000"
+  apiEndpoint: `http://${domain}`,
+  domain: domain
 };
