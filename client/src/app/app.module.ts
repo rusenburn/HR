@@ -35,7 +35,7 @@ export function tokenGetter() {
     JwtModule.forRoot({
       config: {
         tokenGetter: tokenGetter,
-        allowedDomains: [environment.domain],
+        allowedDomains: [environment.domain,"localhost"],
         disallowedRoutes: []
       }
     })
