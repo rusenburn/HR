@@ -41,4 +41,4 @@ class DepartmentsService():
     def delete_one(self, department_id):
         self._db.query(Department)\
             .filter(Department.department_id == department_id)\
-            .delete()
+            .delete()       

@@ -2,9 +2,10 @@ from fastapi import APIRouter, Depends, Query, HTTPException, status
 
 from ..DTOs.locations import LocationCreate, LocationDTO, LocationUpdate
 from ..DTOs.nested import LocationNested
-from ..services.unit_of_work import UnitOfWork
+from ..services.unit_of_work import UnitOfWork, UnitOfWork0
 from ..mappers.location_mapper import LocationMapper
-from ..dependencies import get_location_mapper, get_unit_of_work, require_admin_user
+from ..dependencies import get_location_mapper, get_unit_of_work, get_unit_of_work_async, require_admin_user
+
 router = APIRouter(
     prefix="/locations",
     tags=["locations"],
@@ -16,21 +17,21 @@ router = APIRouter(
 
 
 @router.get("/", response_model=list[LocationNested])
-def get_all(country_id: int = Query(0), skip: int = Query(0), limit: int = Query(100),
-            uow: UnitOfWork = Depends(get_unit_of_work),
+async def get_all(country_id: int = Query(0), skip: int = Query(0), limit: int = Query(100),
+            uow: UnitOfWork0 = Depends(get_unit_of_work_async),
             location_mapper: LocationMapper = Depends(get_location_mapper)):
-    locations = uow.locations.get_all(
+    locations = await uow.locations.get_all_async(
         country_id=country_id, skip=skip, limit=limit)
     dtos = [location_mapper.from_model_to_nested(l) for l in locations]
     return dtos
 
 
 @router.get("/{location_id}")
-def get_one(location_id: int,
-            uow: UnitOfWork = Depends(get_unit_of_work),
+async def get_one(location_id: int,
+            uow: UnitOfWork0 = Depends(get_unit_of_work_async),
             location_mapper: LocationMapper = Depends(get_location_mapper)
             ):
-    location = uow.locations.get_one(location_id)
+    location = await uow.locations.get_one_async(location_id)
     if location is None:
         raise HTTPException(status_code=404)
     dto = location_mapper.from_model_to_dto(location)
@@ -38,36 +39,39 @@ def get_one(location_id: int,
 
 
 @router.post("/", response_model=LocationNested, status_code=201)
-def create_one(location_create: LocationCreate,
-               uow: UnitOfWork = Depends(get_unit_of_work),
+async def create_one(location_create: LocationCreate,
+               uow: UnitOfWork0 = Depends(get_unit_of_work_async),
                location_mapper: LocationMapper =Depends(get_location_mapper)
                ):
     location = location_mapper.from_create_to_model(location_create)
-    uow.locations.create_one(location)
-    uow.commit_refresh([location])
+    await uow.locations.create_one_async(location)
+    await uow.commit_async()
     dto = location_mapper.from_model_to_nested(location)
     return dto
 
 
 @router.put("/", response_model=LocationNested)
-def update_one(location_update: LocationUpdate,
-               uow: UnitOfWork = Depends(get_unit_of_work),
+async def update_one(location_update: LocationUpdate,
+               uow: UnitOfWork0 = Depends(get_unit_of_work_async),
                location_mapper: LocationMapper = Depends(get_location_mapper)
                ):
-    location = uow.locations.get_one(location_update.location_id)
+    location = await uow.locations.get_one_async(location_update.location_id)
     if location is None:
         raise HTTPException(status_code=404)
+    country = await uow.countries.get_one_async(location_update.country_id)
+    if country is None:
+        raise HTTPException(status_code=400)
     location = location_mapper.from_update_to_model(location_update, location)
-    uow.locations.update_one(location)
-    uow.commit_refresh([location])
+    await uow.locations.update_one_async(location)
+    await uow.commit_async()
 
     dto = location_mapper.from_model_to_nested(location)
     return dto
 
 
 @router.delete("/{location_id}", status_code=status.HTTP_204_NO_CONTENT)
-def delete_one(location_id: int,
-               uow: UnitOfWork = Depends(get_unit_of_work),
+async def delete_one(location_id: int,
+               uow: UnitOfWork0 = Depends(get_unit_of_work_async),
                ):
-    uow.locations.delete_one(location_id)
-    uow.commit_refresh()
+    await  uow.locations.delete_one_async(location_id)
+    await uow.commit_async()

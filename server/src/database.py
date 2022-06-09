@@ -1,6 +1,7 @@
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
+from sqlalchemy.ext.asyncio import create_async_engine,AsyncSession
 import os
 
 DB_PASSWORD = "my-secret-pw"
@@ -19,12 +20,22 @@ if "DB_SERVER" in os.environ:
 
 # DATABASE_URL = "sqlite:///./sql_app.db"
 DATABASE_URL = f"mysql+pymysql://root:{DB_PASSWORD}@{DB_SERVER}/{DB_NAME}"
+ASYNC_DATABASE_URL = f"mysql+asyncmy://root:{DB_PASSWORD}@{DB_SERVER}/{DB_NAME}"
 print(DATABASE_URL)
+print(ASYNC_DATABASE_URL)
 # DATABASE_URL = "sqlite:///:memory:"
 # DATABASE_URL = "postgresql://user:password@postgresserver/db"
 
 engine = create_engine(DATABASE_URL,pool_recycle=3600)
 
 SessionFactory = sessionmaker(autocommit=False,autoflush=False,bind=engine)
+
+async_engine = create_async_engine(ASYNC_DATABASE_URL,pool_recycle=3600,future=True)
+AsyncSessionFactory = sessionmaker(
+    bind=async_engine,
+    autocommit=False,
+    autoflush=False,
+    expire_on_commit=False,
+    class_=AsyncSession)
 
 Base = declarative_base()

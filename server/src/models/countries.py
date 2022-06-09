@@ -12,4 +12,3 @@ class Country(Base):
 
     region = relationship("Region",back_populates="countries",foreign_keys=region_id,lazy="raise")
     locations = relationship("Location" , back_populates="country",lazy="raise")
-    

@@ -1,6 +1,12 @@
 from fastapi import Depends, Query, HTTPException, status
 from sqlalchemy.orm import Session
+from sqlalchemy.ext.asyncio import AsyncSession
 
+
+from .services.locations import LocationAsyncService
+from .services.countries import CountriesAsyncService
+from .services.unit_of_work import UnitOfWork0
+from .services.regions import RegionsService0
 from .services.jwt import JwtContainer, JwtService
 from fastapi.security import OAuth2PasswordBearer
 from .mappers.job_mapper import JobMapper
@@ -24,10 +30,10 @@ from .services import (
     UsersService,
     CryptService)
 
-from .database import SessionFactory
+from .database import SessionFactory, AsyncSessionFactory
 
 
-oauth2_schema = OAuth2PasswordBearer(tokenUrl="users/login",auto_error=False)
+oauth2_schema = OAuth2PasswordBearer(tokenUrl="users/login", auto_error=False)
 
 
 def get_db() -> Session:
@@ -172,9 +178,9 @@ def get_current_user(jwt_container: JwtContainer = Depends(get_jwt_container)) -
 def require_logged_in_user(jwt_container: JwtContainer = Depends(get_jwt_container)) -> JwtContainer:
     if (jwt_container.username == "" or jwt_container.username == None):
         raise HTTPException(
-                    status_code=status.HTTP_401_UNAUTHORIZED,
-                    detail="UnAuthorized User, Must be logged in",
-                    headers={"WWW-Authenticate": "Bearer"},)
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="UnAuthorized User, Must be logged in",
+            headers={"WWW-Authenticate": "Bearer"},)
     return jwt_container
 
 
@@ -182,8 +188,43 @@ def require_admin_user(jwt_container: JwtContainer = Depends(get_jwt_container))
     if(jwt_container.username == "" or jwt_container.username == None
             or not jwt_container.admin):
         raise HTTPException(
-                    status_code=status.HTTP_401_UNAUTHORIZED,
-                    detail="Not authenticated,User must be an admin",
-                    headers={"WWW-Authenticate": "Bearer"},
-                )
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Not authenticated,User must be an admin",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
     return jwt_container
+
+
+# Async Depedencies
+async def get_db_async() -> AsyncSession:
+    async with AsyncSessionFactory() as session:
+        try:
+            yield session
+        finally:
+            await session.close()
+        # async with session.begin():
+        #     yield session
+
+
+async def get_regions_service_async(db: AsyncSession = Depends(get_db_async)) -> RegionsService0:
+    service = RegionsService0(db=db)
+    return service
+
+
+async def get_country_service_async(db: AsyncSession = Depends(get_db_async)) -> CountriesAsyncService:
+    service = CountriesAsyncService(db=db)
+    return service
+
+async def get_location_service_async(db:AsyncSession=Depends(get_db_async))->LocationAsyncService:
+    service = LocationAsyncService(db=db)
+    return service
+
+async def get_unit_of_work_async(
+        db: AsyncSession = Depends(get_db_async),
+        regions: RegionsService0 = Depends(get_regions_service_async),
+        countries: CountriesAsyncService = Depends(get_country_service_async),
+        locations:LocationAsyncService=Depends(get_location_service_async)) -> UnitOfWork0:
+
+    service = UnitOfWork0(db=db, region_service=regions,
+                          country_service=countries,location_service=locations)
+    return service
