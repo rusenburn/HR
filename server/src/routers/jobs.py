@@ -1,10 +1,12 @@
 from fastapi import APIRouter, Depends, Query, HTTPException
 
+from ..services.unit_of_work import UnitOfWork0
+
 from ..models import Job
 from ..DTOs.jobs import JobDTO, JobCreate, JobUpdate
 from ..DTOs.nested import JobNested
 from ..mappers.job_mapper import JobMapper
-from ..dependencies import get_job_mapper, get_unit_of_work,get_base_query, require_admin_user
+from ..dependencies import get_job_mapper, get_unit_of_work,get_base_query, get_unit_of_work_async, require_admin_user
 from ..services import UnitOfWork
 
 router = APIRouter(
@@ -16,61 +18,63 @@ router = APIRouter(
 
 
 @router.get("/", response_model=list[JobNested])
-def get_all(
-        # skip: int = Query(0, ge=0),
-        # limit: int = Query(100, ge=0),
-        uow: UnitOfWork = Depends(get_unit_of_work),
+async def get_all(
+        uow: UnitOfWork0 = Depends(get_unit_of_work_async),
         job_mapper: JobMapper = Depends(get_job_mapper),
         query=Depends(get_base_query)):
 
-    jobs = uow.jobs.get_all(**query)
+    jobs = await uow.jobs.get_all_async(**query)
     dtos = [job_mapper.from_model_to_nested(j) for j in jobs]
     return dtos
 
 
 @router.get("/{job_id}", response_model=JobDTO)
-def get_one(job_id: int,
-            uow: UnitOfWork = Depends(get_unit_of_work),
+async def get_one(job_id: int,
+            uow: UnitOfWork0 = Depends(get_unit_of_work_async),
             job_mapper: JobMapper = Depends(get_job_mapper)
             ):
-    job = uow.jobs.get_one(job_id)
+    job = await uow.jobs.get_one_async(job_id)
+    if job is None:
+        raise HTTPException(status_code=404)
     dto = job_mapper.from_model_to_dto(job)
     return dto
 
 @router.post("/", response_model=JobNested, status_code=201)
-def create_one(job_create: JobCreate,
-               uow: UnitOfWork = Depends(get_unit_of_work),
+async def create_one(job_create: JobCreate,
+               uow: UnitOfWork0 = Depends(get_unit_of_work_async),
                job_mapper: JobMapper = Depends(get_job_mapper)
                ):
-    if uow.jobs.title_exist(job_create.job_title):
+    if await uow.jobs.title_exist_async(job_create.job_title):
         raise HTTPException(status_code=400, detail={
             "description": f"job_title: {job_create.job_title} must be unique"})
 
     job = job_mapper.from_create_to_model(job_create)
-    uow.jobs.create_one(job)
-    uow.commit_refresh(items=[job])
+    await uow.jobs.create_one_async(job)
+    await uow.commit_async()
     dto = job_mapper.from_model_to_nested(job)
     return dto
 
 @router.put("/", response_model=JobNested)
-def update_one(job_update: JobUpdate,
-               uow: UnitOfWork = Depends(get_unit_of_work),
+async def update_one(job_update: JobUpdate,
+               uow: UnitOfWork0 = Depends(get_unit_of_work_async),
                job_mapper: JobMapper = Depends(get_job_mapper)
                ):
-    job = uow.jobs.get_one(job_update.job_id)
+    job = await uow.jobs.get_one_async(job_update.job_id)
+    if job is None:
+        raise HTTPException(status_code=404)
     if job_update.job_title.lower() != job.job_title.lower():
-        if uow.jobs.title_exist(job_update.job_title):
+        if await uow.jobs.title_exist_async(job_update.job_title):
             raise HTTPException(
                 400, detail={"description": f"job_title: {job_update.job_title} must be unique"})
     job = job_mapper.from_update_to_model(job_update, job)
-    uow.jobs.update_one(job)
-    uow.commit_refresh(items=[job])
+    await uow.jobs.update_one_async(job)
+    await uow.commit_async()
     dto = job_mapper.from_model_to_nested(job)
     return dto
 
 @router.delete("/{job_id}", status_code=204)
-def delete_one(job_id: int,
-               uow: UnitOfWork = Depends(get_unit_of_work),
+async def delete_one(job_id: int,
+               uow: UnitOfWork0 = Depends(get_unit_of_work_async),
                ):
-    uow.jobs.delete_one(job_id)
-    uow.commit_refresh()
+    await uow.jobs.delete_one_async(job_id)
+    await uow.commit_async()

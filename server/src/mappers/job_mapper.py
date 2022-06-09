@@ -25,7 +25,7 @@ class JobMapper():
         return job
     
     def from_update_to_model(self,update_dto:JobUpdate,job:Job)->Job:
-        # job.job_id = update_dto.job_id
+        job.job_id = update_dto.job_id
         job.job_title = update_dto.job_title
         job.min_salary = update_dto.min_salary
         job.max_salary=update_dto.max_salary

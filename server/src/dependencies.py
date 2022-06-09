@@ -2,7 +2,12 @@ from fastapi import Depends, Query, HTTPException, status
 from sqlalchemy.orm import Session
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from .services.employees import EmployeeAsyncService
+from .services.job_histories import JobHistoryAsyncService
 
+from .services.jobs import JobAsyncService
+
+from .services.departments import DeparmentAsyncService
 from .services.locations import LocationAsyncService
 from .services.countries import CountriesAsyncService
 from .services.unit_of_work import UnitOfWork0
@@ -219,12 +224,37 @@ async def get_location_service_async(db:AsyncSession=Depends(get_db_async))->Loc
     service = LocationAsyncService(db=db)
     return service
 
+async def get_department_service_async(db:AsyncSession=Depends(get_db_async))->DeparmentAsyncService:
+    service = DeparmentAsyncService(db=db)
+    return service
+async def get_jobs_service_async(db:AsyncSession=Depends(get_db_async))->JobAsyncService:
+    service = JobAsyncService(db=db)
+    return service
+async def get_employee_service_async(db:AsyncSession=Depends(get_db_async))->EmployeeAsyncService:
+    service=EmployeeAsyncService(db=db)
+    return service
+async def get_job_history_service_async(db:AsyncSession=Depends(get_db_async))->JobHistoryAsyncService:
+    service = JobHistoryAsyncService(db=db)
+    return service
+
 async def get_unit_of_work_async(
         db: AsyncSession = Depends(get_db_async),
         regions: RegionsService0 = Depends(get_regions_service_async),
         countries: CountriesAsyncService = Depends(get_country_service_async),
-        locations:LocationAsyncService=Depends(get_location_service_async)) -> UnitOfWork0:
+        locations:LocationAsyncService=Depends(get_location_service_async),
+        departments:DeparmentAsyncService=Depends(get_department_service_async),
+        jobs:JobAsyncService=Depends(get_jobs_service_async),
+        employees:EmployeeAsyncService=Depends(get_employee_service_async),
+        job_history:JobHistoryAsyncService=Depends(get_job_history_service_async)) -> UnitOfWork0:
 
-    service = UnitOfWork0(db=db, region_service=regions,
-                          country_service=countries,location_service=locations)
+    service = UnitOfWork0(
+        db=db, 
+        region_service=regions,
+        country_service=countries,
+        location_service=locations,
+        department_service=departments,
+        job_service = jobs,
+        employee_service=employees,
+        job_history_service=job_history
+        )
     return service

@@ -5,10 +5,10 @@ from ..database import Base
 from .regions import RegionsService, RegionsService0
 from .countries import CountriesAsyncService, CountriesServices
 from .locations import LocationAsyncService, LocationsService
-from .departments import DepartmentsService
-from .jobs import JobsService
-from .employees import EmployeesService
-from .job_histories import JobHistoriesService
+from .departments import DeparmentAsyncService, DepartmentsService
+from .jobs import JobAsyncService, JobsService
+from .employees import EmployeeAsyncService, EmployeesService
+from .job_histories import JobHistoriesService, JobHistoryAsyncService
 from .users import UsersService
 
 class UnitOfWork:
@@ -43,11 +43,23 @@ class UnitOfWork:
                     self._db.refresh(item)
 
 class UnitOfWork0:
-    def __init__(self,db:AsyncSession,region_service:RegionsService0,country_service:CountriesAsyncService,location_service:LocationAsyncService) -> None:
+    def __init__(self,
+                    db:AsyncSession,
+                    region_service:RegionsService0,
+                    country_service:CountriesAsyncService,
+                    location_service:LocationAsyncService,
+                    department_service:DeparmentAsyncService,
+                    job_service:JobAsyncService,
+                    employee_service:EmployeeAsyncService,
+                    job_history_service:JobHistoryAsyncService) -> None:
         self._db = db
         self.regions = region_service
         self.countries = country_service
         self.locations = location_service
+        self.departments = department_service
+        self.jobs = job_service
+        self.employees = employee_service
+        self.job_history = job_history_service
         assert self._db == self.regions._db == self.countries._db == self.locations._db
     
     async def commit_async(self,instance=None):
