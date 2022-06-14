@@ -2,9 +2,10 @@ from fastapi import Depends, Query, HTTPException, status
 from sqlalchemy.orm import Session
 from sqlalchemy.ext.asyncio import AsyncSession
 
+
 from .services.employees import EmployeeAsyncService
 from .services.job_histories import JobHistoryAsyncService
-
+from .services.users import UsersAsyncService
 from .services.jobs import JobAsyncService
 
 from .services.departments import DeparmentAsyncService
@@ -237,6 +238,10 @@ async def get_job_history_service_async(db:AsyncSession=Depends(get_db_async))->
     service = JobHistoryAsyncService(db=db)
     return service
 
+async def get_users_service_async(db:AsyncSession=Depends(get_db_async))->UsersAsyncService:
+    service =UsersAsyncService(db=db)
+    return service
+
 async def get_unit_of_work_async(
         db: AsyncSession = Depends(get_db_async),
         regions: RegionsService0 = Depends(get_regions_service_async),
@@ -245,7 +250,8 @@ async def get_unit_of_work_async(
         departments:DeparmentAsyncService=Depends(get_department_service_async),
         jobs:JobAsyncService=Depends(get_jobs_service_async),
         employees:EmployeeAsyncService=Depends(get_employee_service_async),
-        job_history:JobHistoryAsyncService=Depends(get_job_history_service_async)) -> UnitOfWork0:
+        job_history:JobHistoryAsyncService=Depends(get_job_history_service_async),
+        users:UsersAsyncService=Depends(get_users_service_async)) -> UnitOfWork0:
 
     service = UnitOfWork0(
         db=db, 
@@ -255,6 +261,6 @@ async def get_unit_of_work_async(
         department_service=departments,
         job_service = jobs,
         employee_service=employees,
-        job_history_service=job_history
-        )
+        job_history_service=job_history,
+        user_service=users)
     return service

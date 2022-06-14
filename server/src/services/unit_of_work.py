@@ -9,7 +9,7 @@ from .departments import DeparmentAsyncService, DepartmentsService
 from .jobs import JobAsyncService, JobsService
 from .employees import EmployeeAsyncService, EmployeesService
 from .job_histories import JobHistoriesService, JobHistoryAsyncService
-from .users import UsersService
+from .users import UsersAsyncService, UsersService
 
 class UnitOfWork:
     def __init__(self,
@@ -51,7 +51,8 @@ class UnitOfWork0:
                     department_service:DeparmentAsyncService,
                     job_service:JobAsyncService,
                     employee_service:EmployeeAsyncService,
-                    job_history_service:JobHistoryAsyncService) -> None:
+                    job_history_service:JobHistoryAsyncService,
+                    user_service:UsersAsyncService) -> None:
         self._db = db
         self.regions = region_service
         self.countries = country_service
@@ -60,6 +61,7 @@ class UnitOfWork0:
         self.jobs = job_service
         self.employees = employee_service
         self.job_history = job_history_service
+        self.users = user_service
         assert self._db == self.regions._db == self.countries._db == self.locations._db
     
     async def commit_async(self,instance=None):
