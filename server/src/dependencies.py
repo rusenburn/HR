@@ -1,8 +1,9 @@
 from fastapi import Depends, Query, HTTPException, status
+from redis import Redis
 from sqlalchemy.orm import Session
 from sqlalchemy.ext.asyncio import AsyncSession
-
-
+from redis import asyncio as aioredis
+from .services.redis_cache import REDIS_URL, RedisCacheService
 from .services.employees import EmployeeAsyncService
 from .services.job_histories import JobHistoryAsyncService
 from .services.users import UsersAsyncService
@@ -40,7 +41,7 @@ from .database import SessionFactory, AsyncSessionFactory
 
 
 oauth2_schema = OAuth2PasswordBearer(tokenUrl="users/login", auto_error=False)
-
+redis = aioredis.from_url(REDIS_URL)
 
 def get_db() -> Session:
     db: Session = SessionFactory()
@@ -263,4 +264,9 @@ async def get_unit_of_work_async(
         employee_service=employees,
         job_history_service=job_history,
         user_service=users)
+    return service
+
+# redis
+async def get_cache_service()->RedisCacheService:
+    service = RedisCacheService(redis=redis)
     return service

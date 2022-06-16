@@ -1,12 +1,13 @@
 from fastapi import APIRouter, Depends, Query, HTTPException
 
+from ..services.redis_cache import RedisCacheService
 from ..services.unit_of_work import UnitOfWork0
 
 from ..models import Job
 from ..DTOs.jobs import JobDTO, JobCreate, JobUpdate
 from ..DTOs.nested import JobNested
 from ..mappers.job_mapper import JobMapper
-from ..dependencies import get_job_mapper, get_unit_of_work,get_base_query, get_unit_of_work_async, require_admin_user
+from ..dependencies import get_cache_service, get_job_mapper, get_unit_of_work,get_base_query, get_unit_of_work_async, require_admin_user
 from ..services import UnitOfWork
 
 router = APIRouter(
@@ -21,9 +22,12 @@ router = APIRouter(
 async def get_all(
         uow: UnitOfWork0 = Depends(get_unit_of_work_async),
         job_mapper: JobMapper = Depends(get_job_mapper),
+        cached:RedisCacheService=Depends(get_cache_service),
         query=Depends(get_base_query)):
-
-    jobs = await uow.jobs.get_all_async(**query)
+    jobs = await cached.get_jobs()
+    if jobs is None:
+        jobs = await uow.jobs.get_all_async(**query)
+        await cached.set_jobs(jobs)
     dtos = [job_mapper.from_model_to_nested(j) for j in jobs]
     return dtos
 

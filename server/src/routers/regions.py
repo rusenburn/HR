@@ -1,5 +1,6 @@
-import asyncio
 from fastapi import APIRouter, Body ,Depends,HTTPException
+
+from ..services.redis_cache import RedisCacheService
 
 
 from ..mappers.region_mapper import RegionMapper
@@ -9,7 +10,7 @@ from ..DTOs.regions import RegionDTO
 from ..DTOs.regions.region_create_dto import RegionCreateDTO
 from ..DTOs.regions.region_update_dto import RegionUpdateDTO
 from ..services.unit_of_work import UnitOfWork,UnitOfWork0
-from ..dependencies import get_unit_of_work_async, get_base_query, get_region_mapper, get_unit_of_work, require_admin_user
+from ..dependencies import get_unit_of_work_async, get_base_query, get_region_mapper, get_unit_of_work, require_admin_user,get_cache_service
 
 router = APIRouter(
     prefix="/regions",
@@ -25,10 +26,14 @@ router = APIRouter(
 @router.get("/",response_model=list[RegionNested])
 async def get_all(
     uow:UnitOfWork0=Depends(get_unit_of_work_async),
+    cache:RedisCacheService=Depends(get_cache_service),
     region_mapper:RegionMapper=Depends(get_region_mapper),
     query=Depends(get_base_query)
     ):
-    regions = await uow.regions.get_all_async(**query)
+    regions = await cache.get_regions()
+    if regions is None:
+        regions = await uow.regions.get_all_async(**query)
+        await cache.set_regions(regions)
     region_dtos = [region_mapper.from_model_to_nested(r) for r in regions]
     return region_dtos
 

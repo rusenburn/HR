@@ -1,11 +1,14 @@
 from copy import deepcopy
+from itertools import count
 from fastapi import APIRouter, Depends, HTTPException
+
+from ..services.redis_cache import RedisCacheService
 
 from ..DTOs.nested import CountryNested
 from ..DTOs.countries import CountryDTO, CountryCreateDTO, CountryUpdateDTO
 from ..mappers.country_mapper import CountryMapper
 from ..services.unit_of_work import UnitOfWork, UnitOfWork0
-from ..dependencies import get_unit_of_work, get_country_mapper, get_base_query, get_unit_of_work_async, require_admin_user
+from ..dependencies import get_cache_service, get_unit_of_work, get_country_mapper, get_base_query, get_unit_of_work_async, require_admin_user
 
 router = APIRouter(
     prefix="/countries",
@@ -29,8 +32,12 @@ async def get_one(country_id: int, uow: UnitOfWork0 = Depends(get_unit_of_work_a
 @router.get("/", response_model=list[CountryNested])
 async def get_all(uow: UnitOfWork0 = Depends(get_unit_of_work_async),
                   country_mapper: CountryMapper = Depends(get_country_mapper),
+                  cached:RedisCacheService = Depends(get_cache_service),
                   query=Depends(get_base_query)):
-    countries = await uow.countries.get_all_async(**query)
+    countries = await cached.get_countries()
+    if countries is None:
+        countries = await uow.countries.get_all_async(**query)
+        await cached.set_countries(countries)
     dtos = [country_mapper.from_model_to_nested(c) for c in countries]
     return dtos
 
