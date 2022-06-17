@@ -1,5 +1,5 @@
-from ..models import Region, Country, Department, Employee, Job, JobHistory, Location
-from ..DTOs.nested import RegionNested,CountryNested,DepartmentNested,LocationNested,JobHistoryNested,JobNested,EmployeeNested
+from models import Region, Country, Department, Employee, Job, JobHistory, Location
+from DTOs.nested import RegionNested,CountryNested,DepartmentNested,LocationNested,JobHistoryNested,JobNested,EmployeeNested
 
 
 class NestedMapper:

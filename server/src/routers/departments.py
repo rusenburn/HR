@@ -1,13 +1,13 @@
 from fastapi import APIRouter, Depends, Query, HTTPException
 
 
-from ..DTOs.nested import DepartmentNested
+from DTOs.nested import DepartmentNested
 
-from ..services.redis_cache import RedisCacheService
-from ..services.unit_of_work import UnitOfWork, UnitOfWork0
-from ..dependencies import get_cache_service, get_department_mapper, get_unit_of_work, get_unit_of_work_async, require_admin_user
-from ..mappers.department_mapper import DepartmentMapper
-from ..DTOs.departments import DepartmentDTO, DepartmentCreate, DepartmentUpdate
+from services.redis_cache import RedisCacheService
+from services.unit_of_work import UnitOfWork, UnitOfWork0
+from dependencies import get_cache_service, get_department_mapper, get_unit_of_work, get_unit_of_work_async, require_admin_user
+from mappers.department_mapper import DepartmentMapper
+from DTOs.departments import DepartmentDTO, DepartmentCreate, DepartmentUpdate
 
 
 router = APIRouter(

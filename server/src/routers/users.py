@@ -1,14 +1,14 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordRequestForm
 
-from ..services.unit_of_work import UnitOfWork0
-from ..mappers.user_mapper import UserMapper
-from ..services import UsersService, CryptService, UnitOfWork
-from ..services.jwt import JwtContainer, JwtService
+from services.unit_of_work import UnitOfWork0
+from mappers.user_mapper import UserMapper
+from services import UsersService, CryptService, UnitOfWork
+from services.jwt import JwtContainer, JwtService
 
-from ..DTOs.users import UserCreateDTO, UserDTO
-from ..DTOs.tokens import TokenDTO
-from ..dependencies import get_crypt_service, get_jwt_service, get_unit_of_work, get_unit_of_work_async, get_users_mapper, get_users_service, require_logged_in_user
+from DTOs.users import UserCreateDTO, UserDTO
+from DTOs.tokens import TokenDTO
+from dependencies import get_crypt_service, get_jwt_service, get_unit_of_work, get_unit_of_work_async, get_users_mapper, get_users_service, require_logged_in_user
 
 router = APIRouter(
     prefix="/users",

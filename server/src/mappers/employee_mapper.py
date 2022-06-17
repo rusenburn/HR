@@ -1,6 +1,6 @@
-from ..models import Employee
-from ..DTOs.nested import EmployeeNested
-from ..DTOs.employees import EmployeeCreate, EmployeeDTO, EmployeeUpdate
+from models import Employee
+from DTOs.nested import EmployeeNested
+from DTOs.employees import EmployeeCreate, EmployeeDTO, EmployeeUpdate
 from .nested_mapper import NestedMapper
 
 class EmployeeMapper:

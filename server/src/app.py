@@ -1,5 +1,5 @@
 from fastapi import FastAPI, Depends
-from .routers import (
+from routers import (
     regions,
     countries,
     locations,
@@ -10,7 +10,6 @@ from .routers import (
     users
 )
 from fastapi.middleware.cors import CORSMiddleware
-
 
 app = FastAPI()
 

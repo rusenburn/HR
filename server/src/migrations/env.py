@@ -3,19 +3,19 @@ from venv import create
 
 from sqlalchemy import create_engine, engine_from_config
 from sqlalchemy import pool
-from src.database import DATABASE_URL,Base
+from database import DATABASE_URL,Base
 from alembic import context
 
 # Imported Models 
-from src.models.regions import Region
-from src.models.countries import Country
-from src.models.locations import Location
-from src.models.departments import Department
-from src.models.jobs import Job
-from src.models.employee import Employee
-from src.models.job_history import JobHistory
-from src.models.users import User
-# from src.models.departments_manager import DepartmentsManager
+
+from models.regions import Region
+from models.countries import Country
+from models.locations import Location
+from models.departments import Department
+from models.jobs import Job
+from models.employee import Employee
+from models.job_history import JobHistory
+from models.users import User
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.

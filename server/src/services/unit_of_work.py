@@ -1,6 +1,6 @@
 from sqlalchemy.orm import Session
 from sqlalchemy.ext.asyncio import AsyncSession
-from ..database import Base
+from database import Base
 
 from .regions import RegionsService, RegionsService0
 from .countries import CountriesAsyncService, CountriesServices

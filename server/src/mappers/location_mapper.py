@@ -1,6 +1,6 @@
-from ..DTOs.locations import LocationUpdate, LocationDTO, LocationCreate
-from ..DTOs.nested import LocationNested
-from ..models import Location
+from DTOs.locations import LocationUpdate, LocationDTO, LocationCreate
+from DTOs.nested import LocationNested
+from models import Location
 from .nested_mapper import NestedMapper
 
 class LocationMapper():

@@ -1,6 +1,6 @@
-from ..models import JobHistory,Employee
-from ..DTOs.nested import JobHistoryNested
-from ..DTOs.job_histories import JobHistoryCreate,JobHistoryDTO,JobHistoryUpdate
+from models import JobHistory,Employee
+from DTOs.nested import JobHistoryNested
+from DTOs.job_histories import JobHistoryCreate,JobHistoryDTO,JobHistoryUpdate
 from .nested_mapper import NestedMapper
 
 class JobHistoryMapper():

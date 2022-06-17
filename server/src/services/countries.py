@@ -4,7 +4,7 @@ from sqlalchemy.orm.query import Query
 from sqlalchemy.future import select
 from sqlalchemy import update, delete
 from sqlalchemy.ext.asyncio import AsyncSession
-from ..models import Country
+from models import Country
 
 
 class CountriesServices:

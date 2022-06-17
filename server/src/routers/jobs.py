@@ -1,14 +1,14 @@
 from fastapi import APIRouter, Depends, Query, HTTPException
 
-from ..services.redis_cache import RedisCacheService
-from ..services.unit_of_work import UnitOfWork0
+from services.redis_cache import RedisCacheService
+from services.unit_of_work import UnitOfWork0
 
-from ..models import Job
-from ..DTOs.jobs import JobDTO, JobCreate, JobUpdate
-from ..DTOs.nested import JobNested
-from ..mappers.job_mapper import JobMapper
-from ..dependencies import get_cache_service, get_job_mapper, get_unit_of_work,get_base_query, get_unit_of_work_async, require_admin_user
-from ..services import UnitOfWork
+from models import Job
+from DTOs.jobs import JobDTO, JobCreate, JobUpdate
+from DTOs.nested import JobNested
+from mappers.job_mapper import JobMapper
+from dependencies import get_cache_service, get_job_mapper, get_unit_of_work,get_base_query, get_unit_of_work_async, require_admin_user
+from services import UnitOfWork
 
 router = APIRouter(
     prefix="/jobs",

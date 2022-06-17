@@ -1,6 +1,6 @@
-from ..DTOs.regions import RegionCreateDTO,RegionUpdateDTO,RegionDTO
-from ..DTOs.nested import RegionNested
-from ..models.regions import Region
+from DTOs.regions import RegionCreateDTO,RegionUpdateDTO,RegionDTO
+from DTOs.nested import RegionNested
+from models.regions import Region
 from .nested_mapper import NestedMapper
 
 class RegionMapper:

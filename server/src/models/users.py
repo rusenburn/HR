@@ -1,6 +1,6 @@
 from tokenize import String
 import sqlalchemy as sa
-from ..database import Base
+from database import Base
 import uuid
 
 def generate_uuid()->str:

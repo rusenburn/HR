@@ -1,6 +1,6 @@
-from ..models import User
-from ..DTOs.users import UserDTO,UserCreateDTO
-from ..services import CryptService
+from models import User
+from DTOs.users import UserDTO,UserCreateDTO
+from services import CryptService
 class UserMapper:
     def __init__(self,crypt_service:CryptService) -> None:
         self._crypt_service = crypt_service

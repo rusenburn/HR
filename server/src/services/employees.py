@@ -3,7 +3,7 @@ from sqlalchemy.orm import Session, joinedload,selectinload,Query
 from sqlalchemy import update,delete
 from sqlalchemy.future import select
 from sqlalchemy.ext.asyncio import AsyncSession
-from ..models import Employee
+from models import Employee
 
 
 class EmployeesService():

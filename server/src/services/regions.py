@@ -1,6 +1,6 @@
 from argparse import ArgumentError
 from sqlalchemy.orm import Session, joinedload, selectinload
-from ..models import Region
+from models import Region
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 from sqlalchemy.orm.query import Query

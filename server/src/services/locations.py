@@ -4,7 +4,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 from sqlalchemy import select , update, delete
 
-from ..models import Location
+from models import Location
 
 
 class LocationsService():

@@ -1,7 +1,7 @@
 from .nested_mapper import NestedMapper
-from ..DTOs.countries import CountryDTO,CountryCreateDTO,CountryUpdateDTO
-from ..DTOs.nested import CountryNested
-from ..models import Country
+from DTOs.countries import CountryDTO,CountryCreateDTO,CountryUpdateDTO
+from DTOs.nested import CountryNested
+from models import Country
 
 
 class CountryMapper:

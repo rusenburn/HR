@@ -1,16 +1,16 @@
 from fastapi import APIRouter, Body ,Depends,HTTPException
 
-from ..services.redis_cache import RedisCacheService
+from services.redis_cache import RedisCacheService
 
 
-from ..mappers.region_mapper import RegionMapper
-from ..mappers.nested_mapper import NestedMapper
-from ..DTOs.nested import RegionNested
-from ..DTOs.regions import RegionDTO
-from ..DTOs.regions.region_create_dto import RegionCreateDTO
-from ..DTOs.regions.region_update_dto import RegionUpdateDTO
-from ..services.unit_of_work import UnitOfWork,UnitOfWork0
-from ..dependencies import get_unit_of_work_async, get_base_query, get_region_mapper, get_unit_of_work, require_admin_user,get_cache_service
+from mappers.region_mapper import RegionMapper
+from mappers.nested_mapper import NestedMapper
+from DTOs.nested import RegionNested
+from DTOs.regions import RegionDTO
+from DTOs.regions.region_create_dto import RegionCreateDTO
+from DTOs.regions.region_update_dto import RegionUpdateDTO
+from services.unit_of_work import UnitOfWork,UnitOfWork0
+from dependencies import get_unit_of_work_async, get_base_query, get_region_mapper, get_unit_of_work, require_admin_user,get_cache_service
 
 router = APIRouter(
     prefix="/regions",

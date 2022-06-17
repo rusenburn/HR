@@ -3,29 +3,29 @@ from redis import Redis
 from sqlalchemy.orm import Session
 from sqlalchemy.ext.asyncio import AsyncSession
 from redis import asyncio as aioredis
-from .services.redis_cache import REDIS_URL, RedisCacheService
-from .services.employees import EmployeeAsyncService
-from .services.job_histories import JobHistoryAsyncService
-from .services.users import UsersAsyncService
-from .services.jobs import JobAsyncService
+from services.redis_cache import REDIS_URL, RedisCacheService
+from services.employees import EmployeeAsyncService
+from services.job_histories import JobHistoryAsyncService
+from services.users import UsersAsyncService
+from services.jobs import JobAsyncService
 
-from .services.departments import DeparmentAsyncService
-from .services.locations import LocationAsyncService
-from .services.countries import CountriesAsyncService
-from .services.unit_of_work import UnitOfWork0
-from .services.regions import RegionsService0
-from .services.jwt import JwtContainer, JwtService
+from services.departments import DeparmentAsyncService
+from services.locations import LocationAsyncService
+from services.countries import CountriesAsyncService
+from services.unit_of_work import UnitOfWork0
+from services.regions import RegionsService0
+from services.jwt import JwtContainer, JwtService
 from fastapi.security import OAuth2PasswordBearer
-from .mappers.job_mapper import JobMapper
-from .mappers.department_mapper import DepartmentMapper
-from .mappers.location_mapper import LocationMapper
-from .mappers.country_mapper import CountryMapper
-from .mappers.region_mapper import RegionMapper
-from .mappers.employee_mapper import EmployeeMapper
-from .mappers.job_history_mapper import JobHistoryMapper
-from .mappers.nested_mapper import NestedMapper
-from .mappers.user_mapper import UserMapper
-from .services import (
+from mappers.job_mapper import JobMapper
+from mappers.department_mapper import DepartmentMapper
+from mappers.location_mapper import LocationMapper
+from mappers.country_mapper import CountryMapper
+from mappers.region_mapper import RegionMapper
+from mappers.employee_mapper import EmployeeMapper
+from mappers.job_history_mapper import JobHistoryMapper
+from mappers.nested_mapper import NestedMapper
+from mappers.user_mapper import UserMapper
+from services import (
     CountriesServices,
     UnitOfWork,
     RegionsService,
@@ -37,7 +37,7 @@ from .services import (
     UsersService,
     CryptService)
 
-from .database import SessionFactory, AsyncSessionFactory
+from database import SessionFactory, AsyncSessionFactory
 
 
 oauth2_schema = OAuth2PasswordBearer(tokenUrl="users/login", auto_error=False)

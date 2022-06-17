@@ -1,11 +1,11 @@
 from datetime import datetime
 from fastapi import APIRouter, Depends, HTTPException, Query
 
-from ..services.unit_of_work import UnitOfWork, UnitOfWork0
-from ..mappers.job_history_mapper import JobHistoryMapper
-from ..DTOs.job_histories import JobHistoryCreate, JobHistoryDTO,JobHistoryUpdate
-from ..models import JobHistory
-from ..dependencies import get_job_history_mapper, get_unit_of_work, get_unit_of_work_async, require_admin_user
+from services.unit_of_work import UnitOfWork, UnitOfWork0
+from mappers.job_history_mapper import JobHistoryMapper
+from DTOs.job_histories import JobHistoryCreate, JobHistoryDTO,JobHistoryUpdate
+from models import JobHistory
+from dependencies import get_job_history_mapper, get_unit_of_work, get_unit_of_work_async, require_admin_user
 
 router = APIRouter(
     prefix="/job-history",

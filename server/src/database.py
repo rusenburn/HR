@@ -18,13 +18,10 @@ if "DB_SERVER" in os.environ:
     DB_SERVER = os.environ["DB_SERVER"]
 
 
-# DATABASE_URL = "sqlite:///./sql_app.db"
 DATABASE_URL = f"mysql+pymysql://root:{DB_PASSWORD}@{DB_SERVER}/{DB_NAME}"
 ASYNC_DATABASE_URL = f"mysql+asyncmy://root:{DB_PASSWORD}@{DB_SERVER}/{DB_NAME}"
 print(DATABASE_URL)
 print(ASYNC_DATABASE_URL)
-# DATABASE_URL = "sqlite:///:memory:"
-# DATABASE_URL = "postgresql://user:password@postgresserver/db"
 
 engine = create_engine(DATABASE_URL,pool_recycle=3600)
 

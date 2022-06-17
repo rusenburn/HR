@@ -1,10 +1,10 @@
 from fastapi import APIRouter, Depends, Query, HTTPException, status
 
-from ..DTOs.locations import LocationCreate, LocationDTO, LocationUpdate
-from ..DTOs.nested import LocationNested
-from ..services.unit_of_work import UnitOfWork, UnitOfWork0
-from ..mappers.location_mapper import LocationMapper
-from ..dependencies import get_location_mapper, get_unit_of_work, get_unit_of_work_async, require_admin_user
+from DTOs.locations import LocationCreate, LocationDTO, LocationUpdate
+from DTOs.nested import LocationNested
+from services.unit_of_work import UnitOfWork, UnitOfWork0
+from mappers.location_mapper import LocationMapper
+from dependencies import get_location_mapper, get_unit_of_work, get_unit_of_work_async, require_admin_user
 
 router = APIRouter(
     prefix="/locations",

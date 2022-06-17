@@ -3,7 +3,7 @@ from sqlalchemy.orm import Session, joinedload,Query,selectinload
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 from sqlalchemy import update,delete
-from ..models import Department
+from models import Department
 
 
 

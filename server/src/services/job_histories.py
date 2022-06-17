@@ -5,7 +5,7 @@ from sqlalchemy import update,delete
 from sqlalchemy.future import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from ..models import JobHistory
+from models import JobHistory
 
 
 class JobHistoriesService():

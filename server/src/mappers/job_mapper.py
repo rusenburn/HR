@@ -1,6 +1,6 @@
-from ..models import Job
-from ..DTOs.nested import JobNested
-from ..DTOs.jobs import JobCreate,JobDTO,JobUpdate
+from models import Job
+from DTOs.nested import JobNested
+from DTOs.jobs import JobCreate,JobDTO,JobUpdate
 from .nested_mapper import NestedMapper
 class JobMapper():
     def __init__(self,nested:NestedMapper) -> None:

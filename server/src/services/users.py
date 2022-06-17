@@ -2,7 +2,7 @@ from sqlalchemy.orm import Session,Query
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import update,delete,func
 from sqlalchemy.future import select
-from ..models import User
+from models import User
 
 
 class UsersService:

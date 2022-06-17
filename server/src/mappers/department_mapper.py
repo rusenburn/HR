@@ -1,6 +1,6 @@
-from ..models import Department
-from ..DTOs.nested import DepartmentNested
-from ..DTOs.departments import DepartmentCreate,DepartmentUpdate,DepartmentDTO
+from models import Department
+from DTOs.nested import DepartmentNested
+from DTOs.departments import DepartmentCreate,DepartmentUpdate,DepartmentDTO
 from .nested_mapper import NestedMapper
 
 class DepartmentMapper():
