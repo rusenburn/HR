@@ -84,7 +84,7 @@ async def update_one(
 
 @router.delete("/{region_id}",status_code=204)
 async def delete_one(region_id : int ,uow:UnitOfWork0=Depends(get_unit_of_work_async)):
-    model = uow.regions.get_one_async(region_id)
+    model = await uow.regions.get_one_async(region_id)
     if model is None:
         raise HTTPException(status_code=404)
     await uow.regions.delete_one_async(region_id)

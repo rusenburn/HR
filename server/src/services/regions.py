@@ -37,7 +37,7 @@ class RegionsService0:
 
     async def create_one_async(self, region: Region):
         if not isinstance(region,Region):
-            raise ArgumentError(region,"argument must be a Region Type.")
+            raise TypeError("TypeError: region argument must be a Region Type.")
         self._db.add(region)
 
     async def get_one_async(self, region_id: int) -> Region:
