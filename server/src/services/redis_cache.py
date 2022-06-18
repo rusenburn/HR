@@ -3,8 +3,9 @@ import os
 import redis
 from redis.asyncio.client import Redis
 
-from models import Region, Country, Job, Employee, Department, JobHistory
+from models import Region, Country, Job, Employee, Department, JobHistory,Location
 import pickle
+
 
 REDIS_URL = "redis://localhost"
 CACHE_TIME_IN_MINUTES = 5
@@ -141,6 +142,32 @@ class RedisCacheService:
         except redis.exceptions.ConnectionError:
             self._increase_connection()
             return None
+
+    async def get_locations(self)->list[Location]:
+        if datetime.utcnow() < self._next_connection_attemp:
+            return None
+        try:
+            encoded = await self._db.get("locations")
+            if encoded is None:
+                return encoded
+            locations = pickle.loads(encoded)
+            return locations
+        except redis.exceptions.ConnectionError:
+            self._increase_connection()
+            return None
+
+    async def set_locations(self,locations:list[Location]):
+        if locations is None:
+            raise TypeError("TypeError: Cannot cache null objects.")
+        if datetime.utcnow() < self._next_connection_attemp:
+            return
+        if not self._connection:
+            return
+        try:
+            encoded = pickle.dumps(locations)
+            await self._db.set("locations", encoded, CACHE_TIME_IN_MINUTES*60)
+        except redis.exceptions.ConnectionError:
+            self._connection = False
 
     @classmethod
     def _increase_connection(cls):

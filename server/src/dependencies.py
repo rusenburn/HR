@@ -54,6 +54,12 @@ def get_db() -> Session:
 def get_base_query(limit: int = 100, skip: int = 0):
     return {"limit": limit, "skip": skip}
 
+def get_location_query(
+        base_query = Depends(get_base_query),
+        country_id:int | None= Query(0,alias="countryId")):
+        return {
+            **base_query,
+            "country_id":country_id}
 
 def get_employee_query(
         base_Query=Depends(get_base_query),

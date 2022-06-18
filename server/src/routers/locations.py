@@ -1,10 +1,12 @@
 from fastapi import APIRouter, Depends, Query, HTTPException, status
 
 from DTOs.locations import LocationCreate, LocationDTO, LocationUpdate
+from services.redis_cache import RedisCacheService
 from DTOs.nested import LocationNested
 from services.unit_of_work import UnitOfWork, UnitOfWork0
 from mappers.location_mapper import LocationMapper
-from dependencies import get_location_mapper, get_unit_of_work, get_unit_of_work_async, require_admin_user
+from dependencies import get_location_mapper, get_unit_of_work, get_unit_of_work_async, require_admin_user,get_cache_service,get_location_query
+
 
 router = APIRouter(
     prefix="/locations",
@@ -17,11 +19,14 @@ router = APIRouter(
 
 
 @router.get("/", response_model=list[LocationNested])
-async def get_all(country_id: int = Query(0), skip: int = Query(0), limit: int = Query(100),
+async def get_all(query=Depends(get_location_query),
             uow: UnitOfWork0 = Depends(get_unit_of_work_async),
-            location_mapper: LocationMapper = Depends(get_location_mapper)):
-    locations = await uow.locations.get_all_async(
-        country_id=country_id, skip=skip, limit=limit)
+            location_mapper: LocationMapper = Depends(get_location_mapper),
+            cached:RedisCacheService=Depends(get_cache_service)):
+    locations = await cached.get_locations()
+    if locations is None:
+        locations = await uow.locations.get_all_async(**query)
+        await cached.set_locations(locations)
     dtos = [location_mapper.from_model_to_nested(l) for l in locations]
     return dtos
 
@@ -43,6 +48,10 @@ async def create_one(location_create: LocationCreate,
                uow: UnitOfWork0 = Depends(get_unit_of_work_async),
                location_mapper: LocationMapper =Depends(get_location_mapper)
                ):
+    country = await uow.countries.get_one_async(location_create.country_id)
+    if country is None:
+        raise HTTPException(status_code=400,detail={"description": "countryId does not exist"})
+
     location = location_mapper.from_create_to_model(location_create)
     await uow.locations.create_one_async(location)
     await uow.commit_async()
@@ -73,5 +82,8 @@ async def update_one(location_update: LocationUpdate,
 async def delete_one(location_id: int,
                uow: UnitOfWork0 = Depends(get_unit_of_work_async),
                ):
+    location = await uow.locations.get_one_async(location_id)
+    if location is None:
+        raise HTTPException(status_code=404)
     await  uow.locations.delete_one_async(location_id)
     await uow.commit_async()
