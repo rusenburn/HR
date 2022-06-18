@@ -5,15 +5,18 @@ from fastapi import HTTPException
 from DTOs.nested import RegionNested
 from DTOs.regions.region_dto import RegionDTO
 from routers.regions import create_one,update_one,get_one,get_all,delete_one
+from services.unit_of_work import UnitOfWork0
+from services.redis_cache import RedisCacheService
+from mappers.region_mapper import RegionMapper
 from tests.factory import Factory
 
 class TestRegionsRouter(IsolatedAsyncioTestCase):
     def setUp(self) -> None:
         self.factory = Factory()
-        self.uow= AsyncMock()
-        self.uow.regions = AsyncMock()
-        self.cache = AsyncMock()
-        self.region_mapper =AsyncMock()
+        self.uow : UnitOfWork0 | Mock= Mock()
+        self.uow.regions = Mock()
+        self.cache: RedisCacheService | Mock = Mock()
+        self.region_mapper : RegionMapper|Mock  = Mock()
     
     def tearDown(self) -> None:
         ...
@@ -146,7 +149,7 @@ class TestRegionsRouter(IsolatedAsyncioTestCase):
         result = await update_one(region_update_dto=update_dto,uow=self.uow,region_mapper=self.region_mapper)
 
         self.assertEqual(dto,result)
-        self.uow.regions.get_one_async.assert_awaited_once_with(existed_region.region_id)
+        self.uow.regions.get_one_async.assert_awaited_once_with(update_dto.region_id)
         self.uow.regions.update_one_async.assert_awaited_once_with(region_to_update)
         self.uow.commit_async.assert_awaited_once()
         self.region_mapper.from_update_to_model.assert_called_once_with(update_dto,existed_region)

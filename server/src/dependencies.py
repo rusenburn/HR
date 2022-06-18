@@ -61,6 +61,12 @@ def get_location_query(
             **base_query,
             "country_id":country_id}
 
+def get_department_query(
+    base_query = Depends(get_base_query),
+    location_id:int|None = Query(0,alias="locationId")):
+    return {**base_query,
+        "location_id" : location_id}
+
 def get_employee_query(
         base_Query=Depends(get_base_query),
         department_id: int | None = Query(0, alias="departmentId"),
