@@ -1,6 +1,5 @@
 from unittest.async_case import IsolatedAsyncioTestCase
-from unittest.mock import MagicMock, Mock, AsyncMock
-from fastapi.testclient import TestClient
+from unittest.mock import Mock, AsyncMock
 from fastapi import HTTPException
 from services.unit_of_work import UnitOfWork0
 from mappers.department_mapper import DepartmentMapper
@@ -8,7 +7,7 @@ from services.redis_cache import RedisCacheService
 from DTOs.departments.department_update_dto import DepartmentUpdate
 from models.departments import Department
 from tests.factory import Factory
-from routers import departments as DepartmentRouter
+from routers import departments as department_router
 
 
 class DepartmentRouterTest(IsolatedAsyncioTestCase):
@@ -31,7 +30,7 @@ class DepartmentRouterTest(IsolatedAsyncioTestCase):
         self.uow.departments.get_one_async = AsyncMock(return_value=None)
 
         with self.assertRaises(HTTPException) as ex:
-            await DepartmentRouter.get_one(department_id=department_id,uow=self.uow,department_mapper=self.department_mapper)
+            await department_router.get_one(department_id=department_id,uow=self.uow,department_mapper=self.department_mapper)
         
         self.assertEqual(ex.exception.status_code, 404)
         self.uow.departments.get_one_async.assert_awaited_once_with(department_id)
@@ -49,7 +48,7 @@ class DepartmentRouterTest(IsolatedAsyncioTestCase):
         self.uow.departments.get_one_async = AsyncMock(return_value=service_result)
         self.department_mapper.from_model_to_dto =Mock(return_value=mapper_result)
 
-        result= await DepartmentRouter.get_one(department_id=department_id,department_mapper=self.department_mapper,uow=self.uow)
+        result= await department_router.get_one(department_id=department_id,department_mapper=self.department_mapper,uow=self.uow)
 
         self.assertEqual(mapper_result,result)
         self.uow.departments.get_one_async.assert_awaited_once_with(department_id)
@@ -68,7 +67,7 @@ class DepartmentRouterTest(IsolatedAsyncioTestCase):
         self.uow.departments.get_all_async = AsyncMock()
         self.department_mapper = Mock(side_effect=lambda x : self.factory.make_department_nested())
 
-        result = await DepartmentRouter.get_all({},department_mapper=self.department_mapper,uow=self.uow,cached=self.cache)
+        result = await department_router.get_all({},department_mapper=self.department_mapper,uow=self.uow,cached=self.cache)
 
         self.assertEqual(len(result),l)
         self.cache.get_departments.assert_awaited_once()
@@ -90,7 +89,7 @@ class DepartmentRouterTest(IsolatedAsyncioTestCase):
         self.cache.set_departments = AsyncMock()
         self.department_mapper = Mock(side_effect=lambda x : self.factory.make_department_nested())
 
-        result = await DepartmentRouter.get_all({},department_mapper=self.department_mapper,uow=self.uow,cached=self.cache)
+        result = await department_router.get_all({},department_mapper=self.department_mapper,uow=self.uow,cached=self.cache)
 
         self.cache.get_departments.assert_awaited_once()
         self.uow.departments.get_all_async.assert_awaited_once()
@@ -109,7 +108,7 @@ class DepartmentRouterTest(IsolatedAsyncioTestCase):
         self.uow.locations.get_one_async = AsyncMock(return_value=None)
 
         with self.assertRaises(HTTPException) as ex:
-            await DepartmentRouter.create_one(department_create=create_dto,department_mapper=self.department_mapper,uow=self.uow)
+            await department_router.create_one(department_create=create_dto,department_mapper=self.department_mapper,uow=self.uow)
         
         self.assertEqual(ex.exception.status_code,400)
         self.uow.locations.get_one_async.assert_called_once_with(create_dto.location_id)
@@ -132,7 +131,7 @@ class DepartmentRouterTest(IsolatedAsyncioTestCase):
         self.uow.departments.create_one_async = AsyncMock()
         self.department_mapper.from_model_to_nested = Mock(return_value=to_nested_result)
 
-        result = await DepartmentRouter.create_one(department_create=create_dto,department_mapper=self.department_mapper,uow=self.uow)
+        result = await department_router.create_one(department_create=create_dto,department_mapper=self.department_mapper,uow=self.uow)
 
         self.assertEqual(result,to_nested_result)
         self.uow.locations.get_one_async.assert_awaited_once_with(create_dto.location_id)
@@ -151,7 +150,7 @@ class DepartmentRouterTest(IsolatedAsyncioTestCase):
         self.uow.departments.get_one_async = AsyncMock(return_value=None)
 
         with self.assertRaises(HTTPException) as ex:
-            await DepartmentRouter.update_one(department_update=update_dto,department_mapper=self.department_mapper,uow=self.uow)
+            await department_router.update_one(department_update=update_dto,department_mapper=self.department_mapper,uow=self.uow)
         
         self.assertEqual(ex.exception.status_code,404)
         
@@ -171,7 +170,7 @@ class DepartmentRouterTest(IsolatedAsyncioTestCase):
         self.uow.locations.get_one_async = AsyncMock(return_value=None)
 
         with self.assertRaises(HTTPException) as ex:
-            await DepartmentRouter.update_one(department_update=update_dto,department_mapper=self.department_mapper,uow=self.uow)
+            await department_router.update_one(department_update=update_dto,department_mapper=self.department_mapper,uow=self.uow)
         
         self.assertEqual(ex.exception.status_code,400)
         self.uow.locations.get_one_async.assert_awaited_once_with(update_dto.location_id)
@@ -195,7 +194,7 @@ class DepartmentRouterTest(IsolatedAsyncioTestCase):
 
         self.uow.departments.update_one_async = AsyncMock()
         self.uow.commit_async = AsyncMock()
-        result = await DepartmentRouter.update_one(department_update=update_dto,department_mapper=self.department_mapper,uow=self.uow)
+        result = await department_router.update_one(department_update=update_dto,department_mapper=self.department_mapper,uow=self.uow)
 
         self.uow.departments.get_one_async.assert_awaited_once_with(update_dto.department_id)
         self.uow.locations.get_one_async.assert_awaited_once_with(update_dto.location_id)
@@ -216,7 +215,7 @@ class DepartmentRouterTest(IsolatedAsyncioTestCase):
         self.uow.departments.get_one_async = AsyncMock(return_value=None)
 
         with self.assertRaises(HTTPException) as ex:
-            await DepartmentRouter.delete_one(department_id,uow=self.uow)
+            await department_router.delete_one(department_id,uow=self.uow)
         self.assertEqual(ex.exception.status_code, 404)
         self.uow.departments.get_one_async.assert_awaited_once_with(department_id)
     
@@ -232,7 +231,7 @@ class DepartmentRouterTest(IsolatedAsyncioTestCase):
         self.uow.commit_async = AsyncMock()
         self.uow.departments.delete_one_async = AsyncMock()
 
-        await DepartmentRouter.delete_one(department_id=department_id,uow=self.uow)
+        await department_router.delete_one(department_id=department_id,uow=self.uow)
 
         self.uow.departments.delete_one_async.assert_awaited_once_with(department_id)
         self.uow.commit_async.assert_awaited_once()
