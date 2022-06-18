@@ -75,7 +75,7 @@ async def update_one(update_dto: CountryNested,
                 "description": f"region_id [{update_dto.region_id}] must be a valid region"})
 
     model = country_mapper.from_update_to_model(update_dto, model)
-    res = await uow.countries.update_one_async(model)
+    await uow.countries.update_one_async(model)
     await uow.commit_async(model)
     print(model.country_name)
     dto = country_mapper.from_model_to_nested(model)
