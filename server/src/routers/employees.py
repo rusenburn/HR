@@ -2,8 +2,6 @@ from fastapi import APIRouter, Depends, HTTPException, Query
 
 from services.redis_cache import RedisCacheService
 
-
-
 from models import Employee
 from DTOs.employees import EmployeeCreate, EmployeeDTO, EmployeeUpdate
 from DTOs.nested import EmployeeNested
@@ -24,10 +22,10 @@ router = APIRouter(
 
 @router.get("/", response_model=list[EmployeeNested])
 async def get_all(
-            uow: UnitOfWork0 = Depends(get_unit_of_work_async),
-            employeeQuery=Depends(get_employee_query),
-            cached:RedisCacheService=Depends(get_cache_service),
-            employee_mapper: EmployeeMapper = Depends(get_employee_mapper)):
+        uow: UnitOfWork0 = Depends(get_unit_of_work_async),
+        employeeQuery=Depends(get_employee_query),
+        cached: RedisCacheService = Depends(get_cache_service),
+        employee_mapper: EmployeeMapper = Depends(get_employee_mapper)):
     employees = await cached.get_employees()
     if employees is None:
         employees = await uow.employees.get_all_async(**employeeQuery)
@@ -38,9 +36,10 @@ async def get_all(
 
 @router.get("/{employee_id}", response_model=EmployeeDTO)
 async def get_one(employee_id: int,
-            uow: UnitOfWork0 = Depends(get_unit_of_work_async),
-            employee_mapper: EmployeeMapper = Depends(get_employee_mapper)
-            ):
+                  uow: UnitOfWork0 = Depends(get_unit_of_work_async),
+                  employee_mapper: EmployeeMapper = Depends(
+                      get_employee_mapper)
+                  ):
 
     employee = await uow.employees.get_one_async(employee_id)
     if employee is None:
@@ -52,9 +51,10 @@ async def get_one(employee_id: int,
 
 @router.post("/", response_model=EmployeeNested, status_code=201)
 async def create_one(create_dto: EmployeeCreate,
-               uow: UnitOfWork0 = Depends(get_unit_of_work_async),
-               employee_mapper: EmployeeMapper = Depends(get_employee_mapper)
-               ):
+                     uow: UnitOfWork0 = Depends(get_unit_of_work_async),
+                     employee_mapper: EmployeeMapper = Depends(
+                         get_employee_mapper)
+                     ):
     employee = employee_mapper.from_create_to_model(create_dto)
     await uow.employees.create_one_async(employee)
     await uow.commit_async(employee)
@@ -64,11 +64,17 @@ async def create_one(create_dto: EmployeeCreate,
 
 @router.put("/", response_model=EmployeeNested)
 async def update_one(update_dto: EmployeeUpdate,
-               uow: UnitOfWork0 = Depends(get_unit_of_work_async),
-               employee_mapper: EmployeeMapper = Depends(get_employee_mapper)):
+                     uow: UnitOfWork0 = Depends(get_unit_of_work_async),
+                     employee_mapper: EmployeeMapper = Depends(get_employee_mapper)):
     employee = await uow.employees.get_one_async(update_dto.employee_id)
     if employee is None:
         raise HTTPException(status_code=404)
+
+    if update_dto.manager_id and update_dto.manager_id != employee.manager_id:
+        manager = await uow.employees.get_one_async(update_dto.manager_id)
+        if manager is None:
+            raise HTTPException(status_code=400, detail={
+                                "description": "manager does not exist"})
 
     employee = employee_mapper.from_update_to_model(update_dto, employee)
     await uow.employees.update_one_async(employee)
@@ -79,7 +85,7 @@ async def update_one(update_dto: EmployeeUpdate,
 
 @router.delete("/{employee_id}", status_code=204)
 async def delete_one(employee_id: int,
-               uow: UnitOfWork0 = Depends(get_unit_of_work_async),
-               ):
+                     uow: UnitOfWork0 = Depends(get_unit_of_work_async),
+                     ):
     await uow.employees.delete_one_async(employee_id)
     await uow.commit_async()
