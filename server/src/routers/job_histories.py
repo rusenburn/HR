@@ -5,7 +5,8 @@ from services.unit_of_work import UnitOfWork, UnitOfWork0
 from mappers.job_history_mapper import JobHistoryMapper
 from DTOs.job_histories import JobHistoryCreate, JobHistoryDTO,JobHistoryUpdate
 from models import JobHistory
-from dependencies import get_job_history_mapper, get_unit_of_work, get_unit_of_work_async, require_admin_user
+from dependencies import get_job_history_mapper, get_unit_of_work, get_unit_of_work_async, require_admin_user,get_job_history_query,get_cache_service
+from services.redis_cache import RedisCacheService
 
 router = APIRouter(
     prefix="/job-history",
@@ -19,12 +20,15 @@ router = APIRouter(
 
 @router.get("/", response_model=list[JobHistoryDTO])
 async def get_all(
-        skip: int = 0, limit: int = 100, employee_id: int = 0, department_id: int = 0, job_id: int = 0,
+        query:dict=Depends(get_job_history_query),
         job_history_mapper: JobHistoryMapper = Depends(get_job_history_mapper),
-        uow: UnitOfWork0 = Depends(get_unit_of_work_async)):
+        uow: UnitOfWork0 = Depends(get_unit_of_work_async),
+        cache:RedisCacheService = Depends(get_cache_service)):
 
-    histories = await uow.job_history.get_all_async(
-        employee_id=employee_id, skip=skip, limit=limit, job_id=job_id, department_id=department_id)
+    histories = await cache.get_job_history()
+    if histories is None:
+        histories = await uow.job_history.get_all_async(**query)
+        await cache.set_job_history(histories)
     dtos = list(map(job_history_mapper.from_model_to_dto, histories))
     return dtos
 
@@ -63,11 +67,16 @@ async def create_one(
 
     # checks the last history of the employee
     hist = await uow.job_history.get_all_async(employee_id=create_dto.employee_id,limit=1)
-    if len(hist): 
-        # if there is a record before make the old end_date = new start_date 
+    if len(hist):
         last =hist[0]
+        # new start date support to be bigger than the last start date
+        if create_dto.start_date <= last.start_date: 
+            raise HTTPException(400,detail={f"new job start_date is {create_dto.start_date} which is less than the last job {last.start_date}"})
+
+        # if there is a record before make the old end_date = new start_date 
         last.end_date = create_dto.start_date
         await uow.job_history.update_one_async(last)
+        
     
     job_history = job_history_mapper.from_create_to_model(create_dto)
 
@@ -80,7 +89,10 @@ async def create_one(
         employee.hire_date = create_dto.start_date
     await uow.employees.update_one_async(employee)
     await uow.commit_async()
+
+    # TODO: check if needed
     job_history = await uow.job_history.get_one_async(job_history.employee_id,job_history.start_date)
+
     dto = job_history_mapper.from_model_to_dto(job_history)
     
     return dto

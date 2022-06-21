@@ -68,15 +68,28 @@ def get_department_query(
         "location_id" : location_id}
 
 def get_employee_query(
-        base_Query=Depends(get_base_query),
+        base_query=Depends(get_base_query),
         department_id: int | None = Query(0, alias="departmentId"),
         job_id: int | None = Query(0, alias="jobId"),
         manager_id: int | None = Query(0, alias="managerId")):
-    return {**base_Query,
+    return {**base_query,
             "department_id": department_id,
             "job_id": job_id,
             "manager_id": manager_id}
 
+
+
+def get_job_history_query(
+    base_query = Depends(get_base_query),
+    employee_id = 0,
+    department_id = 0,
+    job_id = 0):
+
+    return{
+        **base_query,
+        "employee_id":employee_id,
+        "department_id":department_id,
+        "job_id":job_id}
 
 def get_region_service(db: Session = Depends(get_db)) -> RegionsService:
     service = RegionsService(db=db)

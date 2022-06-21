@@ -4,7 +4,7 @@ from fastapi import APIRouter, Depends, Query, HTTPException
 from DTOs.nested import DepartmentNested
 from services.redis_cache import RedisCacheService
 from services.unit_of_work import UnitOfWork, UnitOfWork0
-from dependencies import get_cache_service, get_department_mapper, get_unit_of_work, get_unit_of_work_async, require_admin_user,get_location_query
+from dependencies import get_cache_service, get_department_mapper, get_unit_of_work, get_unit_of_work_async, require_admin_user,get_department_query
 from mappers.department_mapper import DepartmentMapper
 from DTOs.departments import DepartmentDTO, DepartmentCreate, DepartmentUpdate
 
@@ -33,7 +33,7 @@ async def get_one(department_id: int,
 
 @router.get("/", response_model=list[DepartmentNested])
 async def get_all(
-            query:dict=Depends(get_location_query),
+            query:dict=Depends(get_department_query),
             department_mapper: DepartmentMapper = Depends(
                 get_department_mapper),
             uow: UnitOfWork0 = Depends(get_unit_of_work_async),
