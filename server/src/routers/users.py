@@ -1,14 +1,14 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordRequestForm
 
-from services.unit_of_work import UnitOfWork0
+from services.unit_of_work import UnitOfWork
 from mappers.user_mapper import UserMapper
-from services import UsersService, CryptService, UnitOfWork
+from services import CryptService
 from services.jwt import JwtContainer, JwtService
 
 from DTOs.users import UserCreateDTO, UserDTO
 from DTOs.tokens import TokenDTO
-from dependencies import get_crypt_service, get_jwt_service, get_unit_of_work, get_unit_of_work_async, get_users_mapper, get_users_service, require_logged_in_user
+from dependencies import get_crypt_service, get_jwt_service, get_unit_of_work_async, get_users_mapper, require_logged_in_user
 
 router = APIRouter(
     prefix="/users",
@@ -19,7 +19,7 @@ router = APIRouter(
 
 @router.post("/register", response_model=UserDTO)
 async def register(userCreate: UserCreateDTO,
-             uow: UnitOfWork0 = Depends(get_unit_of_work_async),
+             uow: UnitOfWork = Depends(get_unit_of_work_async),
              user_mapper: UserMapper = Depends(get_users_mapper)
              ):
 
@@ -39,7 +39,7 @@ async def register(userCreate: UserCreateDTO,
 
 @router.post("/login",response_model=TokenDTO)
 async def login(form_data: OAuth2PasswordRequestForm = Depends(),
-          uow: UnitOfWork0 = Depends(get_unit_of_work_async),
+          uow: UnitOfWork = Depends(get_unit_of_work_async),
           jwt_service: JwtService = Depends(get_jwt_service),
           crypt_service: CryptService = Depends(get_crypt_service)
           ):
@@ -54,7 +54,7 @@ async def login(form_data: OAuth2PasswordRequestForm = Depends(),
     return TokenDTO(access_token=access_token,token_type="bearer")
 
 @router.get("/me",response_model=UserDTO)
-async def read_me(jwt:JwtContainer = Depends(require_logged_in_user),uow:UnitOfWork0=Depends(get_unit_of_work_async),user_mapper:UserMapper=Depends(get_users_mapper)):
+async def read_me(jwt:JwtContainer = Depends(require_logged_in_user),uow:UnitOfWork=Depends(get_unit_of_work_async),user_mapper:UserMapper=Depends(get_users_mapper)):
     user = await uow.users.get_one_by_username_async(jwt.username)
     if user is None:
         raise HTTPException(status_code=400)

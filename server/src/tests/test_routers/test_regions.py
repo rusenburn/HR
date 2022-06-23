@@ -5,7 +5,7 @@ from fastapi import HTTPException
 from DTOs.nested import RegionNested
 from DTOs.regions.region_dto import RegionDTO
 from routers.regions import create_one,update_one,get_one,get_all,delete_one
-from services.unit_of_work import UnitOfWork0
+from services.unit_of_work import UnitOfWork
 from services.redis_cache import RedisCacheService
 from mappers.region_mapper import RegionMapper
 from tests.factory import Factory
@@ -13,7 +13,7 @@ from tests.factory import Factory
 class TestRegionsRouter(IsolatedAsyncioTestCase):
     def setUp(self) -> None:
         self.factory = Factory()
-        self.uow : UnitOfWork0 | Mock= Mock()
+        self.uow : UnitOfWork | Mock= Mock()
         self.uow.regions = Mock()
         self.cache: RedisCacheService | Mock = Mock()
         self.region_mapper : RegionMapper|Mock  = Mock()

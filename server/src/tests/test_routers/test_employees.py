@@ -1,7 +1,7 @@
 from unittest.async_case import IsolatedAsyncioTestCase
 from unittest.mock import MagicMock, Mock, AsyncMock, PropertyMock
 from fastapi import HTTPException
-from services.unit_of_work import UnitOfWork0
+from services.unit_of_work import UnitOfWork
 from services.redis_cache import RedisCacheService
 from models import Employee
 
@@ -20,7 +20,7 @@ def mock(typ: typing.Type):
 
 class EmployeesRouterTest(IsolatedAsyncioTestCase):
     def setUp(self) -> None:
-        self.uow = mock(UnitOfWork0)
+        self.uow = mock(UnitOfWork)
         self.uow.employees = mock(EmployeeAsyncService)
         self.cache = mock(RedisCacheService)
         self.mapper = mock(EmployeeMapper)

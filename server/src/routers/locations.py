@@ -3,9 +3,9 @@ from fastapi import APIRouter, Depends, Query, HTTPException, status
 from DTOs.locations import LocationCreate, LocationDTO, LocationUpdate
 from services.redis_cache import RedisCacheService
 from DTOs.nested import LocationNested
-from services.unit_of_work import UnitOfWork, UnitOfWork0
+from services.unit_of_work import UnitOfWork
 from mappers.location_mapper import LocationMapper
-from dependencies import get_location_mapper, get_unit_of_work, get_unit_of_work_async, require_admin_user,get_cache_service,get_location_query
+from dependencies import get_location_mapper, get_unit_of_work_async, require_admin_user,get_cache_service,get_location_query
 
 
 router = APIRouter(
@@ -20,7 +20,7 @@ router = APIRouter(
 
 @router.get("/", response_model=list[LocationNested])
 async def get_all(query=Depends(get_location_query),
-            uow: UnitOfWork0 = Depends(get_unit_of_work_async),
+            uow: UnitOfWork = Depends(get_unit_of_work_async),
             location_mapper: LocationMapper = Depends(get_location_mapper),
             cached:RedisCacheService=Depends(get_cache_service)):
     locations = await cached.get_locations()
@@ -33,7 +33,7 @@ async def get_all(query=Depends(get_location_query),
 
 @router.get("/{location_id}")
 async def get_one(location_id: int,
-            uow: UnitOfWork0 = Depends(get_unit_of_work_async),
+            uow: UnitOfWork = Depends(get_unit_of_work_async),
             location_mapper: LocationMapper = Depends(get_location_mapper)
             ):
     location = await uow.locations.get_one_async(location_id)
@@ -45,7 +45,7 @@ async def get_one(location_id: int,
 
 @router.post("/", response_model=LocationNested, status_code=201)
 async def create_one(location_create: LocationCreate,
-               uow: UnitOfWork0 = Depends(get_unit_of_work_async),
+               uow: UnitOfWork = Depends(get_unit_of_work_async),
                location_mapper: LocationMapper =Depends(get_location_mapper)
                ):
     country = await uow.countries.get_one_async(location_create.country_id)
@@ -61,7 +61,7 @@ async def create_one(location_create: LocationCreate,
 
 @router.put("/", response_model=LocationNested)
 async def update_one(location_update: LocationUpdate,
-               uow: UnitOfWork0 = Depends(get_unit_of_work_async),
+               uow: UnitOfWork = Depends(get_unit_of_work_async),
                location_mapper: LocationMapper = Depends(get_location_mapper)
                ):
     location = await uow.locations.get_one_async(location_update.location_id)
@@ -80,7 +80,7 @@ async def update_one(location_update: LocationUpdate,
 
 @router.delete("/{location_id}", status_code=status.HTTP_204_NO_CONTENT)
 async def delete_one(location_id: int,
-               uow: UnitOfWork0 = Depends(get_unit_of_work_async),
+               uow: UnitOfWork = Depends(get_unit_of_work_async),
                ):
     location = await uow.locations.get_one_async(location_id)
     if location is None:

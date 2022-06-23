@@ -1,14 +1,13 @@
 from fastapi import APIRouter, Depends, Query, HTTPException
 
 from services.redis_cache import RedisCacheService
-from services.unit_of_work import UnitOfWork0
+from services.unit_of_work import UnitOfWork
 
 from models import Job
 from DTOs.jobs import JobDTO, JobCreate, JobUpdate
 from DTOs.nested import JobNested
 from mappers.job_mapper import JobMapper
-from dependencies import get_cache_service, get_job_mapper, get_unit_of_work,get_base_query, get_unit_of_work_async, require_admin_user
-from services import UnitOfWork
+from dependencies import get_cache_service, get_job_mapper,get_base_query, get_unit_of_work_async, require_admin_user
 
 router = APIRouter(
     prefix="/jobs",
@@ -20,7 +19,7 @@ router = APIRouter(
 
 @router.get("/", response_model=list[JobNested])
 async def get_all(
-        uow: UnitOfWork0 = Depends(get_unit_of_work_async),
+        uow: UnitOfWork = Depends(get_unit_of_work_async),
         job_mapper: JobMapper = Depends(get_job_mapper),
         cached:RedisCacheService=Depends(get_cache_service),
         query=Depends(get_base_query)):
@@ -34,7 +33,7 @@ async def get_all(
 
 @router.get("/{job_id}", response_model=JobDTO)
 async def get_one(job_id: int,
-            uow: UnitOfWork0 = Depends(get_unit_of_work_async),
+            uow: UnitOfWork = Depends(get_unit_of_work_async),
             job_mapper: JobMapper = Depends(get_job_mapper)
             ):
     job = await uow.jobs.get_one_async(job_id)
@@ -45,7 +44,7 @@ async def get_one(job_id: int,
 
 @router.post("/", response_model=JobNested, status_code=201)
 async def create_one(job_create: JobCreate,
-               uow: UnitOfWork0 = Depends(get_unit_of_work_async),
+               uow: UnitOfWork = Depends(get_unit_of_work_async),
                job_mapper: JobMapper = Depends(get_job_mapper)
                ):
     if await uow.jobs.title_exist_async(job_create.job_title):
@@ -60,7 +59,7 @@ async def create_one(job_create: JobCreate,
 
 @router.put("/", response_model=JobNested)
 async def update_one(job_update: JobUpdate,
-               uow: UnitOfWork0 = Depends(get_unit_of_work_async),
+               uow: UnitOfWork = Depends(get_unit_of_work_async),
                job_mapper: JobMapper = Depends(get_job_mapper)
                ):
     job = await uow.jobs.get_one_async(job_update.job_id)
@@ -78,7 +77,7 @@ async def update_one(job_update: JobUpdate,
 
 @router.delete("/{job_id}", status_code=204)
 async def delete_one(job_id: int,
-               uow: UnitOfWork0 = Depends(get_unit_of_work_async),
+               uow: UnitOfWork = Depends(get_unit_of_work_async),
                ):
     await uow.jobs.delete_one_async(job_id)
     await uow.commit_async()

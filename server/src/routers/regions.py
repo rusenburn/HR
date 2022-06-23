@@ -9,8 +9,8 @@ from DTOs.nested import RegionNested
 from DTOs.regions import RegionDTO
 from DTOs.regions.region_create_dto import RegionCreateDTO
 from DTOs.regions.region_update_dto import RegionUpdateDTO
-from services.unit_of_work import UnitOfWork,UnitOfWork0
-from dependencies import get_unit_of_work_async, get_base_query, get_region_mapper, get_unit_of_work, require_admin_user,get_cache_service
+from services.unit_of_work import UnitOfWork
+from dependencies import get_unit_of_work_async, get_base_query, get_region_mapper, require_admin_user,get_cache_service
 
 router = APIRouter(
     prefix="/regions",
@@ -25,7 +25,7 @@ router = APIRouter(
 
 @router.get("/",response_model=list[RegionNested])
 async def get_all(
-    uow:UnitOfWork0=Depends(get_unit_of_work_async),
+    uow:UnitOfWork=Depends(get_unit_of_work_async),
     cache:RedisCacheService=Depends(get_cache_service),
     region_mapper:RegionMapper=Depends(get_region_mapper),
     query=Depends(get_base_query)
@@ -41,7 +41,7 @@ async def get_all(
 @router.get("/{region_id}",response_model=RegionDTO)
 async def get_one(
         region_id:int,
-        uow:UnitOfWork0=Depends(get_unit_of_work_async),
+        uow:UnitOfWork=Depends(get_unit_of_work_async),
         region_mapper:RegionMapper=Depends(get_region_mapper)
         ):
 
@@ -52,10 +52,10 @@ async def get_one(
     dto = region_mapper.from_model_to_dto(region)
     return dto
 
-@router.post("/",response_model=RegionNested)
+@router.post("/",response_model=RegionNested,status_code=201)
 async def create_one(
         create_dto:RegionCreateDTO=Body(...),
-        uow:UnitOfWork0=Depends(get_unit_of_work_async),
+        uow:UnitOfWork=Depends(get_unit_of_work_async),
         region_mapper:RegionMapper=Depends(get_region_mapper)
         ):
 
@@ -65,10 +65,10 @@ async def create_one(
     dto = region_mapper.from_model_to_nested(region)
     return dto
 
-@router.put("/",response_model=RegionNested)
+@router.put("/",response_model=RegionNested,status_code=200)
 async def update_one(
         region_update_dto:RegionUpdateDTO=Body(...),
-        uow:UnitOfWork0=Depends(get_unit_of_work_async),
+        uow:UnitOfWork=Depends(get_unit_of_work_async),
         region_mapper:RegionMapper=Depends(get_region_mapper)
         ):
     
@@ -83,7 +83,7 @@ async def update_one(
     return region_dto
 
 @router.delete("/{region_id}",status_code=204)
-async def delete_one(region_id : int ,uow:UnitOfWork0=Depends(get_unit_of_work_async)):
+async def delete_one(region_id : int ,uow:UnitOfWork=Depends(get_unit_of_work_async)):
     model = await uow.regions.get_one_async(region_id)
     if model is None:
         raise HTTPException(status_code=404)

@@ -3,8 +3,8 @@ from fastapi import APIRouter, Depends, Query, HTTPException
 
 from DTOs.nested import DepartmentNested
 from services.redis_cache import RedisCacheService
-from services.unit_of_work import UnitOfWork, UnitOfWork0
-from dependencies import get_cache_service, get_department_mapper, get_unit_of_work, get_unit_of_work_async, require_admin_user,get_department_query
+from services.unit_of_work import UnitOfWork
+from dependencies import get_cache_service, get_department_mapper, get_unit_of_work_async, require_admin_user,get_department_query
 from mappers.department_mapper import DepartmentMapper
 from DTOs.departments import DepartmentDTO, DepartmentCreate, DepartmentUpdate
 
@@ -22,7 +22,7 @@ router = APIRouter(
 async def get_one(department_id: int,
             department_mapper: DepartmentMapper = Depends(
                 get_department_mapper),
-            uow: UnitOfWork0 = Depends(get_unit_of_work_async)
+            uow: UnitOfWork = Depends(get_unit_of_work_async)
             ):
     department = await uow.departments.get_one_async(department_id)
     if department is None:
@@ -36,7 +36,7 @@ async def get_all(
             query:dict=Depends(get_department_query),
             department_mapper: DepartmentMapper = Depends(
                 get_department_mapper),
-            uow: UnitOfWork0 = Depends(get_unit_of_work_async),
+            uow: UnitOfWork = Depends(get_unit_of_work_async),
             cached:RedisCacheService=Depends(get_cache_service)
             ):
     departments = await cached.get_departments()
@@ -51,7 +51,7 @@ async def get_all(
 async def create_one(department_create: DepartmentCreate,
                department_mapper: DepartmentMapper = Depends(
                    get_department_mapper),
-               uow: UnitOfWork0 = Depends(get_unit_of_work_async)
+               uow: UnitOfWork = Depends(get_unit_of_work_async)
                ):
     location = await uow.locations.get_one_async(department_create.location_id)
     if location is None:
@@ -68,7 +68,7 @@ async def create_one(department_create: DepartmentCreate,
 async def update_one(department_update: DepartmentUpdate,
                department_mapper: DepartmentMapper = Depends(
                    get_department_mapper),
-               uow: UnitOfWork0 = Depends(get_unit_of_work_async)):
+               uow: UnitOfWork = Depends(get_unit_of_work_async)):
     department = await uow.departments.get_one_async(department_update.department_id)
     if department is None:
         raise HTTPException(status_code=404)
@@ -86,7 +86,7 @@ async def update_one(department_update: DepartmentUpdate,
 
 @router.delete("/{department_id}",status_code=204)
 async def delete_one(department_id:int,
-               uow: UnitOfWork0 = Depends(get_unit_of_work_async)):
+               uow: UnitOfWork = Depends(get_unit_of_work_async)):
     department = await uow.departments.get_one_async(department_id)
     if department is None:
         raise HTTPException(status_code=404)

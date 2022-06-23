@@ -7,8 +7,8 @@ from services.redis_cache import RedisCacheService
 from DTOs.nested import CountryNested
 from DTOs.countries import CountryDTO, CountryCreateDTO, CountryUpdateDTO
 from mappers.country_mapper import CountryMapper
-from services.unit_of_work import UnitOfWork, UnitOfWork0
-from dependencies import get_cache_service, get_unit_of_work, get_country_mapper, get_base_query, get_unit_of_work_async, require_admin_user
+from services.unit_of_work import UnitOfWork
+from dependencies import get_cache_service, get_country_mapper, get_base_query, get_unit_of_work_async, require_admin_user
 
 router = APIRouter(
     prefix="/countries",
@@ -19,7 +19,7 @@ router = APIRouter(
 
 
 @router.get("/{country_id}", response_model=CountryDTO)
-async def get_one(country_id: int, uow: UnitOfWork0 = Depends(get_unit_of_work_async),
+async def get_one(country_id: int, uow: UnitOfWork = Depends(get_unit_of_work_async),
                   country_mapper: CountryMapper = Depends(get_country_mapper)
                   ):
     country = await uow.countries.get_one_async(country_id)
@@ -30,7 +30,7 @@ async def get_one(country_id: int, uow: UnitOfWork0 = Depends(get_unit_of_work_a
 
 
 @router.get("/", response_model=list[CountryNested])
-async def get_all(uow: UnitOfWork0 = Depends(get_unit_of_work_async),
+async def get_all(uow: UnitOfWork = Depends(get_unit_of_work_async),
                   country_mapper: CountryMapper = Depends(get_country_mapper),
                   cached:RedisCacheService = Depends(get_cache_service),
                   query=Depends(get_base_query)):
@@ -42,9 +42,9 @@ async def get_all(uow: UnitOfWork0 = Depends(get_unit_of_work_async),
     return dtos
 
 
-@router.post("/", response_model=CountryNested)
+@router.post("/", response_model=CountryNested,status_code=201)
 async def create_one(create_dto: CountryCreateDTO,
-               uow: UnitOfWork0 = Depends(get_unit_of_work_async),
+               uow: UnitOfWork = Depends(get_unit_of_work_async),
                country_mapper: CountryMapper = Depends(get_country_mapper)
                ):
     region = await uow.regions.get_one_async(create_dto.region_id)
@@ -62,7 +62,7 @@ async def create_one(create_dto: CountryCreateDTO,
 
 @router.put("/")
 async def update_one(update_dto: CountryNested,
-               uow: UnitOfWork0 = Depends(get_unit_of_work_async),
+               uow: UnitOfWork = Depends(get_unit_of_work_async),
                country_mapper: CountryMapper = Depends(get_country_mapper)):
     model = await uow.countries.get_one_async(update_dto.country_id)
     if model is None:
@@ -84,7 +84,7 @@ async def update_one(update_dto: CountryNested,
 
 @router.delete("/{country_id}", status_code=204)
 async def delete_one(country_id: int,
-               uow: UnitOfWork0 = Depends(get_unit_of_work_async),
+               uow: UnitOfWork = Depends(get_unit_of_work_async),
                ):
 
     model = await uow.countries.get_one_async(country_id)

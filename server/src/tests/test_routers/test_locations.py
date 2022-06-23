@@ -2,7 +2,7 @@ from unittest.async_case import IsolatedAsyncioTestCase
 from unittest.mock import Mock, AsyncMock
 from fastapi.testclient import TestClient
 from fastapi import HTTPException
-from services.unit_of_work import UnitOfWork0
+from services.unit_of_work import UnitOfWork
 from services.redis_cache import RedisCacheService
 from mappers.location_mapper import LocationMapper
 from tests.factory import Factory
@@ -12,7 +12,7 @@ from routers import locations as LocationRouter
 class LocationsRouterTest(IsolatedAsyncioTestCase):
     def setUp(self) -> None:
         self.factory = Factory()
-        self.uow: Mock | UnitOfWork0 = Mock()
+        self.uow: Mock | UnitOfWork = Mock()
         self.location_mapper : Mock | LocationMapper = Mock()
         self.cache : RedisCacheService|Mock = Mock()
 

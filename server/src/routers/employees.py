@@ -6,9 +6,8 @@ from models import Employee
 from DTOs.employees import EmployeeCreate, EmployeeDTO, EmployeeUpdate
 from DTOs.nested import EmployeeNested
 from mappers.employee_mapper import EmployeeMapper
-from services.unit_of_work import UnitOfWork0
-from services import UnitOfWork
-from dependencies import get_cache_service, get_employee_mapper, get_employee_query, get_unit_of_work, get_unit_of_work_async
+from services.unit_of_work import UnitOfWork
+from dependencies import get_cache_service, get_employee_mapper, get_employee_query, get_unit_of_work_async
 
 
 router = APIRouter(
@@ -22,7 +21,7 @@ router = APIRouter(
 
 @router.get("/", response_model=list[EmployeeNested])
 async def get_all(
-        uow: UnitOfWork0 = Depends(get_unit_of_work_async),
+        uow: UnitOfWork = Depends(get_unit_of_work_async),
         employeeQuery=Depends(get_employee_query),
         cached: RedisCacheService = Depends(get_cache_service),
         employee_mapper: EmployeeMapper = Depends(get_employee_mapper)):
@@ -36,7 +35,7 @@ async def get_all(
 
 @router.get("/{employee_id}", response_model=EmployeeDTO)
 async def get_one(employee_id: int,
-                  uow: UnitOfWork0 = Depends(get_unit_of_work_async),
+                  uow: UnitOfWork = Depends(get_unit_of_work_async),
                   employee_mapper: EmployeeMapper = Depends(
                       get_employee_mapper)
                   ):
@@ -51,7 +50,7 @@ async def get_one(employee_id: int,
 
 @router.post("/", response_model=EmployeeNested, status_code=201)
 async def create_one(create_dto: EmployeeCreate,
-                     uow: UnitOfWork0 = Depends(get_unit_of_work_async),
+                     uow: UnitOfWork = Depends(get_unit_of_work_async),
                      employee_mapper: EmployeeMapper = Depends(
                          get_employee_mapper)
                      ):
@@ -64,7 +63,7 @@ async def create_one(create_dto: EmployeeCreate,
 
 @router.put("/", response_model=EmployeeNested)
 async def update_one(update_dto: EmployeeUpdate,
-                     uow: UnitOfWork0 = Depends(get_unit_of_work_async),
+                     uow: UnitOfWork = Depends(get_unit_of_work_async),
                      employee_mapper: EmployeeMapper = Depends(get_employee_mapper)):
     employee = await uow.employees.get_one_async(update_dto.employee_id)
     if employee is None:
@@ -85,7 +84,7 @@ async def update_one(update_dto: EmployeeUpdate,
 
 @router.delete("/{employee_id}", status_code=204)
 async def delete_one(employee_id: int,
-                     uow: UnitOfWork0 = Depends(get_unit_of_work_async),
+                     uow: UnitOfWork = Depends(get_unit_of_work_async),
                      ):
     await uow.employees.delete_one_async(employee_id)
     await uow.commit_async()

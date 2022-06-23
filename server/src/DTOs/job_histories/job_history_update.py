@@ -1,6 +1,7 @@
+import datetime as dt
 from datetime import datetime
+import typing
 from pydantic import BaseModel, Field, validator
-
 
 class JobHistoryUpdate(BaseModel):
     employee_id: int = Field(..., gt=0,alias="employeeId")
@@ -12,9 +13,15 @@ class JobHistoryUpdate(BaseModel):
         allow_population_by_field_name=True
 
     @validator('end_date')
-    def max_salary_not_smaller_than_min_salary(cls, v: int, values: dict, **kwargs):
+    def end_date_not_before_start_date(cls, v: datetime, values: dict, **kwargs):
         if v and 'start_date' in values :
-            start_date = values['start_date']
+            start_date = typing.cast(datetime,values['start_date'])
+            start_date = start_date.replace(tzinfo=dt.timezone.utc)
+            v = v.replace(tzinfo=dt.timezone.utc)
             if v < start_date:
-                raise ValueError('max_salary must be bigger than min_salary')
+                raise ValueError('end_date must be bigger than start_date')
+            elif v>start_date:
+                return v
+            else:
+                raise ValueError('end_date must be bigger than start_date')
         return v

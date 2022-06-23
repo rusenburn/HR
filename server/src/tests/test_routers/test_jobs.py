@@ -1,7 +1,7 @@
 from unittest.async_case import IsolatedAsyncioTestCase
 from unittest.mock import MagicMock, Mock, AsyncMock,PropertyMock
 from fastapi import HTTPException
-from services.unit_of_work import UnitOfWork0
+from services.unit_of_work import UnitOfWork
 from services.redis_cache import RedisCacheService
 from models import Job
 from DTOs.nested import JobNested
@@ -14,7 +14,7 @@ import typing
 class JobsRouterTest(IsolatedAsyncioTestCase):
     def setUp(self) -> None:
         self.factory = Factory()
-        self.uow : Mock | UnitOfWork0 = AsyncMock()
+        self.uow : Mock | UnitOfWork = AsyncMock()
         self.cache : Mock | RedisCacheService = AsyncMock()
         self.mapper : Mock | JobMapper = Mock()
     

@@ -2,7 +2,7 @@ from unittest import TestCase
 from unittest import mock
 from unittest.async_case import IsolatedAsyncioTestCase
 from unittest.mock import Mock, patch,MagicMock
-from services.regions import RegionsService0
+from services.regions import RegionsAsyncService
 from models import Region
 from tests.factory import Factory
 from DTOs.regions import RegionDTO
@@ -10,7 +10,7 @@ from DTOs.regions import RegionDTO
 
 class TestRegionsServiceAsync(IsolatedAsyncioTestCase):
     def setUp(self) -> None:
-        self.service = RegionsService0(Mock())
+        self.service = RegionsAsyncService(Mock())
         self.factory = Factory()
 
     

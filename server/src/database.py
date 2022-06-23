@@ -27,7 +27,7 @@ engine = create_engine(DATABASE_URL,pool_recycle=3600)
 
 SessionFactory = sessionmaker(autocommit=False,autoflush=False,bind=engine)
 
-async_engine = create_async_engine(ASYNC_DATABASE_URL,pool_recycle=3600,future=True)
+async_engine = create_async_engine(ASYNC_DATABASE_URL,pool_recycle=3600,future=True,echo=False)
 AsyncSessionFactory = sessionmaker(
     bind=async_engine,
     autocommit=False,

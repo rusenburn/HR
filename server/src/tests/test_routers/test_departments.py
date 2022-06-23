@@ -1,7 +1,7 @@
 from unittest.async_case import IsolatedAsyncioTestCase
 from unittest.mock import Mock, AsyncMock
 from fastapi import HTTPException
-from services.unit_of_work import UnitOfWork0
+from services.unit_of_work import UnitOfWork
 from mappers.department_mapper import DepartmentMapper
 from services.redis_cache import RedisCacheService
 from DTOs.departments.department_update_dto import DepartmentUpdate
@@ -13,7 +13,7 @@ from routers import departments as department_router
 class DepartmentRouterTest(IsolatedAsyncioTestCase):
     def setUp(self) -> None:
         self.factory = Factory()
-        self.uow : Mock|UnitOfWork0 = Mock()
+        self.uow : Mock|UnitOfWork = Mock()
         self.department_mapper : Mock|DepartmentMapper = Mock()
         self.cache : Mock|RedisCacheService = Mock()
     

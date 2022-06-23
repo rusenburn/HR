@@ -1,10 +1,9 @@
 from datetime import datetime, timedelta
-from lzma import MODE_FAST
 import typing
 from unittest.async_case import IsolatedAsyncioTestCase
 from unittest.mock import Mock, AsyncMock
 from fastapi import HTTPException
-from services.unit_of_work import UnitOfWork0
+from services.unit_of_work import UnitOfWork
 from mappers.job_history_mapper import JobHistoryMapper
 from services.redis_cache import RedisCacheService
 from services.job_histories import JobHistoryAsyncService
@@ -23,7 +22,7 @@ class PointException(Exception):
 
 class JobHistoryRouterTest(IsolatedAsyncioTestCase):
     def setUp(self) -> None:
-        self.uow = mock(UnitOfWork0)
+        self.uow = mock(UnitOfWork)
         self.uow.job_history = mock(JobHistoryAsyncService)
         self.uow.employees = mock(EmployeeAsyncService)
         self.uow.jobs = mock(JobHistoryAsyncService)

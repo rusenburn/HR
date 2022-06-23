@@ -1,11 +1,11 @@
 from datetime import datetime
 from fastapi import APIRouter, Depends, HTTPException, Query
-
-from services.unit_of_work import UnitOfWork, UnitOfWork0
+import datetime as dt
+from services.unit_of_work import UnitOfWork
 from mappers.job_history_mapper import JobHistoryMapper
 from DTOs.job_histories import JobHistoryCreate, JobHistoryDTO,JobHistoryUpdate
 from models import JobHistory
-from dependencies import get_job_history_mapper, get_unit_of_work, get_unit_of_work_async, require_admin_user,get_job_history_query,get_cache_service
+from dependencies import get_job_history_mapper, get_unit_of_work_async, require_admin_user,get_job_history_query,get_cache_service
 from services.redis_cache import RedisCacheService
 
 router = APIRouter(
@@ -22,7 +22,7 @@ router = APIRouter(
 async def get_all(
         query:dict=Depends(get_job_history_query),
         job_history_mapper: JobHistoryMapper = Depends(get_job_history_mapper),
-        uow: UnitOfWork0 = Depends(get_unit_of_work_async),
+        uow: UnitOfWork = Depends(get_unit_of_work_async),
         cache:RedisCacheService = Depends(get_cache_service)):
 
     histories = await cache.get_job_history()
@@ -37,7 +37,7 @@ async def get_all(
 async def get_last(
         employee_id: int,
         job_history_mapper: JobHistoryMapper = Depends(get_job_history_mapper),
-        uow: UnitOfWork0 = Depends(get_unit_of_work_async)):
+        uow: UnitOfWork = Depends(get_unit_of_work_async)):
 
     result_list = await uow.job_history.get_all_async(employee_id, limit=1)
     if len(result_list)==0:
@@ -51,9 +51,9 @@ async def get_last(
 async def create_one(
     create_dto: JobHistoryCreate,
     job_history_mapper: JobHistoryMapper = Depends(get_job_history_mapper),
-    uow: UnitOfWork0 = Depends(get_unit_of_work_async)):
-
+    uow: UnitOfWork = Depends(get_unit_of_work_async)):
     employee = await uow.employees.get_one_async(employee_id=create_dto.employee_id)
+
     if employee is None:
         raise HTTPException(status_code =400,detail={"description":"cannot create a history if employee does not exist"})
 
@@ -70,7 +70,9 @@ async def create_one(
     if len(hist):
         last =hist[0]
         # new start date support to be bigger than the last start date
-        if create_dto.start_date <= last.start_date: 
+        last.start_date = last.start_date.astimezone(dt.timezone.utc)
+        create_dto.start_date = create_dto.start_date.astimezone(dt.timezone.utc)
+        if create_dto.start_date <= last.start_date:
             raise HTTPException(400,detail={f"new job start_date is {create_dto.start_date} which is less than the last job {last.start_date}"})
 
         # if there is a record before make the old end_date = new start_date 
@@ -89,10 +91,7 @@ async def create_one(
         employee.hire_date = create_dto.start_date
     await uow.employees.update_one_async(employee)
     await uow.commit_async()
-
-    # TODO: check if needed
     job_history = await uow.job_history.get_one_async(job_history.employee_id,job_history.start_date)
-
     dto = job_history_mapper.from_model_to_dto(job_history)
     
     return dto
@@ -100,7 +99,7 @@ async def create_one(
 @router.put("/",response_model=JobHistoryDTO)
 async def update_one(update_dto:JobHistoryUpdate,
         job_history_mapper: JobHistoryMapper = Depends(get_job_history_mapper),
-        uow: UnitOfWork0 = Depends(get_unit_of_work_async)):
+        uow: UnitOfWork = Depends(get_unit_of_work_async)):
         history = await uow.job_history.get_one_async(update_dto.employee_id,update_dto.start_date)
         if history is None:
             raise HTTPException(status_code=404)
@@ -112,7 +111,7 @@ async def update_one(update_dto:JobHistoryUpdate,
 
 @router.delete("/{employee_id}/{start_date}",status_code=204)
 async def delete_one(employee_id:int,start_date:datetime,
-        uow: UnitOfWork0 = Depends(get_unit_of_work_async)):
+        uow: UnitOfWork = Depends(get_unit_of_work_async)):
         await uow.job_history.delete_one_async(employee_id,start_date)
         # TODO if it is the last job_history then we should update our employee
         await uow.commit_async()

@@ -5,7 +5,7 @@ from unittest.mock import Mock, AsyncMock
 from fastapi import HTTPException
 from DTOs.nested import CountryNested
 from tests.factory import Factory
-from services.unit_of_work import UnitOfWork0
+from services.unit_of_work import UnitOfWork
 from services.redis_cache import RedisCacheService
 from mappers.country_mapper import CountryMapper
 from routers.countries import get_one, get_all, create_one, update_one, delete_one
@@ -15,7 +15,7 @@ class TestCountriesRouter(IsolatedAsyncioTestCase):
     def setUp(self) -> None:
         self.factory = Factory()
         
-        self.uow: Mock | UnitOfWork0 = Mock(UnitOfWork0)
+        self.uow: Mock | UnitOfWork = Mock(UnitOfWork)
         self.uow.countries = Mock()
         self.uow.regions = Mock()
         self.country_mapper: Mock | CountryMapper = Mock()
